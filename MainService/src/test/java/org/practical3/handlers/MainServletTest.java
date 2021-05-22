@@ -17,7 +17,7 @@ public class MainServletTest {
         Main.runServer(8090, "/");
     }
 
-    
+
     @Test
     public void doGet() throws Exception
     {
