@@ -114,6 +114,7 @@ public class Main {
         try {
             if(server.isRunning()){
                 server.stop();
+                db.close();
             }
         } catch (Exception e) {
             System.out.println( String.format("Error while stopping server: %s", e.getMessage()));
