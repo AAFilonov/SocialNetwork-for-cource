@@ -1,0 +1,12 @@
+server.port = 8080
+server.contextPath = /
+
+database.server = jdbc:postgresql://arjuna.db.elephantsql.com/csyrivqt
+database.user = csyrivqt
+database.password = K7Q_If3mhvTzI9WPyCWs9wnBOqNgh7Uc
+database.database = csyrivqt
+
+database.table.users = users
+database.table.blocked = blocked
+
+database.table.users.insert = INSERT INTO users(login, password) VALUES (?, ?)
