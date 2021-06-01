@@ -18,4 +18,16 @@ public enum Field {
     Field(String val) {
         this.val = val;
     }
+
+    public static Field parse(String s) throws IllegalArgumentException {
+
+        for (Field field:Field.values()) {
+            String fieldVal=field.getVal();
+            if(s.equals(fieldVal))
+                return  field;
+        }
+
+       throw new IllegalArgumentException();
+
+    }
 }

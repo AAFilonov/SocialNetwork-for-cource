@@ -30,19 +30,16 @@ public class PostsDataBaseManager extends DataBaseManager {
 
 
 
-    public Collection<Post> getPosts(Collection<Integer> ids, Collection<Field> fields, Integer count, Integer offset)  {
-        try {
-            String query = String.format( "select %s from db.posts WHERE post_id IN (%s) LIMIT %d OFFSET %d" ,
-                    getFieldsAsString(fields),
-                    getIdsASString(ids),
-                    count, offset);
-            ResultSet result =  super.execute(query);
-            return fetchPosts(result, fields);
-        }
-        catch (Exception ex){
-            System.out.println("SQL ERROR: "+ ex.getMessage()+"\n");
-            return null;
-        }
+    public Collection<Post> getPosts(Collection<Integer> ids, Collection<Field> fields, Integer count, Integer offset) throws SQLException {
+
+       String query = String.format( "select %s from db.posts WHERE post_id IN (%s) LIMIT %d OFFSET %d" ,
+               getFieldsAsString(fields),
+               getIdsASString(ids),
+               count, offset);
+       ResultSet result =  super.execute(query);
+       return fetchPosts(result, fields);
+
+
     }
 
 

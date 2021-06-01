@@ -5,16 +5,11 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.practical3.common.DataBaseManager;
 import org.practical3.common.PostsDataBaseManager;
-import org.practical3.handlers.MainServlet;
+import org.practical3.handlers.PostsServlet;
 
 import org.practical3.utils.PropertyManager;
 
 import javax.servlet.Servlet;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
 
 
 public class Main {
@@ -93,7 +88,7 @@ public class Main {
     }
 
     private static void setServlets() {
-        setServlet(new MainServlet((PostsDataBaseManager) db),"/posts/*");
+        setServlet(new PostsServlet((PostsDataBaseManager) db),"/posts/*");
     }
 
 

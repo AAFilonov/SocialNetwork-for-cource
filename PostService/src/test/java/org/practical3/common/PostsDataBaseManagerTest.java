@@ -36,7 +36,7 @@ class PostsDataBaseManagerTest {
 
 
     @Test
-    void getPosts() {
+    void getPosts() throws SQLException {
 
         ArrayList<Integer> ids = new ArrayList<Integer>(
                 Arrays.asList(1,2));
