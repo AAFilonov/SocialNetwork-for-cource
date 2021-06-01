@@ -6,7 +6,8 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.practical3.common.DataBaseManager;
 import org.practical3.common.PostsDataBaseManager;
 import org.practical3.handlers.MainServlet;
-import org.practical3.model.ConfigData;
+
+import org.practical3.utils.PropertyManager;
 
 import javax.servlet.Servlet;
 import java.io.IOException;
@@ -24,6 +25,7 @@ public class Main {
     private static ServletContextHandler context;
     public static void main(String[] args) throws Exception
     {
+      PropertyManager.load("./main.props");
       runServer();
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             @Override
@@ -36,38 +38,18 @@ public class Main {
 
 
     private static void runServer() {
-        //TODO  сделать чтения файла конфигов из аргумента командной строки?
-        Path configPath = Paths.get(System.getProperty("user.dir")+"/config.conf");
-        ConfigData configData = readConfigs(configPath);
+        int port = PropertyManager.getPropertyAsInteger("server.port", 8080);
+        String contextPath = PropertyManager.getPropertyAsString("server.contextPath", "/");
 
-        if(configData!=null) {
-            setConnection(configData);
-            if(db!=null) runServer(configData.ServerPort, configData.ServerPath);
-        }
+        runServer(port,contextPath);
 
     }
 
-    private static ConfigData readConfigs(Path configFile) {
-        try {
-            //TODO временное решение, заменить на на json
-            List<String> args = Files.readAllLines(configFile);
-            String ServerPort = args.get(0);
-            String ServerPath = args.get(1);
-            String DB_URL = args.get(2);
-            String DB_Name = args.get(3);
-            String User = args.get(4);
-            String Password = args.get(5);
-            return new ConfigData(ServerPort, ServerPath, DB_URL, DB_Name, User, Password);
-        }
-        catch (IOException ex){
-            System.out.println( String.format("Error while open config file: %s", ex.getMessage()));
-            return null;
-        }
-    }
 
-    private static void setConnection(ConfigData configData) {
+
+    private static void setConnection() {
         try {
-            db = new PostsDataBaseManager(configData);
+            db = new PostsDataBaseManager();
         }
        catch (Exception ex){
            System.out.println( String.format("Error while connect to database: %s", ex.getMessage()));
@@ -78,12 +60,8 @@ public class Main {
     public static void runServer(int port, String contextStr)
     {
         server = new Server(port);
-
-        context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.setContextPath(contextStr);
-        server.setHandler(context);
-
-        setServlets();
+        setContext(contextStr);
+        setConnection();
         try
         {
             server.start();
@@ -96,10 +74,20 @@ public class Main {
     }
 
 
+
+    private static void setContext(String contextStr ) {
+
+        context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        context.setContextPath(contextStr);
+        server.setHandler(context);
+
+        setServlets();
+    }
+
     private static void setServlets() {
         setServlet(new MainServlet((PostsDataBaseManager) db),"/posts/*");
-
     }
+
 
     private static void setServlet(Servlet servlet,String path ) {
 

@@ -1,6 +1,7 @@
 package org.practical3.common;
 
-import org.practical3.model.ConfigData;
+
+import org.practical3.model.Post;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,8 +9,8 @@ import java.sql.Statement;
 import java.util.Collection;
 
 public class PostsDataBaseManager extends DataBaseManager {
-    public PostsDataBaseManager(ConfigData configData) throws SQLException {
-        super(configData);
+    public PostsDataBaseManager() throws SQLException {
+        super();
     }
 
     public String  getData() throws SQLException {
@@ -26,7 +27,9 @@ public class PostsDataBaseManager extends DataBaseManager {
     }
 
 
-    public Collection<Post> getPosts(Collection<int> ids, )
+    public Collection<Post> getPosts(Collection<Integer> ids){
+        return null;
+    }
     
 
 }

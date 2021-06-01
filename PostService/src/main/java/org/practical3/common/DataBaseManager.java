@@ -1,6 +1,7 @@
 package org.practical3.common;
 
-import org.practical3.model.ConfigData;
+
+import org.practical3.utils.PropertyManager;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -13,9 +14,16 @@ public class DataBaseManager {
         return Connection;
     }
 
-    public DataBaseManager(ConfigData configData ) throws SQLException {
-            this.Connection = DriverManager.getConnection(configData.DB_URL+configData.DB_Name
-                    ,configData.User,configData.Password);
+    public DataBaseManager() throws SQLException {
+
+            String DB_URL =   PropertyManager.getPropertyAsString("database.server", "jdbc:postgresql://127.0.0.1:5432/");
+            String DB_Name =   PropertyManager.getPropertyAsString("database.database", "JavaPractice");
+            String User =   PropertyManager.getPropertyAsString("database.user", "postgres");
+            String Password =   PropertyManager.getPropertyAsString("database.password", "1");
+
+
+            this.Connection = DriverManager.getConnection(DB_URL+DB_Name
+                    ,User,Password);
             System.out.println("DB connection successfully opened");
 
     }
