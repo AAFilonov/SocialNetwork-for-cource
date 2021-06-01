@@ -7,8 +7,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DataBase {
+    
     Connection Connection;
-
+    public java.sql.Connection getConnection(){
+        return Connection;
+    }
 
     public DataBase(ConfigData configData ) throws SQLException {
             this.Connection = DriverManager.getConnection(configData.DB_URL+configData.DB_Name
