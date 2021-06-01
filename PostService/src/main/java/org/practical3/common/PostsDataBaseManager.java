@@ -5,9 +5,10 @@ import org.practical3.model.ConfigData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Collection;
 
-public class PostsDataBase extends DataBase {
-    public PostsDataBase(ConfigData configData) throws SQLException {
+public class PostsDataBaseManager extends DataBaseManager {
+    public PostsDataBaseManager(ConfigData configData) throws SQLException {
         super(configData);
     }
 
@@ -24,6 +25,8 @@ public class PostsDataBase extends DataBase {
         return  output;
     }
 
+
+    public Collection<Post> getPosts(Collection<int> ids, )
     
 
 }

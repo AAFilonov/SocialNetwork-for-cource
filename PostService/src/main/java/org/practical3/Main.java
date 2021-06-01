@@ -2,15 +2,13 @@ package org.practical3;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.practical3.common.DataBase;
-import org.practical3.common.PostsDataBase;
+import org.practical3.common.DataBaseManager;
+import org.practical3.common.PostsDataBaseManager;
 import org.practical3.handlers.MainServlet;
 import org.practical3.model.ConfigData;
 
 import javax.servlet.Servlet;
-import javax.servlet.http.HttpServlet;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -22,7 +20,7 @@ public class Main {
 
 
     private static Server server;
-    private static DataBase db;
+    private static DataBaseManager db;
     private static ServletContextHandler context;
     public static void main(String[] args) throws Exception
     {
@@ -69,7 +67,7 @@ public class Main {
 
     private static void setConnection(ConfigData configData) {
         try {
-            db = new PostsDataBase(configData);
+            db = new PostsDataBaseManager(configData);
         }
        catch (Exception ex){
            System.out.println( String.format("Error while connect to database: %s", ex.getMessage()));
@@ -99,7 +97,7 @@ public class Main {
 
 
     private static void setServlets() {
-        setServlet(new MainServlet((PostsDataBase) db),"/posts/*");
+        setServlet(new MainServlet((PostsDataBaseManager) db),"/posts/*");
 
     }
 

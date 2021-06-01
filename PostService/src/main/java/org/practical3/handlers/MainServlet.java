@@ -1,7 +1,6 @@
 package org.practical3.handlers;
 
-import org.practical3.common.DataBase;
-import org.practical3.common.PostsDataBase;
+import org.practical3.common.PostsDataBaseManager;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -18,9 +17,9 @@ public class MainServlet extends HttpServlet {
 
     //  Database credentials
 
-    private PostsDataBase DB;
+    private PostsDataBaseManager DB;
 
-    public MainServlet(PostsDataBase db){
+    public MainServlet(PostsDataBaseManager db){
         DB =db;
     }
 

@@ -6,14 +6,14 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DataBase {
-    
+public class DataBaseManager {
+
     Connection Connection;
     public java.sql.Connection getConnection(){
         return Connection;
     }
 
-    public DataBase(ConfigData configData ) throws SQLException {
+    public DataBaseManager(ConfigData configData ) throws SQLException {
             this.Connection = DriverManager.getConnection(configData.DB_URL+configData.DB_Name
                     ,configData.User,configData.Password);
             System.out.println("DB connection successfully opened");
