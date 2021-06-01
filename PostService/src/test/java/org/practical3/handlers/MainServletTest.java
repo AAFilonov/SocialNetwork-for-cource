@@ -6,6 +6,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
 import org.practical3.Main;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,7 +18,7 @@ public class MainServletTest {
         Main.runServer(8090, "/");
     }
 
-
+    @Disabled
     @Test
     public void doGet() throws Exception
     {

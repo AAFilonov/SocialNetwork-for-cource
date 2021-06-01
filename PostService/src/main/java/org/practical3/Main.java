@@ -23,6 +23,7 @@ public class Main {
     private static Server server;
     private static DataBaseManager db;
     private static ServletContextHandler context;
+
     public static void main(String[] args) throws Exception
     {
       PropertyManager.load("./main.props");
@@ -47,9 +48,14 @@ public class Main {
 
 
 
-    private static void setConnection() {
+     private static void setConnection() {
         try {
-            db = new PostsDataBaseManager();
+            String DB_URL =   PropertyManager.getPropertyAsString("database.server", "jdbc:postgresql://127.0.0.1:5432/");
+            String DB_Name =   PropertyManager.getPropertyAsString("database.database", "JavaPractice");
+            String User =   PropertyManager.getPropertyAsString("database.user", "postgres");
+            String Password =   PropertyManager.getPropertyAsString("database.password", "1");
+
+           db= new PostsDataBaseManager(DB_URL,DB_Name,User,Password);
         }
        catch (Exception ex){
            System.out.println( String.format("Error while connect to database: %s", ex.getMessage()));
@@ -60,8 +66,11 @@ public class Main {
     public static void runServer(int port, String contextStr)
     {
         server = new Server(port);
+
         setContext(contextStr);
         setConnection();
+        setServlets();
+
         try
         {
             server.start();
@@ -81,7 +90,6 @@ public class Main {
         context.setContextPath(contextStr);
         server.setHandler(context);
 
-        setServlets();
     }
 
     private static void setServlets() {
