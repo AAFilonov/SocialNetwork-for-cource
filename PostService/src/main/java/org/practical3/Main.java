@@ -33,8 +33,8 @@ public class Main {
     }
 
 
-    private static void runServer() {
-        int port = PropertyManager.getPropertyAsInteger("server.port", 8080);
+    public static void runServer() {
+        int port = PropertyManager.getPropertyAsInteger("server.port", 8027);
         String contextPath = PropertyManager.getPropertyAsString("server.contextPath", "/");
 
         runServer(port,contextPath);

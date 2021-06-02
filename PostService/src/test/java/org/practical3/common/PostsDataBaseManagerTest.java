@@ -36,7 +36,7 @@ class PostsDataBaseManagerTest {
 
 
     @Test
-    void getPosts() throws SQLException {
+    void getPosts() throws SQLException, ClassNotFoundException {
 
         ArrayList<Integer> ids = new ArrayList<Integer>(
                 Arrays.asList(1,2));
@@ -45,7 +45,7 @@ class PostsDataBaseManagerTest {
                 Arrays.asList(Field.POST_ID,Field.OWNER_ID,Field.CONTENT));
 
         ArrayList<Post> expected = new ArrayList<>(
-                Arrays.asList( new Post(1,0,"First post"),new Post(2,0,"Second post"))
+                Arrays.asList( new Post(1,0,"First post", new Date(System.currentTimeMillis())),new Post(2,0,"Second post",new Date(System.currentTimeMillis())))
         );
 
         ArrayList<Post> actual = (ArrayList<Post>) db.getPosts(ids,fields,10,0);
@@ -55,7 +55,14 @@ class PostsDataBaseManagerTest {
     }
 
     @Test
-    void insertPosts() {
+    void insertPosts() throws SQLException {
+        ArrayList<Post> inserted = new ArrayList<>(
+                Arrays.asList(
+                        new Post(1,0,"Post 3", new Date(System.currentTimeMillis())),
+                        new Post(2,0,"Post 4",new Date(System.currentTimeMillis())))
+        );
+        int affectedRows = db.insertPosts(inserted);
+        assertEquals(affectedRows,2);
     }
 
     @Test

@@ -1,6 +1,7 @@
 package org.practical3.common;
 
 
+import javafx.geometry.Pos;
 import org.practical3.model.Field;
 import org.practical3.model.Post;
 
@@ -30,22 +31,32 @@ public class PostsDataBaseManager extends DataBaseManager {
 
 
 
-    public Collection<Post> getPosts(Collection<Integer> ids, Collection<Field> fields, Integer count, Integer offset) throws SQLException {
+    public Collection<Post> getPosts(Collection<Integer> ids, Collection<Field> fields, Integer count, Integer offset) throws SQLException, ClassNotFoundException {
 
        String query = String.format( "select %s from db.posts WHERE post_id IN (%s) LIMIT %d OFFSET %d" ,
                getFieldsAsString(fields),
                getIdsASString(ids),
                count, offset);
        ResultSet result =  super.execute(query);
-       return fetchPosts(result, fields);
+        ArrayList<Post> items = fetchPosts(result, fields);
+        if( items.isEmpty())
+            throw  new ClassNotFoundException();
+
+        else return items;
 
 
     }
 
 
-    public void insertPosts(Collection<Post> posts){
+    public int insertPosts(Collection<Post> posts) throws SQLException {
 
+        String query = String.format( "INSERT INTO db.posts(%s) VALUES %s",
+                getFieldsAsString(Field.getAllFields()),
+                getPostsAsString(posts)
+        );
+        return super.executeUpdate(query);
     }
+
 
 
     public void removePosts(Collection<Post> posts){
@@ -93,15 +104,24 @@ public class PostsDataBaseManager extends DataBaseManager {
 
     }
 
+    private String getPostsAsString(Collection<Post> posts) {
+        Collection<String> postsAsString = new ArrayList<>();
+        for (Post post:posts) {
+            postsAsString.add(post.toSqlValues());
+        }
+        return String.join(",", postsAsString);
+    }
+
     Post fetchPost (ResultSet resultSet, Collection < Field > fields) throws SQLException {
         Post post = new Post();
         if (fields.contains(Field.POST_ID)) post.PostId = resultSet.getInt(Field.POST_ID.getVal());
         if (fields.contains(Field.OWNER_ID)) post.OwnerId = resultSet.getInt(Field.OWNER_ID.getVal());
         if (fields.contains(Field.CONTENT)) post.Content = resultSet.getString(Field.CONTENT.getVal());
+        if (fields.contains(Field.TIMESTAMP)) post.Timestamp = resultSet.getDate(Field.TIMESTAMP.getVal());
 
-        if (fields.contains(Field.IS_REDACTED)) post.isRedacted = resultSet.getBoolean(Field.IS_REDACTED.getVal());
-        if (fields.contains(Field.IS_REMOVED)) post.isRemoved = resultSet.getBoolean(Field.IS_REMOVED.getVal());
-        if (fields.contains(Field.IS_COMMENTABLE)) post.isCommentable = resultSet.getBoolean(Field.IS_COMMENTABLE.getVal());
+        if (fields.contains(Field.IS_REDACTED)) post.IsRedacted = resultSet.getBoolean(Field.IS_REDACTED.getVal());
+        if (fields.contains(Field.IS_REMOVED)) post.IsRemoved = resultSet.getBoolean(Field.IS_REMOVED.getVal());
+        if (fields.contains(Field.IS_COMMENTABLE)) post.IsCommentable = resultSet.getBoolean(Field.IS_COMMENTABLE.getVal());
 
         if (fields.contains(Field.COUNT_LIKES)) post.CountLikes = resultSet.getInt(Field.COUNT_LIKES.getVal());
         if (fields.contains(Field.COUNT_REPOSTS)) post.CountReposts = resultSet.getInt(Field.COUNT_REPOSTS.getVal());
