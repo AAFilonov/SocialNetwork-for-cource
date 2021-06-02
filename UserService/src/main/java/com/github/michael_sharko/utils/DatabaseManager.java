@@ -1,14 +1,15 @@
 package com.github.michael_sharko.utils;
 
-import org.postgresql.jdbc.PgConnection;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.SQLNonTransientConnectionException;
 
 public class DatabaseManager
 {
     private static Connection connection;
 
-    public void connect(String url, String user, String password)
+    public static void connectTo(String url, String user, String password)
     {
         try
         {
@@ -23,17 +24,27 @@ public class DatabaseManager
         }
     }
 
-    public final Connection getConnection()
+    public static boolean isConnected()
     {
+        return connection != null;
+    }
+
+    public static Connection getConnection() throws SQLNonTransientConnectionException {
+        if (connection == null)
+            throw new SQLNonTransientConnectionException("[PSQL:Error]: Database not connected!");
+
         return connection;
     }
 
-    public void disconnect()
+    public static void disconnect()
     {
         try
         {
             if (connection != null)
+            {
                 connection.close();
+                System.out.println("[PSQL:Info]: Connected to PostgreSQL!");
+            }
         }
         catch (SQLException troubles)
         {

@@ -1,9 +1,10 @@
 package com.github.michael_sharko;
 
-import com.github.michael_sharko.handlers.RegisterUserServlet;
-import com.github.michael_sharko.utils.PropertyManager;
 import com.github.michael_sharko.handlers.MainServlet;
-
+import com.github.michael_sharko.handlers.RegisterUserServlet;
+import com.github.michael_sharko.handlers.GetServlet;
+import com.github.michael_sharko.utils.DatabaseManager;
+import com.github.michael_sharko.utils.PropertyManager;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
@@ -40,6 +41,7 @@ public class Main
 
         context.addServlet(new ServletHolder(new MainServlet()), "/main");
         context.addServlet(new ServletHolder(new RegisterUserServlet()), "/register");
+        context.addServlet(new ServletHolder(new GetServlet()), "/get");
 
         HandlerList handlers = new HandlerList();
         handlers.setHandlers(new Handler[] { context });
@@ -51,6 +53,12 @@ public class Main
     {
         server = new Server(port);
         server.setHandler(handlers);
+
+        String dbUrl = PropertyManager.getPropertyAsString("database.server", "localhost");
+        String dbUser = PropertyManager.getPropertyAsString("database.user", "postgres");
+        String dbPassword = PropertyManager.getPropertyAsString("database.password", "postgres");
+
+        DatabaseManager.connectTo(dbUrl, dbUser, dbPassword);
 
         try
         {
@@ -68,8 +76,12 @@ public class Main
     {
         try
         {
+            if (DatabaseManager.isConnected())
+                DatabaseManager.disconnect();
+
             if (server.isRunning())
                 server.stop();
+
         }
         catch (Exception e)
         {
