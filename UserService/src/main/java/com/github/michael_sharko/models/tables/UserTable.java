@@ -4,7 +4,7 @@ public class UserTable
 {
     public Integer id;
 
-    public String login;
+    public String username;
     public String password;
     public java.sql.Date birthday;
 

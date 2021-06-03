@@ -2,7 +2,7 @@ CREATE TABLE users
 (
 	id			SERIAL PRIMARY KEY,
 
-  	login		VARCHAR(16) UNIQUE,
+  	username	VARCHAR(16) UNIQUE,
   	password	VARCHAR(32),
   	birthday	DATE,
 

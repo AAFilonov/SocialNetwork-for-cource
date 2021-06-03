@@ -1,5 +1,6 @@
 package com.github.michael_sharko.utils;
 
+import com.github.michael_sharko.handlers.SubscribesServlet;
 import com.github.michael_sharko.models.tables.SubscribesTable;
 import com.github.michael_sharko.models.tables.UserTable;
 
@@ -41,12 +42,12 @@ public class DatabaseManager
     public static void registerUser(UserTable newUser) throws SQLException
     {
         String insertIntoUserTableSql = "INSERT INTO users" +
-                " (login, password, birthday, fullname, sex, country, city, school, university)" +
+                " (username, password, birthday, fullname, sex, country, city, school, university)" +
                 " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT DO NOTHING";
 
         PreparedStatement prepareStatement = connection.prepareStatement(insertIntoUserTableSql);
 
-        prepareStatement.setString(1, newUser.login);
+        prepareStatement.setString(1, newUser.username);
         prepareStatement.setString(2, newUser.password);
         prepareStatement.setDate(3, newUser.birthday);
         prepareStatement.setString(4, newUser.fullname);
@@ -60,21 +61,6 @@ public class DatabaseManager
         prepareStatement.close();
     }
 
-    public static void registerSubscribe(SubscribesTable subscribe) throws SQLException
-    {
-        String insertIntoSubscribesTableSql = "INSERT INTO subscribes" +
-                " (ownerid, subscriberid)" +
-                " VALUES (?, ?) ON CONFLICT DO NOTHING";
-
-        PreparedStatement prepareStatement = connection.prepareStatement(insertIntoSubscribesTableSql);
-
-        prepareStatement.setInt(1, subscribe.ownerid);
-        prepareStatement.setInt(2, subscribe.subscriberid);
-
-        prepareStatement.executeUpdate();
-        prepareStatement.close();
-    }
-
     public static void selectUsers(List<UserTable> result, String[] params, String condition) throws SQLException
     {
         Statement statement = connection.createStatement();
@@ -83,7 +69,7 @@ public class DatabaseManager
         ResultSet resultSet = statement.executeQuery(sql);
 
         boolean showId = false;
-        boolean showLogin = false;
+        boolean showUsername = false;
         boolean showBirthday = false;
 
         boolean showFullname = false;
@@ -101,7 +87,7 @@ public class DatabaseManager
             Arrays.sort(params);
 
             showId = Arrays.binarySearch(params, "id") >= 0;
-            showLogin = Arrays.binarySearch(params, "login") >= 0;
+            showUsername = Arrays.binarySearch(params, "username") >= 0;
             showBirthday = Arrays.binarySearch(params, "birthday") >= 0;
             showFullname = Arrays.binarySearch(params, "fullname") >= 0;
             showSex = Arrays.binarySearch(params, "sex") >= 0;
@@ -120,8 +106,8 @@ public class DatabaseManager
             if (showAll || showId)
                 user.id = resultSet.getInt("id");
 
-            if (showAll || showLogin)
-                user.login = resultSet.getString("login");
+            if (showAll || showUsername)
+                user.username = resultSet.getString("username");
 
             if (showAll || showBirthday)
                 user.birthday = resultSet.getDate("birthday");
@@ -147,6 +133,78 @@ public class DatabaseManager
             result.add(user);
         }
         statement.close();
+    }
+
+    public static void updateUser(UserTable updatedUser) throws SQLException
+    {
+        Statement statement = connection.createStatement();
+
+        String sql = "SELECT * FROM users WHERE id = " + updatedUser.id;
+        ResultSet resultSet = statement.executeQuery(sql);
+
+        UserTable user = new UserTable();
+        resultSet.next();
+
+        user.username = resultSet.getString("username");
+        user.password = resultSet.getString("password");
+        user.birthday = resultSet.getDate("birthday");
+
+        user.fullname = resultSet.getString("fullname");
+        user.sex = resultSet.getInt("sex");
+
+        user.country = resultSet.getString("country");
+        user.city = resultSet.getString("city");
+        user.school = resultSet.getString("school");
+        user.university = resultSet.getString("university");
+
+        String updateUserSql = "UPDATE users SET username = ?, password = ?, birthday = ?, fullname = ?, sex = ?, country = ?, city = ?, school = ?, university = ? WHERE id = ?";
+        PreparedStatement prepareStatement = connection.prepareStatement(updateUserSql);
+
+        prepareStatement.setString(1, updatedUser.username == null ? user.username : updatedUser.username);
+        prepareStatement.setString(2, updatedUser.password == null ? user.password : updatedUser.password);
+        prepareStatement.setDate(3, updatedUser.birthday == null ? user.birthday : updatedUser.birthday);
+
+        prepareStatement.setString(4, updatedUser.fullname == null ? user.fullname : updatedUser.fullname);
+        prepareStatement.setInt(5, updatedUser.sex == null ? user.sex : updatedUser.sex);
+
+        prepareStatement.setString(6, updatedUser.country == null ? user.country : updatedUser.country);
+        prepareStatement.setString(7, updatedUser.city == null ? user.city : updatedUser.city);
+        prepareStatement.setString(8, updatedUser.school == null ? user.school : updatedUser.school);
+        prepareStatement.setString(9, updatedUser.university == null ? user.university : updatedUser.university);
+        prepareStatement.setInt(10, updatedUser.id);
+
+        prepareStatement.executeUpdate();
+        prepareStatement.close();
+    }
+
+    public static void deleteUser(Integer id) throws SQLException
+    {
+        if (id == null)
+            return;
+
+        Statement statement = connection.createStatement();
+
+        ResultSet resultSet = statement.executeQuery("SELECT ownerid FROM subscribes WHERE ownerid = " + id);
+        if (resultSet.next())
+            statement.executeQuery("DELETE FROM subscribes WHERE ownerid = " + id);
+
+        statement.executeQuery("DELETE FROM users WHERE id = " + id);
+        statement.close();
+    }
+
+    public static void registerSubscribe(SubscribesTable subscribe) throws SQLException
+    {
+        String insertIntoSubscribesTableSql = "INSERT INTO subscribes" +
+                " (ownerid, subscriberid)" +
+                " VALUES (?, ?) ON CONFLICT DO NOTHING";
+
+        PreparedStatement prepareStatement = connection.prepareStatement(insertIntoSubscribesTableSql);
+
+        prepareStatement.setInt(1, subscribe.ownerid);
+        prepareStatement.setInt(2, subscribe.subscriberid);
+
+        prepareStatement.executeUpdate();
+        prepareStatement.close();
     }
 
     public static void selectSubscribes(List<SubscribesTable> result, String condition) throws SQLException
