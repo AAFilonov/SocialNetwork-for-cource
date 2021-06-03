@@ -5,7 +5,6 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.practical3.handlers.MainServlet;
 import org.practical3.handlers.PostsServlet;
 import org.practical3.handlers.UsersServlet;
 import org.practical3.utils.Commons;
@@ -58,7 +57,7 @@ public class Main {
 
         setContext(contextStr);
         setServlets();
-        commons.gson = new Gson();
+
     }
 
 

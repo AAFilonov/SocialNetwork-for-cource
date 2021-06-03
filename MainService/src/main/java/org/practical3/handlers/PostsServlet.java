@@ -1,5 +1,6 @@
 package org.practical3.handlers;
 
+import org.practical3.model.AnswerPosts;
 import org.practical3.utils.Commons;
 
 import javax.servlet.ServletConfig;
@@ -13,35 +14,60 @@ import java.io.IOException;
 
 public class PostsServlet extends HttpServlet {
 
-    Commons Common ;
+    Commons Common;
 
-
-    public PostsServlet(Commons commons){
+    public PostsServlet(Commons commons) {
         Common = commons;
     }
 
 
-
     @Override
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
-        log("Method init =)");
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String action = req.getParameter("action");
+        switch (action) {
+            case "getWall":
+                getWall(req, resp);
+                break;
+            case "getPosts":
+                getPosts(req, resp);
+                break;
+            case "insertPosts":
+                insertPosts(req, resp);
+                break;
+            case "updatePosts":
+                updatePosts(req, resp);
+                break;
+            case "removePosts":
+                reomovePosts(req, resp);
+                break;
+
+            default:
+                resp.setContentType("application/json");
+                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                resp.getWriter().println(Common.gson.toJson(new AnswerPosts(null, "Error: wrong action or no action provided")));
+        }
     }
 
-    @Override
-    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.getWriter().write("Method service enter\n");
-        super.service(req, resp);
-        resp.getWriter().write("Method service exit\n");
+    private void updatePosts(HttpServletRequest req, HttpServletResponse resp) {
+
+    }
+    private void reomovePosts(HttpServletRequest req, HttpServletResponse resp) {
+
+    }
+    private void insertPosts(HttpServletRequest req, HttpServletResponse resp) {
+
     }
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.getWriter().write("Method doGet\n");
+    private void getPosts(HttpServletRequest req, HttpServletResponse resp) {
     }
 
-    @Override
-    public void destroy() {
-        log("Method destroy =)");
+
+
+
+    private void getWall(HttpServletRequest req, HttpServletResponse resp) {
+
+
     }
+
+
 }
