@@ -1,21 +1,26 @@
 package org.practical3.handlers;
 
 import org.practical3.model.postService.AnswerPostService;
-import org.practical3.model.postService.RequestPosts;
+import org.practical3.model.postService.PostField;
+import org.practical3.model.postService.RequestWall;
 import org.practical3.utils.Commons;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 import java.util.Map;
 
 
-public class PostsServlet extends HttpServlet {
+public class WallServlet extends HttpServlet {
 
     Commons Common;
 
-    public PostsServlet(Commons commons) {
+    public WallServlet(Commons commons) {
         Common = commons;
     }
 
@@ -52,8 +57,26 @@ public class PostsServlet extends HttpServlet {
 
     private void getPosts(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         Map<String,String[]> args =  req.getParameterMap();
-        RequestPosts request= new RequestPosts(args);
-        AnswerPostService postServiceAnswer =  Common.httpGetPosts(request);
+        String UserName = args.get("username")[0];
+
+        //получить по юзернейму id
+
+        //получить по id подписки
+        //получить по id подписок посты
+        Collection<Integer> ids = new ArrayList<Integer>();
+        Collection<PostField> postFields =RequestWall.parseFields(args);
+        Date dateAfter = new Date( args.get("dateAfter")[0]);
+        Date DateBefore = new Date( args.get("dateBefore")[0]);
+        Integer Count = new Integer(args.get("Count")[0]);
+        Integer Offset = new Integer( args.get("Offset")[0]);
+        RequestWall requestWall = new RequestWall(ids
+                ,postFields
+                ,dateAfter
+                ,DateBefore
+                ,Count
+                ,Offset);
+        AnswerPostService postServiceAnswer = Common.httpGetWall(requestWall);
+
         doReply(postServiceAnswer, resp);
     }
 

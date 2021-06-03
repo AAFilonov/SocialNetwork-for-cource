@@ -14,7 +14,7 @@ import org.junit.Test;
 
 import org.practical3.Main;
 import org.practical3.model.Post;
-import org.practical3.model.AnswerPosts;
+import org.practical3.model.Answer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -70,7 +70,7 @@ public class PostsServletTest {
         HttpEntity resp  = response.getEntity();
         String respStr = EntityUtils.toString(resp);
 
-        AnswerPosts a =  gson.fromJson(respStr, AnswerPosts.class);
+        Answer a =  gson.fromJson(respStr, Answer.class);
 
         org.junit.Assert.assertEquals(a.Status, "OK");
     }
