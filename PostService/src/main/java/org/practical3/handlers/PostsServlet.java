@@ -2,8 +2,7 @@ package org.practical3.handlers;
 
 import org.apache.commons.io.IOUtils;
 import com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
-import org.practical3.utils.PostsDataBaseManager;
+import org.practical3.utils.Commons;
 import org.practical3.model.Post;
 import org.practical3.model.AnswerPosts;
 import org.practical3.model.RequestPosts;
@@ -24,11 +23,11 @@ import java.util.Map;
 public class PostsServlet extends HttpServlet {
 
     //  Database credentials
-    Gson gson = new Gson();
-    private PostsDataBaseManager dataBaseManager;
+    Commons Common ;
 
-    public PostsServlet(PostsDataBaseManager db){
-        dataBaseManager =db;
+
+    public PostsServlet(Commons commons){
+        Common = commons;
     }
 
 
@@ -48,30 +47,30 @@ public class PostsServlet extends HttpServlet {
         try {
 
             RequestPosts request= new RequestPosts(args);
-            Collection<Post> posts=  dataBaseManager.getPosts(request.ids, request.postFields, request.count, request.offset);
+            Collection<Post> posts=  Common.dataBaseManager.getPosts(request.ids, request.postFields, request.count, request.offset);
             if(posts==null) throw new ClassNotFoundException();
             AnswerPosts answer = new AnswerPosts(posts,"OK");
 
             resp.setContentType("application/json");
             resp.setStatus(HttpServletResponse.SC_OK);
-            resp.getWriter().println(gson.toJson(answer));
+            resp.getWriter().println(Common.gson.toJson(answer));
         }
         catch (ClassNotFoundException e){
 
             resp.setContentType("application/json");
             resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            resp.getWriter().println(gson.toJson(new AnswerPosts(null,"Error: no posts found for provided ids")));
+            resp.getWriter().println(Common.gson.toJson(new AnswerPosts(null,"Error: no posts found for provided ids")));
         }
         catch (IllegalArgumentException e){
 
             resp.setContentType("application/json");
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().println(gson.toJson(new AnswerPosts(null,"Error: wrong arguments")));
+            resp.getWriter().println(Common.gson.toJson(new AnswerPosts(null,"Error: wrong arguments")));
         }
         catch (Exception e){
             resp.setContentType("application/json");
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().println(gson.toJson(new AnswerPosts(null,"Error: internal server error\n"+e.getMessage())));
+            resp.getWriter().println(Common.gson.toJson(new AnswerPosts(null,"Error: internal server error\n"+e.getMessage())));
 
         }
     }
@@ -84,25 +83,25 @@ public class PostsServlet extends HttpServlet {
 
             String reqStr = IOUtils.toString(req.getInputStream());
             Type userListType = new TypeToken<ArrayList<Post>>(){}.getType();
-            Collection<Post> posts = gson.fromJson (reqStr, userListType);
+            Collection<Post> posts = Common.gson.fromJson (reqStr, userListType);
 
-            dataBaseManager.insertPosts(posts);
+            Common.dataBaseManager.insertPosts(posts);
             AnswerPosts answer = new AnswerPosts(null,"OK");
 
             resp.setContentType("application/json");
             resp.setStatus(HttpServletResponse.SC_OK);
-            resp.getWriter().println(gson.toJson(answer));
+            resp.getWriter().println(Common.gson.toJson(answer));
         }
         catch (IllegalArgumentException e){
 
             resp.setContentType("application/json");
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().println(gson.toJson(new AnswerPosts(null,"Error: wrong arguments")));
+            resp.getWriter().println(Common.gson.toJson(new AnswerPosts(null,"Error: wrong arguments")));
         }
         catch (Exception e){
             resp.setContentType("application/json");
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().println(gson.toJson(new AnswerPosts(null,"Error: internal server error\n"+e.getMessage())));
+            resp.getWriter().println(Common.gson.toJson(new AnswerPosts(null,"Error: internal server error\n"+e.getMessage())));
 
         }
     }

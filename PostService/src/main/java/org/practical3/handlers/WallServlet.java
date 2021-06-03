@@ -6,6 +6,7 @@ import org.apache.commons.io.IOUtils;
 import org.practical3.model.Post;
 import org.practical3.model.RequestPosts;
 import org.practical3.model.RequestWall;
+import org.practical3.utils.Commons;
 import org.practical3.utils.PostsDataBaseManager;
 import org.practical3.model.AnswerPosts;
 
@@ -24,11 +25,11 @@ import java.util.Map;
 public class WallServlet extends HttpServlet {
 
 
-    Gson gson = new Gson();
-    private PostsDataBaseManager dataBaseManager;
+    Commons Common ;
 
-    public WallServlet(PostsDataBaseManager db) {
-        dataBaseManager = db;
+
+    public WallServlet(Commons commons){
+        Common = commons;
     }
 
 
@@ -52,7 +53,7 @@ public class WallServlet extends HttpServlet {
        } else {
            resp.setContentType("application/json");
            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-           resp.getWriter().println(gson.toJson(new AnswerPosts(null, "Error: wrong action or no action provided")));
+           resp.getWriter().println(Common.gson.toJson(new AnswerPosts(null, "Error: wrong action or no action provided")));
        }
 
     }
@@ -61,22 +62,22 @@ public class WallServlet extends HttpServlet {
         try {
 
             String reqStr = IOUtils.toString(req.getInputStream());
-            RequestWall requestWall = gson.fromJson(reqStr, RequestWall.class);
-            AnswerPosts answer = new AnswerPosts(dataBaseManager.getWall(requestWall), "OK");
+            RequestWall requestWall = Common.gson.fromJson(reqStr, RequestWall.class);
+            AnswerPosts answer = new AnswerPosts(Common.dataBaseManager.getWall(requestWall), "OK");
 
 
             resp.setContentType("application/json");
             resp.setStatus(HttpServletResponse.SC_OK);
-            resp.getWriter().println(gson.toJson(answer));
+            resp.getWriter().println(Common.gson.toJson(answer));
         } catch (IllegalArgumentException e) {
 
             resp.setContentType("application/json");
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().println(gson.toJson(new AnswerPosts(null, "Error: wrong arguments")));
+            resp.getWriter().println(Common.gson.toJson(new AnswerPosts(null, "Error: wrong arguments")));
         } catch (Exception e) {
             resp.setContentType("application/json");
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().println(gson.toJson(new AnswerPosts(null, "Error: internal server error\n" + e.getMessage())));
+            resp.getWriter().println(Common.gson.toJson(new AnswerPosts(null, "Error: internal server error\n" + e.getMessage())));
 
         }
 

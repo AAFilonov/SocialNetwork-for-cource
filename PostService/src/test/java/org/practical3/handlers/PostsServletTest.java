@@ -26,7 +26,11 @@ public class PostsServletTest {
     @Before
     public void init() throws Exception {
         Thread newThread = new Thread(() -> {
-            Main.runServer(8027,"/");
+            try {
+                Main.main(null);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
         newThread.start();
 
