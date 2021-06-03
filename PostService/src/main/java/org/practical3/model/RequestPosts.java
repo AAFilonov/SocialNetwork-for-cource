@@ -3,17 +3,17 @@ package org.practical3.model;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class PostsRequest {
+public class RequestPosts {
 
     public ArrayList<Integer> ids ;
-    public ArrayList<Field> fields ;
+    public ArrayList<PostField> postFields;
     public Integer count  ;
     public Integer offset ;
 
-    public PostsRequest(Map<String, String[]> args){
+    public RequestPosts(Map<String, String[]> args){
 
         ids = parseIds(args);
-       fields = parseFields(args);
+       postFields = parseFields(args);
         count = new Integer(args.get("count")[0]);
         offset = new Integer(args.get("offset")[0]);
 
@@ -30,15 +30,15 @@ public class PostsRequest {
         return ids;
     }
 
-    private  ArrayList<Field> parseFields( Map<String,String[]> args ){
+    private  ArrayList<PostField> parseFields(Map<String,String[]> args ){
         String fields = args.get("fields")[0];
         String[] fieldsArray = fields.split(",");
-        ArrayList<Field> finalFields = new ArrayList<>();
+        ArrayList<PostField> finalPostFields = new ArrayList<>();
 
 
         for (String fieldString:fieldsArray) {
-            finalFields.add(Field.parse(fieldString));
+            finalPostFields.add(PostField.parse(fieldString));
         }
-        return finalFields;
+        return finalPostFields;
     }
 }

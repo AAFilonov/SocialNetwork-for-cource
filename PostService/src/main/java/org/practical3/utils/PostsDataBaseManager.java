@@ -1,8 +1,10 @@
 package org.practical3.utils;
 
 
-import org.practical3.model.Field;
+import org.practical3.model.PostField;
 import org.practical3.model.Post;
+import org.practical3.model.RequestWall;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,10 +14,10 @@ import java.util.Collection;
 
 public class PostsDataBaseManager extends DataBaseManager {
     public PostsDataBaseManager(String DB_URL, String DB_Name, String user, String password) throws SQLException {
-        super(DB_URL,DB_Name,user,password);
+        super(DB_URL, DB_Name, user, password);
     }
 
-    public String  getData() throws SQLException {
+    public String getData() throws SQLException {
 
         String str = super.Connection.nativeSQL("select * from db.posts");
 
@@ -25,21 +27,20 @@ public class PostsDataBaseManager extends DataBaseManager {
         while (result.next()) {
             output += result.getString("content") + "\n";
         }
-        return  output;
+        return output;
     }
 
 
+    public Collection<Post> getPosts(Collection<Integer> ids, Collection<PostField> postFields, Integer count, Integer offset) throws SQLException {
 
-    public Collection<Post> getPosts(Collection<Integer> ids, Collection<Field> fields, Integer count, Integer offset) throws SQLException, ClassNotFoundException {
-
-       String query = String.format( "select %s from db.posts WHERE post_id IN (%s) LIMIT %d OFFSET %d" ,
-               getFieldsAsString(fields),
-               getIdsASString(ids),
-               count, offset);
-       ResultSet result =  super.execute(query);
-        ArrayList<Post> items = fetchPosts(result, fields);
-        if( items.isEmpty())
-            throw  new ClassNotFoundException();
+        String query = String.format("select %s from db.posts WHERE post_id IN (%s) LIMIT %d OFFSET %d",
+                getFieldsAsString(postFields),
+                getIdsASString(ids),
+                count, offset);
+        ResultSet result = super.execute(query);
+        ArrayList<Post> items = fetchPosts(result, postFields);
+        if (items.isEmpty())
+           return null;
 
         else return items;
 
@@ -49,14 +50,15 @@ public class PostsDataBaseManager extends DataBaseManager {
 
     public int insertPosts(Collection<Post> posts) throws SQLException {
 
-        String query = String.format( "INSERT INTO db.posts(%s) VALUES %s",
-                getFieldsAsString(Field.getAllFields()),
+        String query = String.format("INSERT INTO db.posts(%s) VALUES %s",
+                getFieldsAsString(PostField.getAllFields()),
                 getPostsAsString(posts)
         );
         return super.executeUpdate(query);
     }
-    
+
     public int updatePosts(Collection<Post> posts) throws SQLException {
+        throw new NotImplementedException();
         //TODO  метод обновления
        /* String query = String.format( "UPDATE db.posts AS old " +
                         "SET %s  a from (VALEUS %s ) as new(%s) " +
@@ -67,51 +69,63 @@ public class PostsDataBaseManager extends DataBaseManager {
         );
 
         return super.executeUpdate(query);*/
-        return 0;
-    }
-
-
-
-
-    public void removePosts(Collection<Post> posts){
 
     }
 
 
-    public void deletePosts(Collection<Post> posts){
-
+    public void removePosts(Collection<Post> posts) {
+        throw new NotImplementedException();
     }
 
 
+    public void deletePosts(Collection<Post> posts) {
+        throw new NotImplementedException();
+    }
+
+    public Collection<Post> getWall(RequestWall requestWall) throws SQLException {
+
+        String query = String.format("SELECT %s FROM db.posts " +
+                        "WHERE owner_id IN (%s) " +
+                        "AND timestamp BETWEEN '%s' AND '%s' " +
+                        "LIMIT %d OFFSET %d",
+
+                getFieldsAsString(requestWall.Fields),
+                getIdsASString(requestWall.OwnerIds),
+                requestWall.DateAfter.toString(), requestWall.DateBefore.toString(),
+                requestWall.Count, requestWall.Offset);
+
+        ResultSet result = super.execute(query);
+        return fetchPosts(result, requestWall.Fields);
+    }
 
 
-    ArrayList<Post>  fetchPosts(ResultSet resultSet, Collection<Field> fields) throws SQLException {
+    ArrayList<Post> fetchPosts(ResultSet resultSet, Collection<PostField> postFields) throws SQLException {
 
         ArrayList<Post> posts = new ArrayList<>();
         while (resultSet.next()) {
-            posts.add(fetchPost(resultSet,fields));
+            posts.add(fetchPost(resultSet, postFields));
         }
         return posts;
     }
 
 
-
-    String getFieldsAsString(Collection<Field> fields){
-        if(fields.isEmpty()) return "*";
+    String getFieldsAsString(Collection<PostField> postFields) {
+        if (postFields.isEmpty()) return "*";
 
         ArrayList<String> vals = new ArrayList<>();
-        for (Field field:fields) {
-            vals.add("\""+field.getVal()+"\"");
+        for (PostField postField : postFields) {
+            vals.add("\"" + postField.getVal() + "\"");
         }
 
         return String.join(",", vals);
     }
-    String getIdsASString(Collection<Integer> ids){
+
+    String getIdsASString(Collection<Integer> ids) {
         String output;
 
         ArrayList<String> idsVals = new ArrayList<>();
-        for (Integer id:ids) {
-            idsVals.add("'" +id.toString()+"'");
+        for (Integer id : ids) {
+            idsVals.add("'" + id.toString() + "'");
         }
 
         return String.join(",", idsVals);
@@ -120,26 +134,30 @@ public class PostsDataBaseManager extends DataBaseManager {
 
     private String getPostsAsString(Collection<Post> posts) {
         Collection<String> postsAsString = new ArrayList<>();
-        for (Post post:posts) {
+        for (Post post : posts) {
             postsAsString.add(post.toSqlValues());
         }
         return String.join(",", postsAsString);
     }
 
-    Post fetchPost (ResultSet resultSet, Collection < Field > fields) throws SQLException {
+    Post fetchPost(ResultSet resultSet, Collection<PostField> postFields) throws SQLException {
         Post post = new Post();
-        if (fields.contains(Field.POST_ID)) post.PostId = resultSet.getInt(Field.POST_ID.getVal());
-        if (fields.contains(Field.OWNER_ID)) post.OwnerId = resultSet.getInt(Field.OWNER_ID.getVal());
-        if (fields.contains(Field.CONTENT)) post.Content = resultSet.getString(Field.CONTENT.getVal());
-        if (fields.contains(Field.TIMESTAMP)) post.Timestamp = resultSet.getDate(Field.TIMESTAMP.getVal());
+        if (postFields.contains(PostField.POST_ID)) post.PostId = resultSet.getInt(PostField.POST_ID.getVal());
+        if (postFields.contains(PostField.OWNER_ID)) post.OwnerId = resultSet.getInt(PostField.OWNER_ID.getVal());
+        if (postFields.contains(PostField.CONTENT)) post.Content = resultSet.getString(PostField.CONTENT.getVal());
+        if (postFields.contains(PostField.TIMESTAMP)) post.Timestamp = resultSet.getDate(PostField.TIMESTAMP.getVal());
 
-        if (fields.contains(Field.IS_REDACTED)) post.IsRedacted = resultSet.getBoolean(Field.IS_REDACTED.getVal());
-        if (fields.contains(Field.IS_REMOVED)) post.IsRemoved = resultSet.getBoolean(Field.IS_REMOVED.getVal());
-        if (fields.contains(Field.IS_COMMENTABLE)) post.IsCommentable = resultSet.getBoolean(Field.IS_COMMENTABLE.getVal());
+        if (postFields.contains(PostField.IS_REDACTED))
+            post.IsRedacted = resultSet.getBoolean(PostField.IS_REDACTED.getVal());
+        if (postFields.contains(PostField.IS_REMOVED))
+            post.IsRemoved = resultSet.getBoolean(PostField.IS_REMOVED.getVal());
+        if (postFields.contains(PostField.IS_COMMENTABLE))
+            post.IsCommentable = resultSet.getBoolean(PostField.IS_COMMENTABLE.getVal());
 
-        if (fields.contains(Field.COUNT_LIKES)) post.CountLikes = resultSet.getInt(Field.COUNT_LIKES.getVal());
-        if (fields.contains(Field.COUNT_REPOSTS)) post.CountReposts = resultSet.getInt(Field.COUNT_REPOSTS.getVal());
-
+        if (postFields.contains(PostField.COUNT_LIKES))
+            post.CountLikes = resultSet.getInt(PostField.COUNT_LIKES.getVal());
+        if (postFields.contains(PostField.COUNT_REPOSTS))
+            post.CountReposts = resultSet.getInt(PostField.COUNT_REPOSTS.getVal());
 
 
         return post;

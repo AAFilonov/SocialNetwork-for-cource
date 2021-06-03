@@ -1,12 +1,7 @@
 package org.practical3.utils;
 
 
-import org.practical3.model.Field;
-import org.practical3.model.Post;
-
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Collection;
 
 public class DataBaseManager {
 

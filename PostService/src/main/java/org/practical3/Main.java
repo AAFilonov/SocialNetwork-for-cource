@@ -3,6 +3,7 @@ package org.practical3;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.practical3.handlers.WallServlet;
 import org.practical3.utils.DataBaseManager;
 import org.practical3.utils.PostsDataBaseManager;
 import org.practical3.handlers.PostsServlet;
@@ -87,8 +88,10 @@ public class Main {
 
     }
 
-    private static void setServlets() {
+    private static void setServlets()
+    {
         setServlet(new PostsServlet((PostsDataBaseManager) db),"/posts/*");
+        setServlet(new WallServlet((PostsDataBaseManager) db),"/wall/*");
     }
 
 

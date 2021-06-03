@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-public enum Field {
+public enum PostField {
     POST_ID("post_id"),
     OWNER_ID("owner_id"),
     CONTENT("content"),
@@ -15,26 +15,26 @@ public enum Field {
     COUNT_LIKES("CountLikes"),
     COUNT_REPOSTS("CountReposts");
 
-    private static Field classItem = Field.OWNER_ID;
+    private static PostField classItem = PostField.OWNER_ID;
     private final String val;
 
     public  String getVal(){
         return  val;
     }
-    Field(String val) {
+    PostField(String val) {
         this.val = val;
     }
 
-    public static Collection<Field> getAllFields()  {
-        return new ArrayList<Field>(Arrays.asList(classItem.getDeclaringClass().getEnumConstants()));
+    public static Collection<PostField> getAllFields()  {
+        return new ArrayList<PostField>(Arrays.asList(classItem.getDeclaringClass().getEnumConstants()));
     }
 
-    public static Field parse(String s) throws IllegalArgumentException {
+    public static PostField parse(String s) throws IllegalArgumentException {
 
-        for (Field field:Field.values()) {
-            String fieldVal=field.getVal();
+        for (PostField postField : PostField.values()) {
+            String fieldVal= postField.getVal();
             if(s.equals(fieldVal))
-                return  field;
+                return postField;
         }
 
        throw new IllegalArgumentException();

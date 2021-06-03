@@ -5,8 +5,8 @@ import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import org.practical3.utils.PostsDataBaseManager;
 import org.practical3.model.Post;
-import org.practical3.model.PostsAnswer;
-import org.practical3.model.PostsRequest;
+import org.practical3.model.AnswerPosts;
+import org.practical3.model.RequestPosts;
 
 
 import javax.servlet.ServletConfig;
@@ -47,10 +47,10 @@ public class PostsServlet extends HttpServlet {
 
         try {
 
-            PostsRequest request= new PostsRequest(args);
-            PostsAnswer  answer = new PostsAnswer(
-                    dataBaseManager.getPosts(request.ids, request.fields, request.count, request.offset),
-            "OK");
+            RequestPosts request= new RequestPosts(args);
+            Collection<Post> posts=  dataBaseManager.getPosts(request.ids, request.postFields, request.count, request.offset);
+            if(posts==null) throw new ClassNotFoundException();
+            AnswerPosts answer = new AnswerPosts(posts,"OK");
 
             resp.setContentType("application/json");
             resp.setStatus(HttpServletResponse.SC_OK);
@@ -60,18 +60,18 @@ public class PostsServlet extends HttpServlet {
 
             resp.setContentType("application/json");
             resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            resp.getWriter().println(gson.toJson(new PostsAnswer(null,"Error: no posts found for provided ids")));
+            resp.getWriter().println(gson.toJson(new AnswerPosts(null,"Error: no posts found for provided ids")));
         }
         catch (IllegalArgumentException e){
 
             resp.setContentType("application/json");
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().println(gson.toJson(new PostsAnswer(null,"Error: wrong arguments")));
+            resp.getWriter().println(gson.toJson(new AnswerPosts(null,"Error: wrong arguments")));
         }
         catch (Exception e){
             resp.setContentType("application/json");
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().println(gson.toJson(new PostsAnswer(null,"Error: internal server error\n"+e.getMessage())));
+            resp.getWriter().println(gson.toJson(new AnswerPosts(null,"Error: internal server error\n"+e.getMessage())));
 
         }
     }
@@ -87,7 +87,7 @@ public class PostsServlet extends HttpServlet {
             Collection<Post> posts = gson.fromJson (reqStr, userListType);
 
             dataBaseManager.insertPosts(posts);
-            PostsAnswer  answer = new PostsAnswer(null,"OK");
+            AnswerPosts answer = new AnswerPosts(null,"OK");
 
             resp.setContentType("application/json");
             resp.setStatus(HttpServletResponse.SC_OK);
@@ -97,12 +97,12 @@ public class PostsServlet extends HttpServlet {
 
             resp.setContentType("application/json");
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().println(gson.toJson(new PostsAnswer(null,"Error: wrong arguments")));
+            resp.getWriter().println(gson.toJson(new AnswerPosts(null,"Error: wrong arguments")));
         }
         catch (Exception e){
             resp.setContentType("application/json");
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().println(gson.toJson(new PostsAnswer(null,"Error: internal server error\n"+e.getMessage())));
+            resp.getWriter().println(gson.toJson(new AnswerPosts(null,"Error: internal server error\n"+e.getMessage())));
 
         }
     }
