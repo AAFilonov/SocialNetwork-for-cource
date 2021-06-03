@@ -1,5 +1,6 @@
 package com.github.michael_sharko.utils;
 
+import com.github.michael_sharko.models.tables.SubscribesTable;
 import com.github.michael_sharko.models.tables.UserTable;
 
 import java.sql.*;
@@ -54,6 +55,21 @@ public class DatabaseManager
         prepareStatement.setString(7, newUser.city);
         prepareStatement.setString(8, newUser.school);
         prepareStatement.setString(9, newUser.university);
+
+        prepareStatement.executeUpdate();
+        prepareStatement.close();
+    }
+
+    public static void registerSubscribe(SubscribesTable subscribe) throws SQLException
+    {
+        String insertIntoSubscribesTableSql = "INSERT INTO subscribes" +
+                " (ownerid, subscriberid)" +
+                " VALUES (?, ?) ON CONFLICT DO NOTHING";
+
+        PreparedStatement prepareStatement = connection.prepareStatement(insertIntoSubscribesTableSql);
+
+        prepareStatement.setInt(1, subscribe.ownerid);
+        prepareStatement.setInt(2, subscribe.subscriberid);
 
         prepareStatement.executeUpdate();
         prepareStatement.close();
@@ -130,6 +146,39 @@ public class DatabaseManager
 
             result.add(user);
         }
+        statement.close();
+    }
+
+    public static void selectSubscribes(List<SubscribesTable> result, String condition) throws SQLException
+    {
+        Statement statement = connection.createStatement();
+
+        String sql = "SELECT * FROM subscribes " + condition;
+        ResultSet resultSet = statement.executeQuery(sql);
+
+        while (resultSet.next())
+        {
+            SubscribesTable subscribe = new SubscribesTable();
+
+            subscribe.ownerid = resultSet.getInt("ownerid");
+            subscribe.subscriberid = resultSet.getInt("subscriberid");
+
+            result.add(subscribe);
+        }
+
+        statement.close();
+    }
+
+    public static void deleteSubscribe(SubscribesTable subscribe) throws SQLException
+    {
+        if (subscribe.ownerid == null || subscribe.subscriberid == null)
+            return;
+
+        Statement statement = connection.createStatement();
+
+        String sql = "DELETE FROM subscribes WHERE ownerid = " + subscribe.ownerid + " AND subscriberid = " + subscribe.subscriberid;
+        statement.executeQuery(sql);
+
         statement.close();
     }
 

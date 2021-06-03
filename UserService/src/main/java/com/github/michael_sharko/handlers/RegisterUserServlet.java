@@ -19,20 +19,20 @@ import org.apache.commons.lang3.StringUtils;
 @WebServlet("/register")
 public class RegisterUserServlet extends HttpServlet
 {
+    GsonBuilder gsonBuilder = new GsonBuilder();
+    Gson gson = gsonBuilder.create();
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException
     {
         resp.setContentType("application/json");
-
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        Gson gson = gsonBuilder.create();
 
         String reqStr = IOUtils.toString(req.getInputStream());
         if(StringUtils.isBlank(reqStr))
         {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             resp.getWriter().write(gson.toJson(
-                    new Answer("Error", "to register, you must specify at least a username and password")
+                    new Answer<UserTable>("Error", "to register, you must specify at least a username and password")
             ));
             return;
         }

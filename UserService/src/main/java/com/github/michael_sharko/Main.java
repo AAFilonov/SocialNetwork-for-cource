@@ -2,6 +2,7 @@ package com.github.michael_sharko;
 
 import com.github.michael_sharko.handlers.RegisterUserServlet;
 import com.github.michael_sharko.handlers.GetUserServlet;
+import com.github.michael_sharko.handlers.SubscribesServlet;
 import com.github.michael_sharko.utils.DatabaseManager;
 import com.github.michael_sharko.utils.PropertyManager;
 import org.eclipse.jetty.server.Handler;
@@ -40,6 +41,7 @@ public class Main
 
         context.addServlet(new ServletHolder(new RegisterUserServlet()), "/register");
         context.addServlet(new ServletHolder(new GetUserServlet()), "/get");
+        context.addServlet(new ServletHolder(new SubscribesServlet()), "/subscribes");
 
         HandlerList handlers = new HandlerList();
         handlers.setHandlers(new Handler[] { context });
