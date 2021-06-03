@@ -19,6 +19,9 @@ import java.util.List;
 @WebServlet("/get")
 public class GetUserServlet extends HttpServlet
 {
+    GsonBuilder gsonBuilder = new GsonBuilder();
+    Gson gson = gsonBuilder.create();
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
     {
@@ -51,9 +54,6 @@ public class GetUserServlet extends HttpServlet
             if (logins != null)
                 for (String login : logins)
                     DatabaseManager.selectUsers(result, params, "WHERE login = '" + login + '\'');
-
-            GsonBuilder gsonBuilder = new GsonBuilder();
-            Gson gson = gsonBuilder.create();
 
             resp.setStatus(HttpServletResponse.SC_OK);
             resp.getWriter().write(gson.toJson(new Answer("OK", result)));

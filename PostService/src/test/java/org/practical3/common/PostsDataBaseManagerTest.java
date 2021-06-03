@@ -36,7 +36,7 @@ class PostsDataBaseManagerTest {
     @Nested
     class insertTests {
         @Test
-        void insertPosts() throws SQLException {
+        void insertPostsTest() throws SQLException {
             ArrayList<Post> inserted = new ArrayList<>(
                     Arrays.asList(
                             new Post(1, 0, "Post 3", new Date(System.currentTimeMillis())),
@@ -44,22 +44,23 @@ class PostsDataBaseManagerTest {
             );
             int affectedRows = postsDataBaseManager.insertPosts(inserted);
             assertEquals(affectedRows, 2);
+
         }
 
     }
 
 
     @Test
-    void getPosts() throws SQLException, ClassNotFoundException {
+    void getPostsTest() throws SQLException, ClassNotFoundException {
 
         ArrayList<Integer> ids = new ArrayList<Integer>(
-                Arrays.asList(7, 8));
+                Arrays.asList(1, 2));
 
         ArrayList<PostField> postFields = new ArrayList<>(
                 Arrays.asList(PostField.POST_ID, PostField.OWNER_ID, PostField.CONTENT));
 
         ArrayList<Post> expected = new ArrayList<>(
-                Arrays.asList(new Post(7, 0, "First post"), new Post(8, 0, "Second post"))
+                Arrays.asList(new Post(1, 0, "First post"), new Post(2, 0, "Second post"))
         );
 
         ArrayList<Post> actual = (ArrayList<Post>) postsDataBaseManager.getPosts(ids, postFields, 10, 0);
@@ -70,27 +71,47 @@ class PostsDataBaseManagerTest {
 
 
     @Test
-    void removePosts() {
+    void removePostsTest() {
     }
 
     @Test
-    void deletePosts() {
+    void deletePostsTest() throws SQLException {
+
+
+        ArrayList<Integer> ids = new ArrayList<Integer>(
+                Arrays.asList(1, 2));
+        int rowsDeleted = postsDataBaseManager.deletePosts(ids);
+        assertEquals(2, rowsDeleted);
+
     }
 
     @Test
     void getWall() throws SQLException {
-        RequestWall requestWall =  TestUtils.createRequestWall();
 
+
+        RequestWall requestWall = TestUtils.createRequestWall();
         ArrayList<Post> expected = new ArrayList<>(
                 Arrays.asList(new Post(null, null, "First post"), new Post(null, null, "Second post"))
         );
 
-        ArrayList<Post>  actual = (ArrayList<Post>) postsDataBaseManager.getWall(requestWall);
+        ArrayList<Post> actual = (ArrayList<Post>) postsDataBaseManager.getWall(requestWall);
         assertEquals(expected.toString(), actual.toString());
+
 
     }
 
+    void insertTestData() throws SQLException {
+        ArrayList<Post> inserted = new ArrayList<>(
+                Arrays.asList(
+                        new Post(1, 0, "First post", new Date(System.currentTimeMillis())),
+                        new Post(2, 0, "Second post", new Date(System.currentTimeMillis())))
+        );
+        postsDataBaseManager.insertPosts(inserted);
+    }
 
+    void clearTestData() throws SQLException {
+        postsDataBaseManager.deletePosts(Arrays.asList(1, 2));
+    }
 
 
 }

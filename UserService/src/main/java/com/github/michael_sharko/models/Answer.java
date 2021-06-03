@@ -1,28 +1,26 @@
 package com.github.michael_sharko.models;
 
-import com.github.michael_sharko.models.tables.UserTable;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class Answer
+public class Answer<Table>
 {
-    private String status;
+    private final String status;
     private String message;
-    private List<UserTable> users;
+    private List<Table> list;
 
-    public Answer(String status, List<UserTable> users)
+    public Answer(String status, List<Table> list)
     {
         this.status = status;
-        this.users = users;
+        this.list = list;
     }
 
-    public Answer(String status, UserTable user)
+    public Answer(String status, Table user)
     {
         this.status = status;
-        this.users = new ArrayList<>();
+        this.list = new ArrayList<>();
 
-        users.add(user);
+        list.add(user);
     }
 
     public Answer(String status, String message)
@@ -31,9 +29,9 @@ public class Answer
         this.message = message;
     }
 
-    public List<UserTable> getUsers()
+    public List<Table> getList()
     {
-        return users;
+        return list;
     }
 
     public String getStatus()

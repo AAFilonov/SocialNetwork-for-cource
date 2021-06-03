@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.practical3.handlers.WallServlet;
+
 import org.practical3.utils.Commons;
 import org.practical3.utils.PostsDataBaseManager;
 import org.practical3.handlers.PostsServlet;
@@ -21,7 +21,7 @@ public class Main {
 
     private static ServletContextHandler context;
 
-    public static void main(String[] args) throws Exception
+    public static void main(String[] args)
     {
       PropertyManager.load("./main.props");
       runServer();
@@ -91,7 +91,7 @@ public class Main {
     private static void setServlets()
     {
         setServlet(new PostsServlet(commons),"/posts/*");
-        setServlet(new WallServlet(commons),"/wall/*");
+
     }
 
 

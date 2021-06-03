@@ -31,7 +31,7 @@ public class PostsDataBaseManager extends DataBaseManager {
     }
 
 
-    public Collection<Post> getPosts(Collection<Integer> ids, Collection<PostField> postFields, Integer count, Integer offset) throws SQLException {
+    public Collection<Post> getPosts(Collection<Integer> ids, Collection<PostField> postFields, Integer count, Integer offset) throws SQLException, ClassNotFoundException {
 
         String query = String.format("select %s from db.posts WHERE post_id IN (%s) LIMIT %d OFFSET %d",
                 getFieldsAsString(postFields),
@@ -40,7 +40,7 @@ public class PostsDataBaseManager extends DataBaseManager {
         ResultSet result = super.execute(query);
         ArrayList<Post> items = fetchPosts(result, postFields);
         if (items.isEmpty())
-           return null;
+                throw new ClassNotFoundException();
 
         else return items;
 
@@ -78,8 +78,13 @@ public class PostsDataBaseManager extends DataBaseManager {
     }
 
 
-    public void deletePosts(Collection<Post> posts) {
-        throw new NotImplementedException();
+    public int deletePosts(Collection<Integer> ids) throws SQLException {
+
+        String query = String.format("DELETE from db.posts WHERE post_id IN (%s)",
+                getIdsASString(ids));
+
+        return  super.executeUpdate(query);
+
     }
 
     public Collection<Post> getWall(RequestWall requestWall) throws SQLException {
