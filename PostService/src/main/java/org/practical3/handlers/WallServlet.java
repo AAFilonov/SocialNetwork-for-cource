@@ -1,13 +1,12 @@
 package org.practical3.handlers;
 
-import org.apache.commons.io.IOUtils;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import org.apache.commons.io.IOUtils;
 import org.practical3.utils.PostsDataBaseManager;
 import org.practical3.model.Post;
 import org.practical3.model.PostsAnswer;
 import org.practical3.model.PostsRequest;
-
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -21,13 +20,13 @@ import java.util.Collection;
 import java.util.Map;
 
 
-public class PostsServlet extends HttpServlet {
+public class WallServlet extends HttpServlet {
 
-    //  Database credentials
+
     Gson gson = new Gson();
     private PostsDataBaseManager dataBaseManager;
 
-    public PostsServlet(PostsDataBaseManager db){
+    public WallServlet(PostsDataBaseManager db){
         dataBaseManager =db;
     }
 

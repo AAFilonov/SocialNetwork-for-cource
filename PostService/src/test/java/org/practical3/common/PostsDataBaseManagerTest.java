@@ -1,12 +1,9 @@
 package org.practical3.common;
 
-import org.junit.Before;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.practical3.model.Field;
 import org.practical3.model.Post;
+import org.practical3.utils.PostsDataBaseManager;
 import org.practical3.utils.PropertyManager;
 
 import java.sql.SQLException;
@@ -18,12 +15,12 @@ class PostsDataBaseManagerTest {
     PostsDataBaseManager db;
 
     @BeforeEach
-    public void init()  {
+    public void init() {
         PropertyManager.load("./main.props");
-        String DB_URL =   PropertyManager.getPropertyAsString("database.server", "jdbc:postgresql://127.0.0.1:5432/");
-        String DB_Name =   PropertyManager.getPropertyAsString("database.database", "JavaPractice");
-        String User =   PropertyManager.getPropertyAsString("database.user", "postgres");
-        String Password =   PropertyManager.getPropertyAsString("database.password", "1");
+        String DB_URL = PropertyManager.getPropertyAsString("database.server", "jdbc:postgresql://127.0.0.1:5432/");
+        String DB_Name = PropertyManager.getPropertyAsString("database.database", "JavaPractice");
+        String User = PropertyManager.getPropertyAsString("database.user", "postgres");
+        String Password = PropertyManager.getPropertyAsString("database.password", "1");
 
 
         try {
@@ -34,36 +31,43 @@ class PostsDataBaseManagerTest {
     }
 
 
+    @Nested
+    class insertTests
+    {
+        @Test
+        void insertPosts() throws SQLException {
+            ArrayList<Post> inserted = new ArrayList<>(
+                    Arrays.asList(
+                            new Post(1, 0, "Post 3", new Date(System.currentTimeMillis())),
+                            new Post(2, 0, "Post 4", new Date(System.currentTimeMillis())))
+            );
+            int affectedRows = db.insertPosts(inserted);
+            assertEquals(affectedRows, 2);
+        }
+
+    }
+
+
 
     @Test
     void getPosts() throws SQLException, ClassNotFoundException {
 
         ArrayList<Integer> ids = new ArrayList<Integer>(
-                Arrays.asList(1,2));
+                Arrays.asList(1, 2));
 
         ArrayList<Field> fields = new ArrayList<>(
-                Arrays.asList(Field.POST_ID,Field.OWNER_ID,Field.CONTENT));
+                Arrays.asList(Field.POST_ID, Field.OWNER_ID, Field.CONTENT));
 
         ArrayList<Post> expected = new ArrayList<>(
-                Arrays.asList( new Post(1,0,"First post", new Date(System.currentTimeMillis())),new Post(2,0,"Second post",new Date(System.currentTimeMillis())))
+                Arrays.asList(new Post(1, 0, "First post", new Date(System.currentTimeMillis())), new Post(2, 0, "Second post", new Date(System.currentTimeMillis())))
         );
 
-        ArrayList<Post> actual = (ArrayList<Post>) db.getPosts(ids,fields,10,0);
+        ArrayList<Post> actual = (ArrayList<Post>) db.getPosts(ids, fields, 10, 0);
 
-        assertEquals(expected.toString(),actual.toString());
+        assertEquals(expected.toString(), actual.toString());
 
     }
 
-    @Test
-    void insertPosts() throws SQLException {
-        ArrayList<Post> inserted = new ArrayList<>(
-                Arrays.asList(
-                        new Post(1,0,"Post 3", new Date(System.currentTimeMillis())),
-                        new Post(2,0,"Post 4",new Date(System.currentTimeMillis())))
-        );
-        int affectedRows = db.insertPosts(inserted);
-        assertEquals(affectedRows,2);
-    }
 
     @Test
     void removePosts() {
@@ -72,9 +76,6 @@ class PostsDataBaseManagerTest {
     @Test
     void deletePosts() {
     }
-
-
-
 
 
 }

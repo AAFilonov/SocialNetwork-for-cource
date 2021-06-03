@@ -3,8 +3,8 @@ package org.practical3;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.practical3.common.DataBaseManager;
-import org.practical3.common.PostsDataBaseManager;
+import org.practical3.utils.DataBaseManager;
+import org.practical3.utils.PostsDataBaseManager;
 import org.practical3.handlers.PostsServlet;
 
 import org.practical3.utils.PropertyManager;

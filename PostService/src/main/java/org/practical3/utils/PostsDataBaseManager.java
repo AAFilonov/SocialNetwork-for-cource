@@ -1,7 +1,6 @@
-package org.practical3.common;
+package org.practical3.utils;
 
 
-import javafx.geometry.Pos;
 import org.practical3.model.Field;
 import org.practical3.model.Post;
 
@@ -56,6 +55,21 @@ public class PostsDataBaseManager extends DataBaseManager {
         );
         return super.executeUpdate(query);
     }
+    
+    public int updatePosts(Collection<Post> posts) throws SQLException {
+        //TODO  метод обновления
+       /* String query = String.format( "UPDATE db.posts AS old " +
+                        "SET %s  a from (VALEUS %s ) as new(%s) " +
+                        "where new.post_id = old.post_id;"
+                ,getNotNullFieldsAsString(posts)
+                ,getPostsAsString(posts)
+
+        );
+
+        return super.executeUpdate(query);*/
+        return 0;
+    }
+
 
 
 

@@ -1,4 +1,4 @@
-package org.practical3.common;
+package org.practical3.utils;
 
 
 import org.practical3.model.Field;
