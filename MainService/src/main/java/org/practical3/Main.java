@@ -1,69 +1,99 @@
 package org.practical3;
 
+import com.google.gson.Gson;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 import org.practical3.handlers.MainServlet;
+import org.practical3.handlers.PostsServlet;
+import org.practical3.handlers.UsersServlet;
+import org.practical3.utils.Commons;
+import org.practical3.utils.PropertyManager;
 
-
+import javax.servlet.Servlet;
 
 
 public class Main {
 
-
+    private  static Commons commons = new Commons();
     private static Server server;
+
+    private static ServletContextHandler context;
 
     public static void main(String[] args) throws Exception
     {
-
+        PropertyManager.load("./main.props");
         runServer();
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             @Override
             public void run() {
-
                 stopServer();
 
             }
         },"Stop Jetty Hook"));
     }
 
-    public static void runServer(int port, String contextStr)
-    {
-        server = new Server(port);
-        //регистрирует класс по пути /path
-        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.setContextPath(contextStr);
-        server.setHandler(context);
 
-        ServletHandler handler = new ServletHandler();
-        server.setHandler(handler);
+    public static void runServer() {
+        int port = PropertyManager.getPropertyAsInteger("server.port", 8026);
+        String contextPath = PropertyManager.getPropertyAsString("server.contextPath", "/");
 
-        handler.addServletWithMapping(MainServlet.class, "/path");
+        init(port,contextPath);
 
         try
         {
             server.start();
-          //  log.error("Server has started at port: " + port);
-            //server.join();
+            System.out.println( String.format("PostService server start on port %d", port ));
+
+            server.join();
         }catch(Throwable t){
-            //log.error("Error while starting server", t);
+            System.out.println( String.format("Error while stopping server: %s", t.getMessage()));
         }
+
     }
 
-    private static void runServer() {
-        int port = 8026;
-        String contextStr = "/";
+    public static void init(int port, String contextStr){
+        server = new Server(port);
 
-        runServer(port, contextStr);
+        setContext(contextStr);
+        setServlets();
+        commons.gson = new Gson();
+    }
+
+
+
+
+    private static void setContext(String contextStr ) {
+
+        context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        context.setContextPath(contextStr);
+        server.setHandler(context);
+
+    }
+
+    private static void setServlets()
+    {
+        setServlet(new PostsServlet(commons),"/posts/*");
+        setServlet(new UsersServlet(),"/users/*");
+    }
+
+
+    private static void setServlet(Servlet servlet, String path ) {
+
+        ServletHolder servletHolder = new ServletHolder(servlet);
+        context.addServlet(servletHolder,path);
+
     }
 
     public static void stopServer() {
         try {
             if(server.isRunning()){
                 server.stop();
+
             }
         } catch (Exception e) {
-         //   log.error("Error while stopping server", e);
+            System.out.println( String.format("Error while stopping server: %s", e.getMessage()));
         }
     }
 }
