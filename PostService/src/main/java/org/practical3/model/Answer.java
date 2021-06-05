@@ -5,10 +5,9 @@ import java.util.Collection;
 public class Answer {
     public Object Data;
     public String Status;
-    public int Code;
-    public Answer(Object data, String status,  int code) {
+    public Answer( Object data,String status ) {
         Data = data;
         Status = status;
-        Code = code;
+
     }
 }

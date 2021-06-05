@@ -56,14 +56,11 @@ class PostsDataBaseManagerTest {
         ArrayList<Integer> ids = new ArrayList<Integer>(
                 Arrays.asList(1, 2));
 
-        ArrayList<PostField> postFields = new ArrayList<>(
-                Arrays.asList(PostField.POST_ID, PostField.OWNER_ID, PostField.CONTENT));
-
         ArrayList<Post> expected = new ArrayList<>(
                 Arrays.asList(new Post(1, 0, "First post"), new Post(2, 0, "Second post"))
         );
 
-        ArrayList<Post> actual = (ArrayList<Post>) postsDataBaseManager.getPosts(ids, postFields, 10, 0);
+        ArrayList<Post> actual = (ArrayList<Post>) postsDataBaseManager.getPosts(ids, 10, 0);
 
         assertEquals(expected.toString(), actual.toString());
 

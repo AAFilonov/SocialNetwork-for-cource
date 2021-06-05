@@ -2,17 +2,18 @@ package org.practical3.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
+import java.time.LocalDate;
+
 
 public class RequestWall {
     public Collection<Integer> OwnerIds;
     public Collection<PostField> Fields;
-    public Date DateAfter;
-    public Date DateBefore;
+    public LocalDate DateAfter;
+    public LocalDate DateBefore;
     public Integer Count;
     public Integer Offset;
 
-    public RequestWall(ArrayList<Integer> ownerIds, ArrayList<PostField> postFields, Date dateAfter, Date dateBefore, Integer count, Integer offset){
+    public RequestWall(ArrayList<Integer> ownerIds, ArrayList<PostField> postFields, LocalDate dateAfter, LocalDate dateBefore, Integer count, Integer offset){
         OwnerIds = ownerIds;
         Fields =postFields;
         DateAfter = dateAfter;

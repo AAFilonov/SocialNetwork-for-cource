@@ -24,8 +24,6 @@ public class PostsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
             getPosts(req,resp);
-
-
         }
         catch (ClassNotFoundException e){
 

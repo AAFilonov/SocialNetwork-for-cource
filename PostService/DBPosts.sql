@@ -4,7 +4,7 @@ CREATE TABLE db.posts(
 	"post_id" serial PRIMARY KEY,
 	"owner_id" integer NOT NULL,
 	"content" text NOT NULL,
-	"timestamp " date NOT NULL,
+	"timestamp " datetime NOT NULL,
 	"isRemoved" boolean DEFAULT false,
 	"isRedated" boolean DEFAULT false,
 	"isCommentable" boolean DEFAULT false,
