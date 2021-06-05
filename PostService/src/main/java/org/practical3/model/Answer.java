@@ -5,7 +5,7 @@ import java.util.Collection;
 public class Answer {
     public Object Data;
     public String Status;
-    public Answer( Object data,String status ) {
+    public Answer( String status ,Object data ) {
         Data = data;
         Status = status;
 

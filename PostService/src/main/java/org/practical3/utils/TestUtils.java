@@ -1,15 +1,13 @@
 package org.practical3.utils;
 
 import org.practical3.model.Post;
-import org.practical3.model.RequestWall;
+import org.practical3.model.WallRequest;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 public class TestUtils {
     public static final int TestOwnerId = 400;
@@ -17,7 +15,7 @@ public class TestUtils {
     public static final int SecondPostId = 889;
     public static  Instant currentPoint = Instant.now();
 
-    public static RequestWall createRequestWall() {
+    public static WallRequest createRequestWall() {
         ArrayList<Integer> ownerIds = new ArrayList<Integer>(
                 Arrays.asList(TestOwnerId));
         Instant dateTimeBegin = currentPoint.minus(2, ChronoUnit.DAYS);
@@ -26,7 +24,7 @@ public class TestUtils {
         Integer Offset = 0;
         Integer Count = 10;
 
-        return new RequestWall(ownerIds, dateTimeBegin, dateTimeEnd, Count, Offset);
+        return new WallRequest(ownerIds, dateTimeBegin, dateTimeEnd, Count, Offset);
     }
     public static Collection<Integer> getTestPostsIds() {
         return  Arrays.asList(TestUtils.FirstPostId, TestUtils.SecondPostId);

@@ -3,7 +3,7 @@ package org.practical3.utils;
 
 import org.practical3.model.PostField;
 import org.practical3.model.Post;
-import org.practical3.model.RequestWall;
+import org.practical3.model.WallRequest;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.sql.*;
@@ -85,17 +85,17 @@ public class PostsDataBaseManager extends DataBaseManager {
 
     }
 
-    public Collection<Post> getWall(RequestWall requestWall) throws SQLException {
+    public Collection<Post> getWall(WallRequest wallRequest) throws SQLException {
         PreparedStatement statement = super.Connection.prepareStatement (String.format("SELECT * FROM db.posts " +
                 "WHERE owner_id IN (%s) " +
                 "AND timestamp BETWEEN ? AND ?" +
-                "LIMIT ? OFFSET ?", getIdsASString(requestWall.OwnerIds)));
+                "LIMIT ? OFFSET ?", getIdsASString(wallRequest.OwnerIds)));
 
 
-        statement.setTimestamp(1, Timestamp.from(requestWall.DateTimeAfter));
-        statement.setTimestamp(2, Timestamp.from(requestWall.DateTimeBefore));
-        statement.setInt(3, requestWall.Count);
-        statement.setInt(4, requestWall.Offset);
+        statement.setTimestamp(1, Timestamp.from(wallRequest.DateTimeAfter));
+        statement.setTimestamp(2, Timestamp.from(wallRequest.DateTimeBefore));
+        statement.setInt(3, wallRequest.Count);
+        statement.setInt(4, wallRequest.Offset);
 
 
         ResultSet result = statement.executeQuery();
