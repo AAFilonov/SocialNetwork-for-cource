@@ -8,6 +8,7 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.practical3.handlers.PostsServlet;
 import org.practical3.handlers.UsersServlet;
 import org.practical3.utils.Commons;
+import org.practical3.utils.HttpClientManager;
 import org.practical3.utils.PropertyManager;
 
 import javax.servlet.Servlet;
@@ -15,7 +16,7 @@ import javax.servlet.Servlet;
 
 public class Main {
 
-    private  static Commons commons = new Commons();
+
     private static Server server;
 
     private static ServletContextHandler context;
@@ -73,7 +74,7 @@ public class Main {
 
     private static void setServlets()
     {
-        setServlet(new PostsServlet(commons),"/posts/*");
+        setServlet(new PostsServlet(),"/posts/*");
         setServlet(new UsersServlet(),"/users/*");
     }
 

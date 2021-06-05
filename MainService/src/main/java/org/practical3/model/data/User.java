@@ -1,10 +1,10 @@
-package org.practical3.model.userService.tables;
+package org.practical3.model.data;
 
-public class UserTable
+public class User
 {
     public Integer id;
 
-    public String login;
+    public String username;
     public String password;
     public java.sql.Date birthday;
 

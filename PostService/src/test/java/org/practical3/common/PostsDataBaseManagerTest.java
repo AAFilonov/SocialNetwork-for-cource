@@ -2,7 +2,7 @@ package org.practical3.common;
 
 import org.junit.jupiter.api.*;
 import org.practical3.model.Post;
-import org.practical3.model.RequestWall;
+import org.practical3.model.WallRequest;
 import org.practical3.utils.PostsDataBaseManager;
 import org.practical3.utils.PropertyManager;
 import org.practical3.utils.TestUtils;
@@ -78,10 +78,10 @@ class PostsDataBaseManagerTest {
     void getWallTest() throws SQLException {
         insertTestData();
 
-        RequestWall requestWall = TestUtils.createRequestWall();
+        WallRequest wallRequest = TestUtils.createRequestWall();
         Collection<Post> inserted = TestUtils.getTestPosts();
 
-        ArrayList<Post> actual = (ArrayList<Post>) postsDataBaseManager.getWall(requestWall);
+        ArrayList<Post> actual = (ArrayList<Post>) postsDataBaseManager.getWall(wallRequest);
 
         assertEquals(2, actual.size());
 

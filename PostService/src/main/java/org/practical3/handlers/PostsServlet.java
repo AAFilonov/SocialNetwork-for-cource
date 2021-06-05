@@ -2,11 +2,12 @@ package org.practical3.handlers;
 
 import org.apache.commons.io.IOUtils;
 import com.google.common.reflect.TypeToken;
-import org.practical3.model.RequestWall;
+import org.practical3.model.WallRequest;
 import org.practical3.utils.Commons;
 import org.practical3.model.Post;
 import org.practical3.model.Answer;
-import org.practical3.model.RequestPosts;
+import org.practical3.model.PostsRequest;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 
 import javax.servlet.ServletConfig;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 
+@SuppressWarnings({"UnstableApiUsage", "deprecation"})
 public class PostsServlet extends HttpServlet {
 
     //  Database credentials
@@ -55,11 +57,11 @@ public class PostsServlet extends HttpServlet {
 
             resp.setContentType("application/json");
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().println(Common.gson.toJson(new Answer("Error: wrong arguments",null)));
+            resp.getWriter().println(Common.gson.toJson(new Answer("Error: wrong arguments",e)));
         } catch (Exception e) {
             resp.setContentType("application/json");
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().println(Common.gson.toJson(new Answer( "Error: internal server error\n" + e.getMessage(),null)));
+            resp.getWriter().println(Common.gson.toJson(new Answer( "Error: internal server error\n" + e.getMessage(),e)));
 
         }
     }
@@ -79,36 +81,41 @@ public class PostsServlet extends HttpServlet {
                 updatePosts(req, resp);
                 break;
             case "removePosts":
-                reomovePosts(req, resp);
+                removePosts(req, resp);
                 break;
             case "deletePosts":
                 deletePosts(req, resp);
                 break;
+            case "searchPosts":
+               searchPosts(req, resp);
+                break;
 
             default:
                 resp.setContentType("application/json");
-                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                resp.getWriter().println(Common.gson.toJson(new Answer("Error: wrong action or no action provided", null)));
+                resp.setStatus(HttpServletResponse.SC_NOT_IMPLEMENTED);
+                resp.getWriter().println(Common.gson.toJson(new Answer("Error: wrong action or no action "+ action, null)));
 
         }
     }
+
+
 
     private void deletePosts(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException {
         String reqStr = IOUtils.toString(req.getInputStream());
         Type userListType = new TypeToken<ArrayList<Integer>>() {
         }.getType();
         Collection<Integer> ids = Common.gson.fromJson(reqStr, userListType);
-        Common.dataBaseManager.deletePosts(ids);
+        Integer rowsAffected =  Common.dataBaseManager.deletePosts(ids);
+        sendOk(resp,rowsAffected);
     }
 
-    private void updatePosts(HttpServletRequest req, HttpServletResponse resp) {
-    }
+
 
     private void getWall(HttpServletRequest req, HttpServletResponse resp) throws SQLException, IOException {
 
         String reqStr = IOUtils.toString(req.getInputStream());
-        RequestWall requestWall = Common.gson.fromJson(reqStr, RequestWall.class);
-        Collection<Post> posts =  Common.dataBaseManager.getWall(requestWall);
+        WallRequest wallRequest = Common.gson.fromJson(reqStr, WallRequest.class);
+        Collection<Post> posts =  Common.dataBaseManager.getWall(wallRequest);
 
         sendOk(resp,posts);
 
@@ -118,8 +125,10 @@ public class PostsServlet extends HttpServlet {
 
 
         String reqStr = IOUtils.toString(req.getInputStream());
-        RequestPosts request = Common.gson.fromJson(reqStr, RequestPosts.class);
-        Collection<Post> posts = Common.dataBaseManager.getPosts(request.ids, request.count, request.offset);
+        PostsRequest request = Common.gson.fromJson(reqStr, PostsRequest.class);
+
+
+        Collection<Post> posts = Common.dataBaseManager.getPosts(request.ids, request.Count, request.Offset);
 
         sendOk(resp,posts);
     }
@@ -133,19 +142,26 @@ public class PostsServlet extends HttpServlet {
         }.getType();
         Collection<Post> posts = Common.gson.fromJson(reqStr, userListType);
 
-        Common.dataBaseManager.insertPosts(posts);
+        Integer rowsAffected =  Common.dataBaseManager.insertPosts(posts);
 
 
-        sendOk(resp,null);
+        sendOk(resp,rowsAffected);
 
     }
 
 
-    private void reomovePosts(HttpServletRequest req, HttpServletResponse resp) {
+    private void removePosts(HttpServletRequest req, HttpServletResponse resp) {
+        throw new NotImplementedException();
+    }
+    private void updatePosts(HttpServletRequest req, HttpServletResponse resp) {
+        throw new NotImplementedException();
+    }
+    private void searchPosts(HttpServletRequest req, HttpServletResponse resp) {
+        throw new NotImplementedException();
     }
 
     void sendOk(HttpServletResponse resp, Object data) throws IOException {
-        Answer a = new Answer(data,"OK");
+        Answer a = new Answer("OK", data);
         resp.setContentType("application/json");
         resp.setStatus(HttpServletResponse.SC_OK);
         resp.getWriter().println(Common.gson.toJson(a));

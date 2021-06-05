@@ -1,25 +1,27 @@
 package org.practical3.handlers;
 
-import org.practical3.model.postService.AnswerPostService;
-import org.practical3.model.postService.RequestPosts;
+
+import javafx.geometry.Pos;
+import org.practical3.PostServiceAPI;
+import org.practical3.model.data.Post;
+import org.practical3.model.transfer.Answer;
+import org.practical3.model.transfer.requests.PostsRequest;
 import org.practical3.utils.Commons;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Map;
 
 
 public class PostsServlet extends HttpServlet {
+    public PostsServlet() {
 
-    Commons Common;
-
-    public PostsServlet(Commons commons) {
-        Common = commons;
     }
 
-
+    //TODO реализовать свои классы исключений
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
@@ -29,18 +31,18 @@ public class PostsServlet extends HttpServlet {
 
             resp.setContentType("application/json");
             resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            resp.getWriter().println(Common.gson.toJson(new AnswerPostService(null,"Error: no posts found for provided ids",HttpServletResponse.SC_NOT_FOUND)));
+            resp.getWriter().println(Commons.gson.toJson(new Answer(null,"Error: no posts found for provided ids")));
         }
         catch (IllegalArgumentException e){
 
             resp.setContentType("application/json");
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().println(Common.gson.toJson(new AnswerPostService(null,"Error: wrong arguments",HttpServletResponse.SC_BAD_REQUEST)));
+            resp.getWriter().println(Commons.gson.toJson(new Answer(null,"Error: wrong arguments")));
         }
         catch (Exception e){
             resp.setContentType("application/json");
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().println(Common.gson.toJson(new AnswerPostService(null,"Error: internal server error:"+e.getMessage(),HttpServletResponse.SC_INTERNAL_SERVER_ERROR)));
+            resp.getWriter().println(Commons.gson.toJson(new Answer(null,"Error: internal server error:"+e.getMessage())));
 
         }
 
@@ -50,16 +52,17 @@ public class PostsServlet extends HttpServlet {
 
     private void getPosts(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         Map<String,String[]> args =  req.getParameterMap();
-        RequestPosts request= new RequestPosts(args);
-        AnswerPostService postServiceAnswer =  Common.httpGetPosts(request);
-        doReply(postServiceAnswer, resp);
+        PostsRequest request= new PostsRequest(
+                args.get("post_ids")[0],
+                new Integer(args.get("count")[0]),
+                new Integer(args.get("offset")[0])
+        );
+        Collection<Post> posts  = PostServiceAPI.getPosts(request);
+
+        Commons.sendOk(posts, resp);
     }
 
-    private void doReply(AnswerPostService postServiceAnswer, HttpServletResponse resp) throws Exception {
-        resp.setContentType("application/json");
-        resp.setStatus(postServiceAnswer.Code);
-        resp.getWriter().println(Common.gson.toJson(postServiceAnswer));
-    }
+
 
 
 
