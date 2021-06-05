@@ -1,23 +1,22 @@
 package org.practical3.model;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.time.LocalDate;
 
 
 public class RequestWall {
     public Collection<Integer> OwnerIds;
-    public Collection<PostField> Fields;
-    public LocalDate DateAfter;
-    public LocalDate DateBefore;
+    public Instant DateTimeAfter;
+    public Instant DateTimeBefore;
     public Integer Count;
     public Integer Offset;
 
-    public RequestWall(ArrayList<Integer> ownerIds, ArrayList<PostField> postFields, LocalDate dateAfter, LocalDate dateBefore, Integer count, Integer offset){
+    public RequestWall(ArrayList<Integer> ownerIds, Instant dateTimeAfter, Instant dateTimeBefore, Integer count, Integer offset){
         OwnerIds = ownerIds;
-        Fields =postFields;
-        DateAfter = dateAfter;
-        DateBefore = dateBefore;
+
+        DateTimeAfter = dateTimeAfter;
+        DateTimeBefore = dateTimeBefore;
         Count = count;
         Offset = offset;
     }

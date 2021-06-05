@@ -4,7 +4,7 @@ CREATE TABLE db.posts(
 	"post_id" serial PRIMARY KEY,
 	"owner_id" integer NOT NULL,
 	"content" text NOT NULL,
-	"timestamp " datetime NOT NULL,
+	"timestamp" timestamp NOT NULL DEFAULT now(),
 	"isRemoved" boolean DEFAULT false,
 	"isRedated" boolean DEFAULT false,
 	"isCommentable" boolean DEFAULT false,
@@ -23,7 +23,7 @@ WHERE
 
 
 
-insert into db.posts(owner_id,"content") VALUES(0,'First post'), (0,'Second post');
+insert into db.posts(owner_id,"content",) VALUES(0,'First post',now()), (0,'Second post');
 select * FROM db.posts;
 
 select * from db.posts where post_id IN ('1')

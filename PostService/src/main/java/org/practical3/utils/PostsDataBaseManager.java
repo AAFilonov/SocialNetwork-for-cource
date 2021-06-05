@@ -7,7 +7,6 @@ import org.practical3.model.RequestWall;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -31,6 +30,7 @@ public class PostsDataBaseManager extends DataBaseManager {
 
 
     public Collection<Post> getPosts(Collection<Integer> ids, Integer count, Integer offset) throws SQLException, ClassNotFoundException {
+
 
         String query = String.format("select * from db.posts WHERE post_id IN (%s) LIMIT %d OFFSET %d",
 
@@ -86,23 +86,23 @@ public class PostsDataBaseManager extends DataBaseManager {
     }
 
     public Collection<Post> getWall(RequestWall requestWall) throws SQLException {
-
-
-        PreparedStatement statement = super.Connection.prepareStatement("SELECT * FROM db.posts " +
-                "WHERE owner_id IN (?) " +
+        PreparedStatement statement = super.Connection.prepareStatement (String.format("SELECT * FROM db.posts " +
+                "WHERE owner_id IN (%s) " +
                 "AND timestamp BETWEEN ? AND ?" +
-                "LIMIT %d OFFSET %d");
+                "LIMIT ? OFFSET ?", getIdsASString(requestWall.OwnerIds)));
 
-        statement.setString(1,getIdsASString(requestWall.OwnerIds));
-        statement.setDate(2, (LocalDate) requestWall.DateAfter);
-        statement.setDate(3, (Date) requestWall.DateBefore);
-        statement.setInt(3,   requestWall.Count);
-        statement.setInt(3, requestWall.Offset);
+
+        statement.setTimestamp(1, Timestamp.from(requestWall.DateTimeAfter));
+        statement.setTimestamp(2, Timestamp.from(requestWall.DateTimeBefore));
+        statement.setInt(3, requestWall.Count);
+        statement.setInt(4, requestWall.Offset);
 
 
         ResultSet result = statement.executeQuery();
+
+        ArrayList<Post> posts = fetchPosts(result);
         statement.close();
-        return fetchPosts(result);
+        return posts;
     }
 
 
@@ -114,7 +114,6 @@ public class PostsDataBaseManager extends DataBaseManager {
         }
         return posts;
     }
-
 
 
     String getIdsASString(Collection<Integer> ids) {
@@ -142,7 +141,7 @@ public class PostsDataBaseManager extends DataBaseManager {
         post.PostId = resultSet.getInt(PostField.POST_ID.getVal());
         post.OwnerId = resultSet.getInt(PostField.OWNER_ID.getVal());
         post.Content = resultSet.getString(PostField.CONTENT.getVal());
-        post.Timestamp = resultSet.getDate(PostField.TIMESTAMP.getVal());
+        post.Timestamp = resultSet.getTimestamp(PostField.TIMESTAMP.getVal()).toInstant();
         post.IsRedacted = resultSet.getBoolean(PostField.IS_REDACTED.getVal());
         post.IsRemoved = resultSet.getBoolean(PostField.IS_REMOVED.getVal());
         post.IsCommentable = resultSet.getBoolean(PostField.IS_COMMENTABLE.getVal());

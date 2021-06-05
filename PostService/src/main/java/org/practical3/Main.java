@@ -23,7 +23,7 @@ public class Main {
 
     public static void main(String[] args)
     {
-      PropertyManager.load("./main.props");
+      PropertyManager.load("./post.props");
       runServer();
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             @Override
