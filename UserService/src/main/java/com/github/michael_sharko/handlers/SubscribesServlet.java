@@ -25,14 +25,16 @@ public class SubscribesServlet extends HttpServlet
     Gson gson = gsonBuilder.create();
 
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
+        resp.setContentType("application/json");
+
         String reqStr = IOUtils.toString(req.getInputStream());
         if(StringUtils.isBlank(reqStr))
         {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             resp.getWriter().write(gson.toJson(
-                    new Answer<>("Error", "to delete subscribe set ownerid and subscriberid")
+                    new Answer<>("Error", "to subscribes set ownerid and subscriberid")
             ));
             return;
         }
@@ -40,7 +42,7 @@ public class SubscribesServlet extends HttpServlet
         try
         {
             SubscribesTable subscribe = gson.fromJson(reqStr, SubscribesTable.class);
-            DatabaseManager.deleteSubscribe(subscribe);
+            DatabaseManager.registerSubscribe(subscribe);
         }
         catch (SQLException throwables)
         {
@@ -74,16 +76,14 @@ public class SubscribesServlet extends HttpServlet
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException
     {
-        resp.setContentType("application/json");
-
         String reqStr = IOUtils.toString(req.getInputStream());
         if(StringUtils.isBlank(reqStr))
         {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             resp.getWriter().write(gson.toJson(
-                    new Answer<>("Error", "to subscribes set ownerid and subscriberid")
+                    new Answer<>("Error", "to delete subscribe set ownerid and subscriberid")
             ));
             return;
         }
@@ -91,7 +91,7 @@ public class SubscribesServlet extends HttpServlet
         try
         {
             SubscribesTable subscribe = gson.fromJson(reqStr, SubscribesTable.class);
-            DatabaseManager.registerSubscribe(subscribe);
+            DatabaseManager.deleteSubscribe(subscribe);
         }
         catch (SQLException throwables)
         {

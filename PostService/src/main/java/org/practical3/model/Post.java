@@ -1,12 +1,13 @@
 package org.practical3.model;
 
+import java.time.Instant;
 import java.util.Date;
 
 public class Post {
     public Integer PostId=null;
     public Integer OwnerId=null;
     public String Content =null;
-    public Date Timestamp = null;
+    public Instant Timestamp = null;
     public Boolean IsRemoved = null;
     public Boolean IsRedacted = null;
     public Boolean IsCommentable = null;
@@ -29,7 +30,7 @@ public class Post {
     public Post( Integer postId,
                  Integer ownerId,
                  String content,
-                 Date timestamp){
+                 Instant timestamp){
         PostId = postId;
         OwnerId = ownerId;
         Content = content;
@@ -39,7 +40,7 @@ public class Post {
     public Post( Integer postId,
                  Integer ownerId,
                  String content,
-                 Date timestamp,
+                 Instant timestamp,
                  Boolean isRemoved,
                  Boolean isRedacted,
                  Boolean isCommentable ,
@@ -81,8 +82,8 @@ public class Post {
     }
 
     public String toSqlValues() {
-        return String.format("(DEFAULT,%s,%s,%s,%s,%s,%s,%s,%s)"
-               // ,(PostId!=null)? "'"+PostId.toString()+"'":"NULL"
+        return String.format("(%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+                ,(PostId!=null)? "'"+PostId.toString()+"'":"DEFAULT"
                 ,(OwnerId!=null)?"'"+OwnerId.toString()+"'":"DEFAULT"
                 ,(Content!=null)?"'"+Content+"'":"DEFAULT"
                 ,(Timestamp!=null)?"'"+Timestamp.toString()+"'":"DEFAULT"

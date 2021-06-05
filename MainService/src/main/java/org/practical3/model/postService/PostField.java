@@ -1,4 +1,4 @@
-package org.practical3.model;
+package org.practical3.model.postService;
 
 import java.util.ArrayList;
 import java.util.Arrays;

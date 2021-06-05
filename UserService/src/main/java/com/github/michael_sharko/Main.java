@@ -1,8 +1,12 @@
 package com.github.michael_sharko;
 
-import com.github.michael_sharko.handlers.RegisterUserServlet;
-import com.github.michael_sharko.handlers.GetUserServlet;
+import com.github.michael_sharko.handlers.users.DeleteUserServlet;
+import com.github.michael_sharko.handlers.users.RegisterUserServlet;
+import com.github.michael_sharko.handlers.users.SearchUserServlet;
+import com.github.michael_sharko.handlers.users.UpdateUserServlet;
+
 import com.github.michael_sharko.handlers.SubscribesServlet;
+
 import com.github.michael_sharko.utils.DatabaseManager;
 import com.github.michael_sharko.utils.PropertyManager;
 import org.eclipse.jetty.server.Handler;
@@ -40,7 +44,9 @@ public class Main
         context.setContextPath(contextPath);
 
         context.addServlet(new ServletHolder(new RegisterUserServlet()), "/register");
-        context.addServlet(new ServletHolder(new GetUserServlet()), "/get");
+        context.addServlet(new ServletHolder(new SearchUserServlet()), "/search");
+        context.addServlet(new ServletHolder(new UpdateUserServlet()), "/update");
+        context.addServlet(new ServletHolder(new DeleteUserServlet()), "/delete");
         context.addServlet(new ServletHolder(new SubscribesServlet()), "/subscribes");
 
         HandlerList handlers = new HandlerList();

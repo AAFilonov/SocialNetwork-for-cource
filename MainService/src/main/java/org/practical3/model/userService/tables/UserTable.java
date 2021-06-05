@@ -1,10 +1,10 @@
-package com.github.michael_sharko.models.tables;
+package org.practical3.model.userService.tables;
 
 public class UserTable
 {
     public Integer id;
 
-    public String username;
+    public String login;
     public String password;
     public java.sql.Date birthday;
 

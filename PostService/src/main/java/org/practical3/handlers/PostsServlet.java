@@ -5,7 +5,7 @@ import com.google.common.reflect.TypeToken;
 import org.practical3.model.RequestWall;
 import org.practical3.utils.Commons;
 import org.practical3.model.Post;
-import org.practical3.model.AnswerPosts;
+import org.practical3.model.Answer;
 import org.practical3.model.RequestPosts;
 
 
@@ -19,7 +19,6 @@ import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
 
 
 public class PostsServlet extends HttpServlet {
@@ -42,24 +41,25 @@ public class PostsServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String action = req.getParameter("action");
+
         try {
+            String action = req.getParameter("action");
             doAction(action, req, resp);
 
         } catch (ClassNotFoundException e) {
 
             resp.setContentType("application/json");
             resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            resp.getWriter().println(Common.gson.toJson(new AnswerPosts(null, "Error: no posts found for provided ids")));
+            resp.getWriter().println(Common.gson.toJson(new Answer("Error: no posts found for provided ids" ,null )));
         } catch (IllegalArgumentException e) {
 
             resp.setContentType("application/json");
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().println(Common.gson.toJson(new AnswerPosts(null, "Error: wrong arguments")));
+            resp.getWriter().println(Common.gson.toJson(new Answer("Error: wrong arguments",null)));
         } catch (Exception e) {
             resp.setContentType("application/json");
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().println(Common.gson.toJson(new AnswerPosts(null, "Error: internal server error\n" + e.getMessage())));
+            resp.getWriter().println(Common.gson.toJson(new Answer( "Error: internal server error\n" + e.getMessage(),null)));
 
         }
     }
@@ -88,7 +88,7 @@ public class PostsServlet extends HttpServlet {
             default:
                 resp.setContentType("application/json");
                 resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                resp.getWriter().println(Common.gson.toJson(new AnswerPosts(null, "Error: wrong action or no action provided")));
+                resp.getWriter().println(Common.gson.toJson(new Answer("Error: wrong action or no action provided", null)));
 
         }
     }
@@ -119,7 +119,7 @@ public class PostsServlet extends HttpServlet {
 
         String reqStr = IOUtils.toString(req.getInputStream());
         RequestPosts request = Common.gson.fromJson(reqStr, RequestPosts.class);
-        Collection<Post> posts = Common.dataBaseManager.getPosts(request.ids, request.postFields, request.count, request.offset);
+        Collection<Post> posts = Common.dataBaseManager.getPosts(request.ids, request.count, request.offset);
 
         sendOk(resp,posts);
     }
@@ -145,9 +145,9 @@ public class PostsServlet extends HttpServlet {
     }
 
     void sendOk(HttpServletResponse resp, Object data) throws IOException {
-        AnswerPosts answer = new AnswerPosts(data, "OK");
+        Answer a = new Answer(data,"OK");
         resp.setContentType("application/json");
         resp.setStatus(HttpServletResponse.SC_OK);
-        resp.getWriter().println(Common.gson.toJson(answer));
+        resp.getWriter().println(Common.gson.toJson(a));
     }
 }

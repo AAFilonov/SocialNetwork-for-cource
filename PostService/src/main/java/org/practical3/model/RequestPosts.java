@@ -6,14 +6,13 @@ import java.util.Map;
 public class RequestPosts {
 
     public ArrayList<Integer> ids ;
-    public ArrayList<PostField> postFields;
+
     public Integer count  ;
     public Integer offset ;
 
     public RequestPosts(Map<String, String[]> args){
 
         ids = parseIds(args);
-       postFields = parseFields(args);
         count = new Integer(args.get("count")[0]);
         offset = new Integer(args.get("offset")[0]);
 
@@ -30,15 +29,4 @@ public class RequestPosts {
         return ids;
     }
 
-    private  ArrayList<PostField> parseFields(Map<String,String[]> args ){
-        String fields = args.get("fields")[0];
-        String[] fieldsArray = fields.split(",");
-        ArrayList<PostField> finalPostFields = new ArrayList<>();
-
-
-        for (String fieldString:fieldsArray) {
-            finalPostFields.add(PostField.parse(fieldString));
-        }
-        return finalPostFields;
-    }
 }

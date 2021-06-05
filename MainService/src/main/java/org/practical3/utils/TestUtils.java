@@ -1,7 +1,7 @@
 package org.practical3.utils;
 
-import org.practical3.model.PostField;
-import org.practical3.model.RequestWall;
+import org.practical3.model.postService.PostField;
+import org.practical3.model.postService.RequestWall;
 
 import java.util.ArrayList;
 import java.util.Arrays;
