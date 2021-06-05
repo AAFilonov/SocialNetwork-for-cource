@@ -1,12 +1,12 @@
-package org.practical3.model.postService;
+package org.practical3.model.data;
 
-import java.util.Date;
+import java.time.Instant;
 
 public class Post {
     public Integer PostId=null;
     public Integer OwnerId=null;
     public String Content =null;
-    public Date Timestamp = null;
+    public Instant Timestamp = null;
     public Boolean IsRemoved = null;
     public Boolean IsRedacted = null;
     public Boolean IsCommentable = null;
@@ -16,9 +16,9 @@ public class Post {
     public Post( ){
     }
 
-    public Post( Integer postId,
-                 Integer ownerId,
-                 String content
+    public Post(Integer postId,
+                Integer ownerId,
+                String content
                ){
         PostId = postId;
         OwnerId = ownerId;
@@ -26,25 +26,25 @@ public class Post {
 
 
     }
-    public Post( Integer postId,
-                 Integer ownerId,
-                 String content,
-                 Date timestamp){
+    public Post(Integer postId,
+                Integer ownerId,
+                String content,
+                Instant timestamp){
         PostId = postId;
         OwnerId = ownerId;
         Content = content;
         Timestamp = timestamp;
 
     }
-    public Post( Integer postId,
-                 Integer ownerId,
-                 String content,
-                 Date timestamp,
-                 Boolean isRemoved,
-                 Boolean isRedacted,
-                 Boolean isCommentable ,
-                 Integer countLikes,
-                 Integer countReposts){
+    public Post(Integer postId,
+                Integer ownerId,
+                String content,
+                Instant timestamp,
+                Boolean isRemoved,
+                Boolean isRedacted,
+                Boolean isCommentable ,
+                Integer countLikes,
+                Integer countReposts){
         PostId = postId;
         OwnerId = ownerId;
         Content = content;
@@ -81,8 +81,8 @@ public class Post {
     }
 
     public String toSqlValues() {
-        return String.format("(DEFAULT,%s,%s,%s,%s,%s,%s,%s,%s)"
-               // ,(PostId!=null)? "'"+PostId.toString()+"'":"NULL"
+        return String.format("(%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+                ,(PostId!=null)? "'"+PostId.toString()+"'":"DEFAULT"
                 ,(OwnerId!=null)?"'"+OwnerId.toString()+"'":"DEFAULT"
                 ,(Content!=null)?"'"+Content+"'":"DEFAULT"
                 ,(Timestamp!=null)?"'"+Timestamp.toString()+"'":"DEFAULT"

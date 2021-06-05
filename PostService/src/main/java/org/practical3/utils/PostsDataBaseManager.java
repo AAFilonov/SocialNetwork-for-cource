@@ -92,8 +92,8 @@ public class PostsDataBaseManager extends DataBaseManager {
                 "LIMIT ? OFFSET ?", getIdsASString(wallRequest.OwnerIds)));
 
 
-        statement.setTimestamp(1, Timestamp.from(wallRequest.DateTimeAfter));
-        statement.setTimestamp(2, Timestamp.from(wallRequest.DateTimeBefore));
+        statement.setTimestamp(1, Timestamp.from(wallRequest.After));
+        statement.setTimestamp(2, Timestamp.from(wallRequest.Before));
         statement.setInt(3, wallRequest.Count);
         statement.setInt(4, wallRequest.Offset);
 

@@ -1,28 +1,41 @@
 package org.practical3.utils;
 
-import org.practical3.model.postService.PostField;
-import org.practical3.model.postService.RequestWall;
 
+
+import org.practical3.model.data.Post;
+import org.practical3.model.transfer.requests.WallRequest;
+
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
+import java.util.Collection;
 
 public class TestUtils {
+    public static final int TestOwnerId = 400;
+    public static final int FirstPostId = 888;
+    public static final int SecondPostId = 889;
+    public static  Instant currentPoint = Instant.now();
 
-
-    public static RequestWall createRequestWall() {
+    public static WallRequest createRequestWall() {
         ArrayList<Integer> ownerIds = new ArrayList<Integer>(
-                Arrays.asList(0, 2));
-        ArrayList<PostField> postFields = new ArrayList<>(
-                Arrays.asList(PostField.CONTENT));
-        Date dateBegin = new Date(System.currentTimeMillis());
-        Date dateEnd = new Date(System.currentTimeMillis());
-        dateBegin.setMonth(dateBegin.getMonth() - 1);
-        dateEnd.setMonth(dateBegin.getMonth() + 2);
+                Arrays.asList(TestOwnerId));
+        Instant dateTimeBegin = currentPoint.minus(2, ChronoUnit.DAYS);
+        Instant dateTimeEnd =currentPoint.plus(2, ChronoUnit.DAYS);
+
         Integer Offset = 0;
         Integer Count = 10;
 
-        return new RequestWall(ownerIds, postFields, dateBegin, dateEnd, Count, Offset);
+        return new WallRequest(ownerIds, dateTimeBegin, dateTimeEnd, Count, Offset);
+    }
+    public static Collection<Integer> getTestPostsIds() {
+        return  Arrays.asList(TestUtils.FirstPostId, TestUtils.SecondPostId);
     }
 
+
+    public static Collection<Post> getTestPosts() {
+        return  new ArrayList<>(
+                Arrays.asList(new Post(FirstPostId, TestOwnerId, "First post",currentPoint), new Post(SecondPostId, TestOwnerId, "Second post",currentPoint))
+        );
+    }
 }

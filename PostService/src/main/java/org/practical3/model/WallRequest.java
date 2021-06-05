@@ -7,15 +7,15 @@ import java.util.Collection;
 
 public class WallRequest {
     public Collection<Integer> OwnerIds;
-    public Instant DateTimeAfter;
-    public Instant DateTimeBefore;
+    public Instant After;
+    public Instant Before;
     public Integer Count;
     public Integer Offset;
 
-    public WallRequest(ArrayList<Integer> ownerIds, Instant dateTimeAfter, Instant dateTimeBefore, Integer count, Integer offset){
+    public WallRequest(ArrayList<Integer> ownerIds, Instant after, Instant before, Integer count, Integer offset){
         OwnerIds = ownerIds;
-        DateTimeAfter = dateTimeAfter;
-        DateTimeBefore = dateTimeBefore;
+        After = after;
+        Before = before;
         Count = count;
         Offset = offset;
     }
