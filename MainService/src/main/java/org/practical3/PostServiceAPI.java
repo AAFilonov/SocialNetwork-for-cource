@@ -57,17 +57,17 @@ public class PostServiceAPI {
     public static int insertPosts(Collection<Post> posts) throws Exception {
         String url = String.format("%s/posts?action=insertPosts", getBaseURL());
         Answer postServiceAnswer =  sendRequest(url,posts);
-        return (postServiceAnswer!=null)?  (Integer) postServiceAnswer.Data: 0;
+        return (postServiceAnswer!=null)? postServiceAnswer.AffectedRows: 0;
     }
     public static int deletePosts(Collection<Integer> post_ids) throws Exception {
         String url = String.format("%s/posts?action=deletePosts", getBaseURL());
         Answer postServiceAnswer =  sendRequest(url,post_ids);
-        return (postServiceAnswer!=null)? (Integer) postServiceAnswer.Data : 0;
+        return (postServiceAnswer!=null)? postServiceAnswer.AffectedRows: 0;
     }
     public static int updatePosts(Collection<Post> posts)throws Exception {
         String url = String.format("%s/posts?action=insertPosts", getBaseURL());
         Answer postServiceAnswer =  sendRequest(url,posts);
-        return (postServiceAnswer!=null)? (Integer) postServiceAnswer.Data: 0;
+        return (postServiceAnswer!=null)? postServiceAnswer.AffectedRows: 0;
     }
 
     public static int removePosts(Collection<Integer> post_ids)throws Exception {

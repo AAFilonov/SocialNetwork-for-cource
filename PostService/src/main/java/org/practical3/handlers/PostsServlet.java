@@ -139,7 +139,8 @@ public class PostsServlet extends HttpServlet {
         Integer rowsAffected =   Common.dataBaseManager.insertPosts(posts);
 
 
-        sendOk(resp,new ArrayList<>(rowsAffected) );
+        sendOk(resp,new Answer("OK",null,rowsAffected));
+
 
     }
     private void deletePosts(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException {
@@ -148,7 +149,7 @@ public class PostsServlet extends HttpServlet {
         }.getType();
         Collection<Integer> ids = Common.gson.fromJson(reqStr, userListType);
         Integer rowsAffected =  Common.dataBaseManager.deletePosts(ids);
-        sendOk(resp,rowsAffected);
+        sendOk(resp,new Answer("OK",null,rowsAffected));
     }
 
     private void removePosts(HttpServletRequest req, HttpServletResponse resp) {
@@ -161,6 +162,11 @@ public class PostsServlet extends HttpServlet {
         throw new NotImplementedException();
     }
 
+    void sendOk(HttpServletResponse resp, Answer a) throws IOException {
+        resp.setContentType("application/json");
+        resp.setStatus(HttpServletResponse.SC_OK);
+        resp.getWriter().println(Common.gson.toJson(a));
+    }
     void sendOk(HttpServletResponse resp, Object data) throws IOException {
         Answer a = new Answer("OK", data);
         resp.setContentType("application/json");
