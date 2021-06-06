@@ -22,6 +22,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
 
+import static org.practical3.UserServiceAPI.getSubscriptions;
+
 
 public class WallServlet extends HttpServlet {
 
@@ -44,14 +46,14 @@ public class WallServlet extends HttpServlet {
     private void getWall(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         Map<String, String[]> args = req.getParameterMap();
 
-        String UserName = args.get("user")[0];
-        //получить по юзернейму id
+        String username = args.get("user")[0];
 
-        //получить по id подписки
-        //получить по id подписок посты
+
+
+        Collection<Integer> subscriptions  =  getSubscriptions(username);
 
         WallRequest request = new WallRequest(
-                args.get("post_ids")[0]
+                subscriptions
                 , Instant.parse(args.get("after")[0])
                 , Instant.parse(args.get("before")[0])
                 , new Integer(args.get("count")[0])
@@ -63,7 +65,7 @@ public class WallServlet extends HttpServlet {
     }
     private void insertPosts(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 
-        Collection<Post> posts =  Commons.getCollectionFromRequest(req,Post.class);
+        Collection<Post> posts =  Commons.getCollectionFromRequest(req);
         PostServiceAPI. insertPosts(posts);
     }
 
