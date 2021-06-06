@@ -28,6 +28,32 @@ public class PostsServlet extends HttpServlet {
         Commons.processAndReply(req, resp, this::getPosts);
     }
 
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        Commons.processAndReply(req, resp, this::insertPosts);
+    }
+
+
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        Commons.processAndReply(req, resp, this::updatePosts);
+    }
+
+
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        Commons.processAndReply(req, resp, this::deletePosts);
+    }
+
+
+    private void insertPosts(HttpServletRequest httpServletRequest, HttpServletResponse response) throws Exception {
+        Collection<Post> posts = Commons.getCollectionFromRequest(httpServletRequest);
+        Integer affectedRows = PostServiceAPI.insertPosts(posts);
+        Commons.sendOk(new Answer("OK",null,affectedRows), response);
+
+    }
     private void getPosts(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         Map<String,String[]> args =  req.getParameterMap();
         PostsRequest request= new PostsRequest(
@@ -40,8 +66,17 @@ public class PostsServlet extends HttpServlet {
         Commons.sendOk(posts, resp);
     }
 
+    private void updatePosts(HttpServletRequest httpServletRequest, HttpServletResponse response) throws Exception {
+        Collection<Post> posts = Commons.getCollectionFromRequest(httpServletRequest);
+        Integer affectedRows = PostServiceAPI.updatePosts(posts);
+        Commons.sendOk(new Answer("OK",null,affectedRows), response);
+    }
 
-
+    private void deletePosts(HttpServletRequest httpServletRequest, HttpServletResponse response) throws Exception {
+        Collection<Integer> ids = Commons.getCollectionFromRequest(httpServletRequest);
+        Integer affectedRows = PostServiceAPI.deletePosts(ids);
+        Commons.sendOk(new Answer("OK",null,affectedRows), response);
+    }
 
 
 

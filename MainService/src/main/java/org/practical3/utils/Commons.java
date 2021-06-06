@@ -37,6 +37,12 @@ public  class Commons<T> {
         resp.setStatus(HttpServletResponse.SC_OK);
         resp.getWriter().println(Commons.toJson( new Answer("OK", data)));
     }
+    public static void sendOk(Answer a, HttpServletResponse resp) throws Exception {
+
+        resp.setContentType("application/json");
+        resp.setStatus(HttpServletResponse.SC_OK);
+        resp.getWriter().println(Commons.toJson( a));
+    }
 
     public static Collection<Integer> parseIds(String IdsString){
         String[] post_ids_s = IdsString.split(",");
@@ -73,7 +79,7 @@ public  class Commons<T> {
     }
 
 
-    public  static <T>  Collection<T>  getCollectionFromRequest(HttpServletRequest req,Class<T> type) throws IOException {
+    public  static <T>  Collection<T>  getCollectionFromRequest(HttpServletRequest req) throws IOException {
         String reqStr = IOUtils.toString(req.getInputStream());
         Type userListType = new TypeToken<Collection<T>>() {}.getType();
         return Commons.fromJson(reqStr,userListType);
