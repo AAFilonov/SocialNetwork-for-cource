@@ -80,20 +80,6 @@ public class Post {
       );
     }
 
-    public String toSqlValues() {
-        return String.format("(%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-                ,(PostId!=null)? "'"+PostId.toString()+"'":"DEFAULT"
-                ,(OwnerId!=null)?"'"+OwnerId.toString()+"'":"DEFAULT"
-                ,(Content!=null)?"'"+Content+"'":"DEFAULT"
-                ,(Timestamp!=null)?"'"+Timestamp.toString()+"'":"DEFAULT"
-                ,(IsRemoved!=null)?"'"+IsRemoved.toString()+"'":"DEFAULT"
-                ,(IsRedacted!=null)?"'"+IsRedacted.toString()+"'":"DEFAULT"
-                ,(IsCommentable!=null)?"'"+IsCommentable.toString()+"'":"DEFAULT"
-                ,(CountLikes!=null)?"'"+CountLikes.toString()+"'":"DEFAULT"
-                ,(CountReposts!=null)?"'"+CountReposts.toString()+"'":"DEFAULT"
-        );
-    }
-
 
     @Override
     public boolean equals(Object obj) {

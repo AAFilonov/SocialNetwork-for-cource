@@ -11,8 +11,15 @@ import java.util.Collection;
 
 public class TestUtils {
     public static final int TestOwnerId = 400;
+
     public static final int FirstPostId = 888;
     public static final int SecondPostId = 889;
+
+    public static final int TestOwnerId2 = 405;
+    public static final int PostId3 = 988;
+    public static final int PostId4 = 989;
+
+
     public static  Instant currentPoint = Instant.now();
 
     public static WallRequest createRequestWall() {

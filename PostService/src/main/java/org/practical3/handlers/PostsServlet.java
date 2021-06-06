@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 
@@ -100,14 +101,7 @@ public class PostsServlet extends HttpServlet {
 
 
 
-    private void deletePosts(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException {
-        String reqStr = IOUtils.toString(req.getInputStream());
-        Type userListType = new TypeToken<ArrayList<Integer>>() {
-        }.getType();
-        Collection<Integer> ids = Common.gson.fromJson(reqStr, userListType);
-        Integer rowsAffected =  Common.dataBaseManager.deletePosts(ids);
-        sendOk(resp,rowsAffected);
-    }
+
 
 
 
@@ -142,13 +136,20 @@ public class PostsServlet extends HttpServlet {
         }.getType();
         Collection<Post> posts = Common.gson.fromJson(reqStr, userListType);
 
-        Integer rowsAffected =  Common.dataBaseManager.insertPosts(posts);
+        Integer rowsAffected =   Common.dataBaseManager.insertPosts(posts);
 
 
-        sendOk(resp,rowsAffected);
+        sendOk(resp,new ArrayList<>(rowsAffected) );
 
     }
-
+    private void deletePosts(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException {
+        String reqStr = IOUtils.toString(req.getInputStream());
+        Type userListType = new TypeToken<ArrayList<Integer>>() {
+        }.getType();
+        Collection<Integer> ids = Common.gson.fromJson(reqStr, userListType);
+        Integer rowsAffected =  Common.dataBaseManager.deletePosts(ids);
+        sendOk(resp,rowsAffected);
+    }
 
     private void removePosts(HttpServletRequest req, HttpServletResponse resp) {
         throw new NotImplementedException();

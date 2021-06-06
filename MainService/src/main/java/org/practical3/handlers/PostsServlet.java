@@ -22,32 +22,10 @@ public class PostsServlet extends HttpServlet {
     }
 
     //TODO реализовать свои классы исключений
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        try {
-            getPosts(req,resp);
-        }
-        catch (ClassNotFoundException e){
-
-            resp.setContentType("application/json");
-            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            resp.getWriter().println(Commons.gson.toJson(new Answer(null,"Error: no posts found for provided ids")));
-        }
-        catch (IllegalArgumentException e){
-
-            resp.setContentType("application/json");
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().println(Commons.gson.toJson(new Answer(null,"Error: wrong arguments")));
-        }
-        catch (Exception e){
-            resp.setContentType("application/json");
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().println(Commons.gson.toJson(new Answer(null,"Error: internal server error:"+e.getMessage())));
-
-        }
-
-
-
+        Commons.processAndReply(req, resp, this::getPosts);
     }
 
     private void getPosts(HttpServletRequest req, HttpServletResponse resp) throws Exception {

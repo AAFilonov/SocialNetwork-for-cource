@@ -25,7 +25,7 @@ public class HttpClientManager {
     }
 
 
-    public  static Answer getResponceBody(HttpResponse response) throws IOException {
+    public  static Answer getResponseBody(HttpResponse response) throws IOException {
         HttpEntity resp  = response.getEntity();
         String respStr = EntityUtils.toString(resp);
         return Commons.gson.fromJson(respStr, Answer.class);

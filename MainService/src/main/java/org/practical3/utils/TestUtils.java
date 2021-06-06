@@ -15,11 +15,17 @@ public class TestUtils {
     public static final int TestOwnerId = 400;
     public static final int FirstPostId = 888;
     public static final int SecondPostId = 889;
+
+    public static final int TestOwnerId2 = 405;
+    public static final int PostId3 = 988;
+    public static final int PostId4 = 989;
+
+
     public static  Instant currentPoint = Instant.now();
 
-    public static WallRequest createRequestWall() {
+    public static WallRequest createRequestWall(int ownerId) {
         ArrayList<Integer> ownerIds = new ArrayList<Integer>(
-                Arrays.asList(TestOwnerId));
+                Arrays.asList(ownerId));
         Instant dateTimeBegin = currentPoint.minus(2, ChronoUnit.DAYS);
         Instant dateTimeEnd =currentPoint.plus(2, ChronoUnit.DAYS);
 
@@ -33,9 +39,14 @@ public class TestUtils {
     }
 
 
-    public static Collection<Post> getTestPosts() {
+    public static Collection<Post> getTestPosts(int id1,int id2) {
         return  new ArrayList<>(
-                Arrays.asList(new Post(FirstPostId, TestOwnerId, "First post",currentPoint), new Post(SecondPostId, TestOwnerId, "Second post",currentPoint))
+                Arrays.asList(new Post(id1, TestOwnerId, "First post",Instant.now()), new Post(id2, TestOwnerId, "Second post",Instant.now()))
+        );
+    }
+    public static Collection<Post> getExistingPosts() {
+        return  new ArrayList<>(
+                Arrays.asList(new Post(PostId3, TestOwnerId2, null), new Post(PostId4, TestOwnerId2, null))
         );
     }
 }
