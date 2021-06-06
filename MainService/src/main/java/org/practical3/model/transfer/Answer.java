@@ -11,9 +11,6 @@ public class Answer {
         Status = status;
 
     }
-    public Integer getDataAsInteger(){
-        return ( (ArrayList<Integer>)Data).get(0);
-    }
 
 
 }

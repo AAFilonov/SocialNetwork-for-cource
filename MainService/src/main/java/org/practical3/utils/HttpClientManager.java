@@ -19,7 +19,7 @@ public class HttpClientManager {
 
     public HttpResponse  sendPost(String url, Object body) throws IOException {
         HttpPost request = new HttpPost(url);
-        StringEntity entity = new StringEntity( Commons.gson.toJson(body));
+        StringEntity entity = new StringEntity( Commons.toJson(body));
         request.setEntity(entity);
         return httpClient.execute(request);
     }
@@ -28,7 +28,7 @@ public class HttpClientManager {
     public  static Answer getResponseBody(HttpResponse response) throws IOException {
         HttpEntity resp  = response.getEntity();
         String respStr = EntityUtils.toString(resp);
-        return Commons.gson.fromJson(respStr, Answer.class);
+        return Commons.fromJson(respStr, Answer.class);
     }
 
 }

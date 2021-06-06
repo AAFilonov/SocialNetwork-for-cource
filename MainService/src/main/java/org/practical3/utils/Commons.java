@@ -20,11 +20,22 @@ public  class Commons<T> {
     static public Gson gson = new Gson();
 
 
+    public static String toJson(Object o){
+        return  gson.toJson(o);
+    }
+    public static <T> T fromJson(String s,Class<T> dataType){
+        return gson.fromJson(s,dataType);
+    }
+    public static <T> T fromJson(String s,Type dataType){
+        return gson.fromJson(s,dataType);
+    }
+
+
     public static void sendOk(Object data, HttpServletResponse resp) throws Exception {
 
         resp.setContentType("application/json");
         resp.setStatus(HttpServletResponse.SC_OK);
-        resp.getWriter().println(Commons.gson.toJson( new Answer("OK", data)));
+        resp.getWriter().println(Commons.toJson( new Answer("OK", data)));
     }
 
     public static Collection<Integer> parseIds(String IdsString){
@@ -45,15 +56,15 @@ public  class Commons<T> {
         }
         catch (ClassNotFoundException e){
             resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            resp.getWriter().println(Commons.gson.toJson(new Answer(null,"Error: no posts found for provided ids")));
+            resp.getWriter().println(Commons.toJson(new Answer(null,"Error: no posts found for provided ids")));
         }
         catch (IllegalArgumentException e){
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().println(Commons.gson.toJson(new Answer(null,"Error: wrong arguments")));
+            resp.getWriter().println(Commons.toJson(new Answer(null,"Error: wrong arguments")));
         }
         catch (Exception e){
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().println(Commons.gson.toJson(new Answer(null,"Error: internal server error:"+e.getMessage())));
+            resp.getWriter().println(Commons.toJson(new Answer(null,"Error: internal server error:"+e.getMessage())));
 
         }
 
@@ -65,11 +76,11 @@ public  class Commons<T> {
     public  static <T>  Collection<T>  getCollectionFromRequest(HttpServletRequest req,Class<T> type) throws IOException {
         String reqStr = IOUtils.toString(req.getInputStream());
         Type userListType = new TypeToken<Collection<T>>() {}.getType();
-        return Commons.gson.fromJson(reqStr,userListType);
+        return Commons.fromJson(reqStr,userListType);
     }
 
     public  static <T> T getObjectFromRequest (HttpServletRequest req, Class<T> type) throws IOException {
         String reqStr = IOUtils.toString(req.getInputStream());
-        return Commons.gson.fromJson(reqStr, type);
+        return Commons.fromJson(reqStr, type);
     }
 }
