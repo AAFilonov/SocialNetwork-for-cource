@@ -14,7 +14,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public  class Commons<T> {
+public  class Commons {
 
     static public HttpClientManager HttpClientManager = new HttpClientManager();
     static public Gson gson = new Gson();
@@ -62,15 +62,15 @@ public  class Commons<T> {
         }
         catch (ClassNotFoundException e){
             resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            resp.getWriter().println(Commons.toJson(new Answer(null,"Error: no posts found for provided ids")));
+            resp.getWriter().println(Commons.toJson(new Answer("Error: no posts found for provided ids",null)));
         }
         catch (IllegalArgumentException e){
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().println(Commons.toJson(new Answer(null,"Error: wrong arguments")));
+            resp.getWriter().println(Commons.toJson(new Answer("Error: wrong arguments",null)));
         }
         catch (Exception e){
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().println(Commons.toJson(new Answer(null,"Error: internal server error:"+e.getMessage())));
+            resp.getWriter().println(Commons.toJson(new Answer("Error: internal server error:"+e.getMessage(),null)));
 
         }
 

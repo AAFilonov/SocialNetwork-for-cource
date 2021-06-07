@@ -45,15 +45,14 @@ public class PostsServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
+                ProcessRequest(req,resp);
+
+    }
+
+    private  void ProcessRequest(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
             String action = req.getParameter("action");
             doAction(action, req, resp);
-
-        } catch (ClassNotFoundException e) {
-
-            resp.setContentType("application/json");
-            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            resp.getWriter().println(Common.gson.toJson(new Answer("Error: no posts found for provided ids" ,null )));
         } catch (IllegalArgumentException e) {
 
             resp.setContentType("application/json");
@@ -65,8 +64,8 @@ public class PostsServlet extends HttpServlet {
             resp.getWriter().println(Common.gson.toJson(new Answer( "Error: internal server error\n" + e.getMessage(),e)));
 
         }
-    }
 
+    }
     private void doAction(String action, HttpServletRequest req, HttpServletResponse resp) throws IOException, ClassNotFoundException, SQLException {
         switch (action) {
             case "getPosts":

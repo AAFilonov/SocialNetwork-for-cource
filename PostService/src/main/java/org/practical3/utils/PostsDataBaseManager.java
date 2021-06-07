@@ -36,12 +36,12 @@ public class PostsDataBaseManager extends DataBaseManager {
 
                 getIdsASString(ids),
                 count, offset);
-        ResultSet result = super.execute(query);
-        ArrayList<Post> items = fetchPosts(result);
-        if (items.isEmpty())
-            throw new ClassNotFoundException();
+        Statement statement = Connection.createStatement();
 
-        else return items;
+        ResultSet result = statement.executeQuery(query);
+        ArrayList<Post> items = fetchPosts(result);
+        statement.close();
+        return items;
 
 
     }

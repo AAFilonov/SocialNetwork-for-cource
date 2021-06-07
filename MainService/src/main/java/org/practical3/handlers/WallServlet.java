@@ -1,25 +1,16 @@
 package org.practical3.handlers;
 
-import com.google.common.reflect.TypeToken;
 import org.practical3.PostServiceAPI;
 import org.practical3.model.data.Post;
-
-import org.practical3.model.transfer.requests.PostsRequest;
 import org.practical3.model.transfer.requests.WallRequest;
 import org.practical3.utils.Commons;
-import org.apache.commons.io.IOUtils;
-
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.Type;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Map;
 
 import static org.practical3.UserServiceAPI.getSubscriptions;
