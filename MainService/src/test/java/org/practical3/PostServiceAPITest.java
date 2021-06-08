@@ -18,7 +18,7 @@ class PostServiceAPITest {
 
     @Test
     public void testGetPosts() throws Exception {
-        PostsRequest postsRequest = new PostsRequest("988,989",10,0);
+        PostsRequest postsRequest = new PostsRequest("844,845",10,0);
 
         Collection posts =  PostServiceAPI.getPosts(postsRequest);
 
@@ -28,7 +28,7 @@ class PostServiceAPITest {
 
     @Test
     public void testGetWall() throws Exception {
-        WallRequest wallRequest = createRequestWall(TestUtils.TestOwnerId2);
+        WallRequest wallRequest = createRequestWall(TestUtils.TestOwnerId);
 
         Collection posts =  PostServiceAPI.getWall(wallRequest);
 

@@ -8,7 +8,7 @@ public enum PostField {
     POST_ID("post_id"),
     OWNER_ID("owner_id"),
     CONTENT("content"),
-    TIMESTAMP("timestamp"),
+    TIMESTAMP("post_timestamp"),
     IS_REMOVED("isRemoved"),
     IS_REDACTED("isRedated"),
     IS_COMMENTABLE("isCommentable"),

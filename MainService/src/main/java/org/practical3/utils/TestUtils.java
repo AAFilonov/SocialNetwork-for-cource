@@ -46,7 +46,7 @@ public class TestUtils {
     }
     public static Collection<Post> getExistingPosts() {
         return  new ArrayList<>(
-                Arrays.asList(new Post(PostId3, TestOwnerId2, null), new Post(PostId4, TestOwnerId2, null))
+                Arrays.asList(new Post(PostId3, TestOwnerId, null), new Post(PostId4, TestOwnerId, null))
         );
     }
 }

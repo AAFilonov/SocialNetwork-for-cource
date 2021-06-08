@@ -28,3 +28,16 @@ select * FROM db.posts;
 
 select * from db.posts where post_id IN ('1')
 select post_id,owner_id,content from db.posts WHERE post_id IN ('1','2') LIMIT 10 OFFSET 0
+
+
+
+update db.posts as t set
+                         "content" = COALESCE("content" ,  t."content" ) ,
+                         "CountLikes" = COALESCE("CountLikes",  t."CountLikes" )
+    from (values
+  (27517, 'a1111' ,Null),
+  (27516, Null, 222)
+) as data(post_id, "content", "CountLikes")
+where t.post_id = post_id
+
+select *from db.posts where posts.owner_id=400

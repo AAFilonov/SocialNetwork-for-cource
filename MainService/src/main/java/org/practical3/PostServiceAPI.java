@@ -11,6 +11,7 @@ import org.practical3.utils.PropertyManager;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -25,6 +26,12 @@ public class PostServiceAPI {
 
         HttpResponse response = Commons.HttpClientManager.sendPost(url, request);
 
+        return processResponce(response);
+
+
+    }
+
+    static Answer processResponce(  HttpResponse response) throws Exception {
         switch (response.getStatusLine().getStatusCode()) {
             case HttpServletResponse.SC_OK:
                 return HttpClientManager.getResponseBody(response);
@@ -37,8 +44,6 @@ public class PostServiceAPI {
             default:
                 throw new Exception();
         }
-
-
     }
 
 
@@ -57,7 +62,7 @@ public class PostServiceAPI {
     public static int insertPosts(Collection<Post> posts) throws Exception {
         String url = String.format("%s/posts?action=insertPosts", getBaseURL());
         Answer postServiceAnswer =  sendRequest(url,posts);
-        return (postServiceAnswer!=null)? postServiceAnswer.AffectedRows: 0;
+        return (postServiceAnswer!=null)? 1: 0;
     }
     public static int deletePosts(Collection<Integer> post_ids) throws Exception {
         String url = String.format("%s/posts?action=deletePosts", getBaseURL());

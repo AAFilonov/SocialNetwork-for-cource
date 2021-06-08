@@ -87,6 +87,18 @@ class PostsDataBaseManagerTest {
 
         clearTestData();
     }
+    @Test
+    void updateTest() throws SQLException, ClassNotFoundException {
+        insertTestData();
+
+        Post post = new Post(TestUtils.FirstPostId,null,"Some string");
+
+        postsDataBaseManager.updatePost(post);
+        ArrayList<Post> actual = ( ArrayList<Post>)postsDataBaseManager.getPosts( Arrays.asList( TestUtils.FirstPostId), 10, 0);
+        assertEquals(post.Content, actual.get(0).Content);
+
+        clearTestData();
+    }
 
 
     void insertTestData() throws SQLException {
