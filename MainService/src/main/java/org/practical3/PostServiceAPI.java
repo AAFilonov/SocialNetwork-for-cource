@@ -69,7 +69,7 @@ public class PostServiceAPI {
         Answer postServiceAnswer =  sendRequest(url,post_ids);
         return (postServiceAnswer!=null)? postServiceAnswer.AffectedRows: 0;
     }
-    public static int updatePosts(Collection<Post> posts)throws Exception {
+    public static int updatePostf(Collection<Post> posts)throws Exception {
         String url = String.format("%s/posts?action=insertPosts", getBaseURL());
         Answer postServiceAnswer =  sendRequest(url,posts);
         return (postServiceAnswer!=null)? postServiceAnswer.AffectedRows: 0;
