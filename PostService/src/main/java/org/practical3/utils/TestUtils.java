@@ -15,16 +15,13 @@ public class TestUtils {
     public static final int FirstPostId = 888;
     public static final int SecondPostId = 889;
 
-    public static final int TestOwnerId2 = 405;
-    public static final int PostId3 = 988;
-    public static final int PostId4 = 989;
 
 
     public static  Instant currentPoint = Instant.now();
 
     public static WallRequest createRequestWall() {
         ArrayList<Integer> ownerIds = new ArrayList<Integer>(
-                Arrays.asList(TestOwnerId));
+                Arrays.asList(405));
         Instant dateTimeBegin = currentPoint.minus(2, ChronoUnit.DAYS);
         Instant dateTimeEnd =currentPoint.plus(2, ChronoUnit.DAYS);
 

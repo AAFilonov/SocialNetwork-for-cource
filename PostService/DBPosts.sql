@@ -6,7 +6,7 @@ CREATE TABLE db.posts(
 	"content" text NOT NULL,
 	"timestamp" timestamp NOT NULL DEFAULT now(),
 	"isRemoved" boolean DEFAULT false,
-	"isRedated" boolean DEFAULT false,
+	isRedacted boolean DEFAULT false,
 	"isCommentable" boolean DEFAULT false,
 	"CountLikes" integer DEFAULT 0,
 	"CountReposts" integer DEFAULT 0

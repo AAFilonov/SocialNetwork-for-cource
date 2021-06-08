@@ -15,6 +15,9 @@ public class PostsDataBaseManager extends DataBaseManager {
         super(DB_URL, DB_Name, user, password);
     }
 
+    public java.sql.Connection getConnection(){
+        return super.Connection;
+    }
     public String getData() throws SQLException {
 
         String str = super.Connection.nativeSQL("select * from db.posts");
@@ -60,12 +63,11 @@ public class PostsDataBaseManager extends DataBaseManager {
 
         PreparedStatement statement = super.Connection.prepareStatement ("BEGIN;" +
                         "update db.posts set " +
-
                         "owner_id = COALESCE(? , owner_id ) ," +
                         "content = COALESCE(?,content )," +
                         "post_timestamp = COALESCE(?,post_timestamp  ), " +
                         "\"isRemoved\" = COALESCE(?,\"isRemoved\") ," +
-                        "\"isRedated\" = COALESCE(?,\"isRedated\") ," +
+                        "isredacted = COALESCE(?,isredacted) ," +
                         "\"isCommentable\"= COALESCE(?,\"isCommentable\") ," +
                         "\"CountLikes\" = COALESCE(?,\"CountLikes\"), " +
                         "\"CountReposts\"= COALESCE(?,\"CountReposts\") " +

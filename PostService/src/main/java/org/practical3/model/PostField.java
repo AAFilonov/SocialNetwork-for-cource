@@ -10,7 +10,7 @@ public enum PostField {
     CONTENT("content"),
     TIMESTAMP("post_timestamp"),
     IS_REMOVED("isRemoved"),
-    IS_REDACTED("isRedated"),
+    IS_REDACTED("isRedacted"),
     IS_COMMENTABLE("isCommentable"),
     COUNT_LIKES("CountLikes"),
     COUNT_REPOSTS("CountReposts");
