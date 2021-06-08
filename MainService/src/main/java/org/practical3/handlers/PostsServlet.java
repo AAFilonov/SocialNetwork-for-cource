@@ -1,8 +1,6 @@
 package org.practical3.handlers;
 
 
-import javafx.geometry.Pos;
-import org.practical3.Main;
 import org.practical3.PostServiceAPI;
 import org.practical3.model.data.Post;
 import org.practical3.model.transfer.Answer;
@@ -12,7 +10,6 @@ import org.practical3.utils.Commons;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -83,7 +80,7 @@ public class PostsServlet extends HttpServlet {
 
     private void updatePosts(HttpServletRequest httpServletRequest, HttpServletResponse response) throws Exception {
         Collection<Post> posts = Commons.getCollectionFromRequest(httpServletRequest);
-        Integer affectedRows = PostServiceAPI.updatePosts(posts);
+        Integer affectedRows = PostServiceAPI.updatePost(posts);
         Commons.sendOk(new Answer("OK",null,affectedRows), response);
     }
 

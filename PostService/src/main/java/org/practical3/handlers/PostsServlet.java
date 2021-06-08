@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 
 
@@ -45,11 +44,6 @@ public class PostsServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-                ProcessRequest(req,resp);
-
-    }
-
-    private  void ProcessRequest(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
             String action = req.getParameter("action");
             doAction(action, req, resp);
@@ -66,6 +60,7 @@ public class PostsServlet extends HttpServlet {
         }
 
     }
+
     private void doAction(String action, HttpServletRequest req, HttpServletResponse resp) throws IOException, ClassNotFoundException, SQLException {
         switch (action) {
             case "getPosts":
@@ -154,8 +149,11 @@ public class PostsServlet extends HttpServlet {
     private void removePosts(HttpServletRequest req, HttpServletResponse resp) {
         throw new NotImplementedException();
     }
-    private void updatePosts(HttpServletRequest req, HttpServletResponse resp) {
-        throw new NotImplementedException();
+    private void updatePosts(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException {
+        String reqStr = IOUtils.toString(req.getInputStream());
+        Post post = Common.gson.fromJson(reqStr, Post.class);
+        Common.dataBaseManager.updatePost(post);
+        sendOk(resp,new Answer("OK",null,null));
     }
     private void searchPosts(HttpServletRequest req, HttpServletResponse resp) {
         throw new NotImplementedException();

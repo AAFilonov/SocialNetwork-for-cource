@@ -8,9 +8,9 @@ public enum PostField {
     POST_ID("post_id"),
     OWNER_ID("owner_id"),
     CONTENT("content"),
-    TIMESTAMP("timestamp"),
+    TIMESTAMP("post_timestamp"),
     IS_REMOVED("isRemoved"),
-    IS_REDACTED("isRedated"),
+    IS_REDACTED("isRedacted"),
     IS_COMMENTABLE("isCommentable"),
     COUNT_LIKES("CountLikes"),
     COUNT_REPOSTS("CountReposts");

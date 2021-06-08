@@ -1,5 +1,7 @@
 package org.practical3.common;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.jupiter.api.*;
 import org.practical3.model.Post;
 import org.practical3.model.WallRequest;
@@ -8,6 +10,7 @@ import org.practical3.utils.PropertyManager;
 import org.practical3.utils.TestUtils;
 
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,7 +22,7 @@ class PostsDataBaseManagerTest {
     public void init() {
         PropertyManager.load("./Post.props");
         String DB_URL = PropertyManager.getPropertyAsString("database.server", "jdbc:postgresql://127.0.0.1:5432/");
-        String DB_Name = PropertyManager.getPropertyAsString("database.database", "JavaPractice");
+        String DB_Name = "javaPracticeTest";
         String User = PropertyManager.getPropertyAsString("database.user", "postgres");
         String Password = PropertyManager.getPropertyAsString("database.password", "1");
 
@@ -30,7 +33,6 @@ class PostsDataBaseManagerTest {
             exception.printStackTrace();
         }
     }
-
 
     @Nested
     class insertTests {
@@ -49,14 +51,11 @@ class PostsDataBaseManagerTest {
 
     @Test
     void getPostsTest() throws SQLException, ClassNotFoundException {
-        insertTestData();
-        Collection<Integer> ids = TestUtils.getTestPostsIds();
 
-
-        Collection<Post> actual = postsDataBaseManager.getPosts(ids, 10, 0);
+        Collection<Post> actual = postsDataBaseManager.getPosts(Arrays.asList(988,989), 10, 0);
 
         assertEquals(2, actual.size());
-        clearTestData();
+
     }
 
 
@@ -76,14 +75,23 @@ class PostsDataBaseManagerTest {
 
     @Test
     void getWallTest() throws SQLException {
-        insertTestData();
 
         WallRequest wallRequest = TestUtils.createRequestWall();
-        Collection<Post> inserted = TestUtils.getTestPosts();
 
         ArrayList<Post> actual = (ArrayList<Post>) postsDataBaseManager.getWall(wallRequest);
 
         assertEquals(2, actual.size());
+
+    }
+    @Test
+    void updateTest() throws SQLException, ClassNotFoundException {
+        insertTestData();
+
+        Post post = new Post(TestUtils.FirstPostId,null,"Some string");
+
+        postsDataBaseManager.updatePost(post);
+        ArrayList<Post> actual = ( ArrayList<Post>)postsDataBaseManager.getPosts( Arrays.asList( TestUtils.FirstPostId), 10, 0);
+        assertEquals(post.Content, actual.get(0).Content);
 
         clearTestData();
     }
