@@ -1,7 +1,5 @@
 package org.practical3.common;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.jupiter.api.*;
 import org.practical3.model.Post;
 import org.practical3.model.WallRequest;
@@ -10,7 +8,6 @@ import org.practical3.utils.PropertyManager;
 import org.practical3.utils.TestUtils;
 
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -87,11 +84,13 @@ class PostsDataBaseManagerTest {
     void updateTest() throws SQLException, ClassNotFoundException {
         insertTestData();
 
-        Post post = new Post(TestUtils.FirstPostId,null,"Some string");
+        Post post1 = new Post(TestUtils.FirstPostId,null,"Some string");
+        Post post2 = new Post(TestUtils.SecondPostId,null,"Some other string");
 
-        postsDataBaseManager.updatePost(post);
-        ArrayList<Post> actual = ( ArrayList<Post>)postsDataBaseManager.getPosts( Arrays.asList( TestUtils.FirstPostId), 10, 0);
-        assertEquals(post.Content, actual.get(0).Content);
+        postsDataBaseManager.updatePosts(Arrays.asList(post1,post2));
+        ArrayList<Post> actual = ( ArrayList<Post>)postsDataBaseManager.getPosts( Arrays.asList( TestUtils.FirstPostId,TestUtils.SecondPostId), 10, 0);
+        assertEquals(post1.Content, actual.get(0).Content);
+        assertEquals(post2.Content, actual.get(1).Content);
 
         clearTestData();
     }

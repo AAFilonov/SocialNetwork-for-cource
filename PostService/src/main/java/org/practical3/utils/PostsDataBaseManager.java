@@ -58,43 +58,44 @@ public class PostsDataBaseManager extends DataBaseManager {
         return super.executeUpdate(query);
     }
 
-    public void updatePost(Post post) throws SQLException {
+    public int  updatePosts(Collection<Post> posts) throws SQLException {
 
 
-        PreparedStatement statement = super.Connection.prepareStatement ("BEGIN;" +
-                        "update db.posts set " +
-                        "owner_id = COALESCE(? , owner_id ) ," +
-                        "content = COALESCE(?,content )," +
-                        "post_timestamp = COALESCE(?,post_timestamp  ), " +
-                        "\"isRemoved\" = COALESCE(?,\"isRemoved\") ," +
-                        "isredacted = COALESCE(?,isredacted) ," +
-                        "\"isCommentable\"= COALESCE(?,\"isCommentable\") ," +
-                        "\"CountLikes\" = COALESCE(?,\"CountLikes\"), " +
-                        "\"CountReposts\"= COALESCE(?,\"CountReposts\") " +
-                        "where post_id = ?;" +
-                        "COMMIT;"
-                );
+        String sql =      "update db.posts set " +
+         "owner_id = COALESCE(? , owner_id ) ," +
+         "content = COALESCE(?,content )," +
+         "post_timestamp = COALESCE(?,post_timestamp  ), " +
+         "\"isRemoved\" = COALESCE(?,\"isRemoved\") ," +
+         "isredacted = COALESCE(?,isredacted) ," +
+         "\"isCommentable\"= COALESCE(?,\"isCommentable\") ," +
+         "\"CountLikes\" = COALESCE(?,\"CountLikes\"), " +
+         "\"CountReposts\"= COALESCE(?,\"CountReposts\") " +
+         "where post_id = ?;" ;
+        int affectedRows = 0;
+        for (Post post :posts) {
+            PreparedStatement statement = super.Connection.prepareStatement (sql);
 
-
-        if ((post.OwnerId != null)) statement.setInt(1, post.OwnerId);
-         else statement.setNull(1, Types.INTEGER);
-        if ((post.Content != null)) statement.setString(2, post.Content);
-          else statement.setNull(2, Types.LONGVARCHAR);
-        if ((post.Timestamp != null)) statement.setTimestamp(3, Timestamp.from(post.Timestamp));
-          else statement.setNull(3, Types.TIMESTAMP);
-        if ((post.IsRemoved != null)) statement.setBoolean(4, post.IsRemoved);
-          else statement.setNull(4, Types.BOOLEAN);
-        if ((post.IsRedacted != null)) statement.setBoolean(5, post.IsRedacted);
-          else statement.setNull(5, Types.BOOLEAN);
-        if ((post.IsCommentable != null)) statement.setBoolean(6, post.IsCommentable);
-         else statement.setNull(6, Types.BOOLEAN);
-        if ((post.CountLikes != null)) statement.setInt(7, post.CountLikes);
-          else statement.setNull(7, Types.INTEGER);
-        if ((post.CountReposts != null)) statement.setInt(8, post.CountReposts);
-         else statement.setNull(8, Types.INTEGER);
-        statement.setInt(9, post.PostId);
-        statement.executeUpdate();
-        statement.close();
+            if ((post.OwnerId != null)) statement.setInt(1, post.OwnerId);
+            else statement.setNull(1, Types.INTEGER);
+            if ((post.Content != null)) statement.setString(2, post.Content);
+            else statement.setNull(2, Types.LONGVARCHAR);
+            if ((post.Timestamp != null)) statement.setTimestamp(3, Timestamp.from(post.Timestamp));
+            else statement.setNull(3, Types.TIMESTAMP);
+            if ((post.IsRemoved != null)) statement.setBoolean(4, post.IsRemoved);
+            else statement.setNull(4, Types.BOOLEAN);
+            if ((post.IsRedacted != null)) statement.setBoolean(5, post.IsRedacted);
+            else statement.setNull(5, Types.BOOLEAN);
+            if ((post.IsCommentable != null)) statement.setBoolean(6, post.IsCommentable);
+            else statement.setNull(6, Types.BOOLEAN);
+            if ((post.CountLikes != null)) statement.setInt(7, post.CountLikes);
+            else statement.setNull(7, Types.INTEGER);
+            if ((post.CountReposts != null)) statement.setInt(8, post.CountReposts);
+            else statement.setNull(8, Types.INTEGER);
+            statement.setInt(9, post.PostId);
+            affectedRows+= statement.executeUpdate();
+            statement.close();
+        }
+        return affectedRows;
 
     }
 

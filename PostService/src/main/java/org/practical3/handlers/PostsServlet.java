@@ -151,8 +151,10 @@ public class PostsServlet extends HttpServlet {
     }
     private void updatePosts(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException {
         String reqStr = IOUtils.toString(req.getInputStream());
-        Post post = Common.gson.fromJson(reqStr, Post.class);
-        Common.dataBaseManager.updatePost(post);
+        Type userListType = new TypeToken<ArrayList<Post>>() {
+        }.getType();
+        Collection<Post> posts  = Common.gson.fromJson(reqStr,userListType);
+        Common.dataBaseManager.updatePosts(posts);
         sendOk(resp,new Answer("OK",null,null));
     }
     private void searchPosts(HttpServletRequest req, HttpServletResponse resp) {
