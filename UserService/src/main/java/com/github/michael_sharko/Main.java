@@ -51,7 +51,6 @@ public class Main {
         String dbPassword = PropertyManager.getPropertyAsString("database.password", "postgres");
 
         DatabaseManager.connectTo(dbUrl, dbUser, dbPassword);
-        PropertyManager.setURI(server.getURI());
 
         try {
             server.start();

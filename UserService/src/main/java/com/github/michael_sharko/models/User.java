@@ -1,6 +1,8 @@
 package com.github.michael_sharko.models;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
     public Integer userid;
 
     public String username;
@@ -8,4 +10,11 @@ public class User {
 
     public Integer[] subscriptions;
     public Integer[] followers;
+
+    public User() {}
+
+    public User(Integer userid)
+    {
+        this.userid = userid;
+    }
 }

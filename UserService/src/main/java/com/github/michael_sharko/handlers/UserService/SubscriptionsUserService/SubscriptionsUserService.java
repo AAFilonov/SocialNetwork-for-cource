@@ -3,6 +3,7 @@ package com.github.michael_sharko.handlers.UserService.SubscriptionsUserService;
 import com.github.michael_sharko.handlers.UserService.UserService;
 import com.github.michael_sharko.models.Answer;
 import com.github.michael_sharko.models.Subscription;
+import com.github.michael_sharko.utils.StaticGson;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -19,12 +20,12 @@ public class SubscriptionsUserService extends UserService {
         String reqStr = IOUtils.toString(req.getInputStream());
         if (StringUtils.isBlank(reqStr)) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().write(gson.toJson(new Answer("The request cannot be empty!", null)));
+            resp.getWriter().write(StaticGson.gson.toJson(new Answer("The request cannot be empty!", null)));
 
             throw new InvalidParameterException("The request cannot be empty!");
         }
 
-        subscription = gson.fromJson(reqStr, Subscription.class);
+        subscription = StaticGson.gson.fromJson(reqStr, Subscription.class);
         this.req = req;
         this.resp = resp;
     }

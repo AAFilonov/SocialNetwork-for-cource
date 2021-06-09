@@ -17,8 +17,6 @@ import java.util.Properties;
  */
 public class PropertyManager {
     private static final Properties properties = new Properties();
-    private static URI uri;
-    private static int port;
 
     public static Map<String, String> getPropertiesByPrefix(String prefix) {
         Map<String, String> map = new HashMap<>();
@@ -73,13 +71,5 @@ public class PropertyManager {
         public PropertyNotFindException(String message) {
             super(message);
         }
-    }
-
-    public static URI getURI() {
-        return uri;
-    }
-
-    public static void setURI(URI uri) {
-        PropertyManager.uri = uri;
     }
 }

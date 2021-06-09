@@ -14,7 +14,7 @@ public class UpdateInUserService extends UserService {
 
     @Override
     public void execute() throws IOException {
-        DatabaseManager.executeUpdateObject("users", user, "WHERE userid = " + user.userid);
-        sendMessage(HttpServletResponse.SC_OK, new Answer("Success: User was updated successfully", null));
+        if (DatabaseManager.executeUpdateObject("users", user, "WHERE userid = " + user.userid) > 0)
+            sendMessage(HttpServletResponse.SC_OK, new Answer("Success: User was updated successfully", null));
     }
 }

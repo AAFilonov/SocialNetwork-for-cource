@@ -4,6 +4,7 @@ import com.github.michael_sharko.Main;
 import com.github.michael_sharko.models.Answer;
 import com.github.michael_sharko.models.User;
 import com.github.michael_sharko.utils.PropertyManager;
+import com.github.michael_sharko.utils.StaticGson;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.commons.io.IOUtils;
@@ -21,8 +22,6 @@ import java.net.URI;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UserServiceServletTest {
-    GsonBuilder builder = new GsonBuilder();
-    Gson gson = builder.create();
     HttpClient client = HttpClientBuilder.create().build();
 
     @BeforeAll
@@ -48,14 +47,14 @@ public class UserServiceServletTest {
         req.username = "java_username";
         req.password = "java_password";
 
-        StringEntity entity = new StringEntity(gson.toJson(req));
+        StringEntity entity = new StringEntity(StaticGson.gson.toJson(req));
         request.setEntity(entity);
         HttpResponse response = client.execute(request);
 
         HttpEntity resp = response.getEntity();
         String respStr = IOUtils.toString(resp.getContent());
 
-        Answer answer = gson.fromJson(respStr, Answer.class);
+        Answer answer = StaticGson.gson.fromJson(respStr, Answer.class);
         System.out.println(answer.getStatus());
         System.out.println(answer.getData());
     }
@@ -75,7 +74,7 @@ public class UserServiceServletTest {
         HttpEntity resp = response.getEntity();
         String respStr = IOUtils.toString(resp.getContent());
 
-        Answer answer = gson.fromJson(respStr, Answer.class);
+        Answer answer = StaticGson.gson.fromJson(respStr, Answer.class);
         System.out.println(answer.getStatus());
         System.out.println(answer.getData());
     }
@@ -89,7 +88,7 @@ public class UserServiceServletTest {
 
         String url = "http://localhost:8080/users";
 
-        HttpEntity entity = new StringEntity(gson.toJson(req));
+        HttpEntity entity = new StringEntity(StaticGson.gson.toJson(req));
         HttpDeleteWithBody httpDeleteWithBody = new HttpDeleteWithBody(url);
         httpDeleteWithBody.setEntity(entity);
 
@@ -97,7 +96,7 @@ public class UserServiceServletTest {
         HttpEntity resp = response.getEntity();
         String respStr = IOUtils.toString(resp.getContent());
 
-        Answer answer = gson.fromJson(respStr, Answer.class);
+        Answer answer = StaticGson.gson.fromJson(respStr, Answer.class);
         System.out.println(answer.getStatus());
         System.out.println(answer.getData());
     }
