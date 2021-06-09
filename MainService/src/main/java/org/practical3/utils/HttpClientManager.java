@@ -19,7 +19,8 @@ public class HttpClientManager {
 
     public HttpResponse  sendPost(String url, Object body) throws IOException {
         HttpPost request = new HttpPost(url);
-        StringEntity entity = new StringEntity( Commons.toJson(body));
+        String  jsonBody = Commons.toJson(body);
+        StringEntity entity = new StringEntity( jsonBody);
         request.setEntity(entity);
         return httpClient.execute(request);
     }
