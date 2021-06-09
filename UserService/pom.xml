@@ -47,8 +47,8 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.rnk.mf.Main</mainClass>
-                            <packageName>com.rnk.mf</packageName>
+                            <mainClass>com.github.michael_sharko.Main</mainClass>
+                            <packageName>com.github.michael_sharko</packageName>
                         </manifest>
                     </archive>
                 </configuration>

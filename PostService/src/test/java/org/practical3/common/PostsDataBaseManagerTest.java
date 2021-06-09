@@ -17,7 +17,7 @@ class PostsDataBaseManagerTest {
 
     @BeforeEach
     public void init() {
-        PropertyManager.load("./Post.props");
+        PropertyManager.load("./post.props");
         String DB_URL = PropertyManager.getPropertyAsString("database.server", "jdbc:postgresql://127.0.0.1:5432/");
         String DB_Name = "javaPracticeTest";
         String User = PropertyManager.getPropertyAsString("database.user", "postgres");
