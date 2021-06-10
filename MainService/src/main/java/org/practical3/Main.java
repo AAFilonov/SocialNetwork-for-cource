@@ -5,8 +5,10 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.practical3.handlers.FeedServlet;
 import org.practical3.handlers.PostsServlet;
 import org.practical3.handlers.UsersServlet;
+import org.practical3.handlers.WallServlet;
 import org.practical3.utils.Commons;
 import org.practical3.utils.HttpClientManager;
 import org.practical3.utils.PropertyManager;
@@ -76,6 +78,8 @@ public class Main {
     {
         setServlet(new PostsServlet(),"/posts/*");
         setServlet(new UsersServlet(),"/users/*");
+        setServlet(new FeedServlet(),"/feed/*");
+        setServlet(new WallServlet(),"/wall/*");
     }
 
 

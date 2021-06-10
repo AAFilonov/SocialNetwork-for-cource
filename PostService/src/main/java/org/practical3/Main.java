@@ -1,6 +1,5 @@
 package org.practical3;
 
-import com.google.gson.Gson;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -16,7 +15,7 @@ import javax.servlet.Servlet;
 
 public class Main {
 
-    private  static Commons commons = new Commons();
+
     private static Server server;
 
     private static ServletContextHandler context;
@@ -24,6 +23,7 @@ public class Main {
     public static void main(String[] args)
     {
       PropertyManager.load("./post.props");
+      initDB();
       runServer();
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             @Override
@@ -39,7 +39,7 @@ public class Main {
         int port = PropertyManager.getPropertyAsInteger("server.port", 8027);
         String contextPath = PropertyManager.getPropertyAsString("server.contextPath", "/");
 
-        init(port,contextPath);
+        initServer(port,contextPath);
 
         try
         {
@@ -53,24 +53,23 @@ public class Main {
 
     }
 
-    public static void init(int port, String contextStr){
+    public static void initServer(int port, String contextStr){
         server = new Server(port);
 
         setContext(contextStr);
-        setConnection();
         setServlets();
-        commons.gson = new Gson();
+
     }
 
 
-    private static void setConnection() {
+    private static void initDB() {
         try {
             String DB_URL =   PropertyManager.getPropertyAsString("database.server", "jdbc:postgresql://127.0.0.1:5432/");
             String DB_Name =   PropertyManager.getPropertyAsString("database.database", "JavaPractice");
             String User =   PropertyManager.getPropertyAsString("database.user", "postgres");
             String Password =   PropertyManager.getPropertyAsString("database.password", "1");
 
-            commons.dataBaseManager = new PostsDataBaseManager(DB_URL,DB_Name,User,Password);
+            Commons.dataBaseManager = new PostsDataBaseManager(DB_URL,DB_Name,User,Password);
         }
        catch (Exception ex){
            System.out.println( String.format("Error while connect to database: %s", ex.getMessage()));
@@ -90,7 +89,7 @@ public class Main {
 
     private static void setServlets()
     {
-        setServlet(new PostsServlet(commons),"/posts/*");
+        setServlet(new PostsServlet(),"/posts/*");
 
     }
 
@@ -106,7 +105,7 @@ public class Main {
         try {
             if(server.isRunning()){
                 server.stop();
-                commons.dataBaseManager.close();
+                Commons.dataBaseManager.close();
             }
         } catch (Exception e) {
             System.out.println( String.format("Error while stopping server: %s", e.getMessage()));

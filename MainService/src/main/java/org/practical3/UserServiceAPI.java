@@ -1,16 +1,15 @@
 <<<<<<< HEAD
 package org.practical3;
 
-import org.practical3.model.data.Post;
-import org.practical3.model.transfer.requests.WallRequest;
-import org.practical3.utils.PropertyManager;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import org.apache.http.HttpResponse;
+import org.practical3.model.data.User;
 
+import java.io.IOException;
 import java.util.Collection;
 
 public class UserServiceAPI {
-    static String baseURL = PropertyManager.getPropertyAsString("service.users.addr","http://localhost:8080");
 
+<<<<<<< HEAD
 
     public static Collection<Integer> getSubscriptions(String username) throws Exception {
         //вернерт коллекцию id-шников пользовательей, на которых подписан заданный
@@ -129,5 +128,13 @@ public class UserServiceAPI {
         HttpResponse response = HttpManager.sendPost("getfollowers", username);
         return (Collection<Subscription>) HttpManager.readResponse(response).getData();
 >>>>>>> UserService
+=======
+    public static Collection<Integer> getSubscriptions(String user) throws IOException {
+        //HttpResponse response = HttpManager.sendPost("/getsubscriptions", user);
+        //return (Collection<Integer>) HttpManager.readResponse(response).getData();
+        return null;
+>>>>>>> master
     }
+
+
 }

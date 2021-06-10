@@ -1,26 +1,24 @@
 package org.practical3.common;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.jupiter.api.*;
-import org.practical3.model.Post;
-import org.practical3.model.WallRequest;
+import org.practical3.model.data.Post;
+import org.practical3.model.transfer.WallRequest;
+import org.practical3.utils.Commons;
 import org.practical3.utils.PostsDataBaseManager;
 import org.practical3.utils.PropertyManager;
-import org.practical3.utils.TestUtils;
+import org.practical3.utils.testing.TestUtils;
 
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class PostsDataBaseManagerTest {
-    PostsDataBaseManager postsDataBaseManager;
 
-    @BeforeEach
-    public void init() {
-        PropertyManager.load("./Post.props");
+
+    @BeforeAll
+    public  static void init() {
+        PropertyManager.load("./post.props");
         String DB_URL = PropertyManager.getPropertyAsString("database.server", "jdbc:postgresql://127.0.0.1:5432/");
         String DB_Name = "javaPracticeTest";
         String User = PropertyManager.getPropertyAsString("database.user", "postgres");
@@ -28,7 +26,7 @@ class PostsDataBaseManagerTest {
 
 
         try {
-            postsDataBaseManager = new PostsDataBaseManager(DB_URL, DB_Name, User, Password);
+            Commons.dataBaseManager= new PostsDataBaseManager(DB_URL, DB_Name, User, Password);
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
@@ -39,10 +37,10 @@ class PostsDataBaseManagerTest {
         @Test
         void insertTest() throws SQLException {
 
-            Collection<Post> inserted = TestUtils.getTestPosts();
-            int actualRowsAffected = postsDataBaseManager.insertPosts(inserted);
+            Collection<Post> inserted = TestUtils.getTestPosts(888,889);
+            int actualRowsAffected =  Commons.dataBaseManager.insertPosts(inserted);
             assertEquals(2, actualRowsAffected);
-            clearTestData();
+            TestUtils.clearTestData();
         }
 
 
@@ -50,9 +48,9 @@ class PostsDataBaseManagerTest {
 
 
     @Test
-    void getPostsTest() throws SQLException, ClassNotFoundException {
+    void getPostsTest() throws SQLException {
 
-        Collection<Post> actual = postsDataBaseManager.getPosts(Arrays.asList(988,989), 10, 0);
+        Collection<Post> actual = Commons.dataBaseManager.getPosts(Arrays.asList(988, 989), 10, 0);
 
         assertEquals(2, actual.size());
 
@@ -65,53 +63,35 @@ class PostsDataBaseManagerTest {
 
     @Test
     void deletePostsTest() throws SQLException {
-        insertTestData();
-
-        int rowsDeleted = postsDataBaseManager.deletePosts(TestUtils.getTestPostsIds());
+        TestUtils.insertTestData();
+        int rowsDeleted = Commons.dataBaseManager.deletePosts(TestUtils.getTestPostsIds());
         assertEquals(2, rowsDeleted);
-
-
     }
 
     @Test
     void getWallTest() throws SQLException {
-
-        WallRequest wallRequest = TestUtils.createRequestWall();
-
-        ArrayList<Post> actual = (ArrayList<Post>) postsDataBaseManager.getWall(wallRequest);
-
+        WallRequest wallRequest = TestUtils.createRequestWall(405);
+        ArrayList<Post> actual = (ArrayList<Post>) Commons.dataBaseManager.getWall(wallRequest);
         assertEquals(2, actual.size());
-
     }
+
     @Test
-    void updateTest() throws SQLException, ClassNotFoundException {
-        insertTestData();
+    void updateTest() throws SQLException {
+        TestUtils.insertTestData();
 
-        Post post = new Post(TestUtils.FirstPostId,null,"Some string");
+        Post post1 = new Post(TestUtils.FirstPostId, null, "Some string");
+        Post post2 = new Post(TestUtils.SecondPostId, null, "Some other string");
 
-        postsDataBaseManager.updatePost(post);
-        ArrayList<Post> actual = ( ArrayList<Post>)postsDataBaseManager.getPosts( Arrays.asList( TestUtils.FirstPostId), 10, 0);
-        assertEquals(post.Content, actual.get(0).Content);
+        Commons.dataBaseManager.updatePosts(Arrays.asList(post1, post2));
 
-        clearTestData();
+        ArrayList<Post> actual = (ArrayList<Post>) Commons.dataBaseManager.getPosts(Arrays.asList(TestUtils.FirstPostId, TestUtils.SecondPostId), 10, 0);
+        assertEquals(post1.Content, actual.get(0).Content);
+        assertEquals(post2.Content, actual.get(1).Content);
+        TestUtils.clearTestData();
     }
 
 
-    void insertTestData() throws SQLException {
-        try {
-            Collection<Post> inserted = TestUtils.getTestPosts();
-            postsDataBaseManager.insertPosts(inserted);
-        }
-        catch (Exception e) {
-        //ничего не едлать они уже там
-        }
 
-    }
-
-    void clearTestData() throws SQLException {
-
-        postsDataBaseManager.deletePosts(TestUtils.getTestPostsIds());
-    }
 
 
 }

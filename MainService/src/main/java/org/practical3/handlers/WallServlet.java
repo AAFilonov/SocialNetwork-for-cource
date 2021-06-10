@@ -10,10 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
-
-import static org.practical3.UserServiceAPI.getSubscriptions;
 
 
 public class WallServlet extends HttpServlet {
@@ -26,10 +25,7 @@ public class WallServlet extends HttpServlet {
         Commons.processAndReply(req, resp, this::getWall);
     }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Commons.processAndReply(req, resp, this::insertPosts);
-    }
+
 
 
 
@@ -37,14 +33,11 @@ public class WallServlet extends HttpServlet {
     private void getWall(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         Map<String, String[]> args = req.getParameterMap();
 
-        String username = args.get("user")[0];
+        Integer user_id = new Integer(args.get("user_id")[0]);
 
-
-
-        Collection<Integer> subscriptions  =  getSubscriptions(username);
 
         WallRequest request = new WallRequest(
-                subscriptions
+                Arrays.asList(user_id)
                 , Instant.parse(args.get("after")[0])
                 , Instant.parse(args.get("before")[0])
                 , new Integer(args.get("count")[0])
@@ -54,10 +47,6 @@ public class WallServlet extends HttpServlet {
 
         Commons.sendOk(posts, resp);
     }
-    private void insertPosts(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 
-        Collection<Post> posts =  Commons.getCollectionFromRequest(req);
-        PostServiceAPI. insertPosts(posts);
-    }
 
 }
