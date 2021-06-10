@@ -13,6 +13,8 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,10 +28,15 @@ import java.util.Collection;
 
 public class PostsServlet extends HttpServlet {
 
-   
 
 
 
+    @Override
+    public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
+        HttpServletRequest request = (HttpServletRequest) req;
+        System.out.println("[INFO]: Get request "+request.getMethod() +request.getRequestURI());
+        super.service(req, res);
+    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -39,11 +46,14 @@ public class PostsServlet extends HttpServlet {
             doAction(action, req, resp);
         } catch (IllegalArgumentException e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().println(Commons.toJson(new Answer("Error: wrong arguments",e)));
+            resp.getWriter().println(Commons.toJson(new Answer("Wrong arguments",e)));
+        } catch (SQLException e) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().println(Commons.toJson(new Answer("SQL error ",e)));
         } catch (Exception e) {
 
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().println(Commons.toJson(new Answer( "Error: internal server error\n" + e.getMessage(),e)));
+            resp.getWriter().println(Commons.toJson(new Answer( "Internal server error\n" + e.getMessage(),e)));
 
         }
 

@@ -111,7 +111,8 @@ public class PostsDataBaseManager extends DataBaseManager {
     public Collection<Post> getWall(WallRequest wallRequest) throws SQLException {
         PreparedStatement statement = super.Connection.prepareStatement(String.format("SELECT * FROM db.posts " +
                 "WHERE owner_id IN (%s) " +
-                "AND post_timestamp BETWEEN ? AND ?" +
+                "AND post_timestamp BETWEEN ? AND ? " +
+                "and \"isRemoved\" = 'false'" +
                 "LIMIT ? OFFSET ?", getIdsASString(wallRequest.OwnerIds)));
 
 

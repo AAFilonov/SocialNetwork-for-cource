@@ -11,7 +11,6 @@ import org.practical3.utils.PropertyManager;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -22,27 +21,23 @@ public class PostServiceAPI {
     }
 
     private static Answer sendRequest(String url, Object request) throws Exception {
-
-
         HttpResponse response = Commons.HttpClientManager.sendPost(url, request);
-
-        return processResponce(response);
-
-
+        return isSuccessful(response) ? HttpClientManager.getResponseBody(response) : null;
     }
 
-    static Answer processResponce(  HttpResponse response) throws Exception {
+    static boolean isSuccessful(HttpResponse response) throws Exception {
         switch (response.getStatusLine().getStatusCode()) {
             case HttpServletResponse.SC_OK:
-                return HttpClientManager.getResponseBody(response);
+                return true;
 
             case HttpServletResponse.SC_NOT_FOUND:
-                return null;
+                return false;
             case HttpServletResponse.SC_NOT_IMPLEMENTED:
             case HttpServletResponse.SC_BAD_REQUEST:
             default:
-                System.out.println("[POST SERVICE ERROR]: " + HttpClientManager.getResponseBody(response).Status);
-                return null;
+                System.out.println("[POST SERVICE ERROR]: "
+                        + HttpClientManager.getResponseBody(response).Status);
+              throw new Exception();
         }
     }
 
@@ -51,16 +46,22 @@ public class PostServiceAPI {
         String url = String.format("%s/posts?action=getPosts", getBaseURL());
 
         HttpResponse response = HttpClientManager.sendPost(url, postsRequest);
-
-        Collection<Post> posts = HttpClientManager.getPostsCollection(response);
-        return  posts;
+        if(isSuccessful(response)) {
+            Collection<Post> posts = HttpClientManager.getPostsCollection(response);
+            return  posts;
+        }
+        return new ArrayList<Post>();
     }
 
     public static Collection<Post> getWall(WallRequest wallRequest) throws Exception {
+
         String url = String.format("%s/posts?action=getWall", getBaseURL());
         HttpResponse response = HttpClientManager.sendPost(url, wallRequest);
-        Collection<Post> posts = HttpClientManager.getPostsCollection(response);
-        return  posts;
+        if(isSuccessful(response)) {
+            Collection<Post> posts = HttpClientManager.getPostsCollection(response);
+            return  posts;
+        }
+        return new ArrayList<Post>();
     }
 
     public static int insertPosts(Collection<Post> posts) throws Exception {

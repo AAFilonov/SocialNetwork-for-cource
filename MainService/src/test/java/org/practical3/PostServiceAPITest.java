@@ -108,7 +108,7 @@ class PostServiceAPITest {
             PostServiceAPI.removePosts(ids);
             ArrayList<Post> actual = (ArrayList<Post>) PostServiceAPI.getPosts(new PostsRequest("868", 1, 0));
 
-            assertEquals(false, actual.get(0).IsRemoved);
+            assertEquals(true, actual.get(0).IsRemoved);
             PostServiceAPI.restorePosts(ids);
         }
 
@@ -116,11 +116,11 @@ class PostServiceAPITest {
         public void doRestorePost_whenPostIsRemoveTrue_ThenPostIsRemovedBecameFalse() throws Exception {
 
             Collection<Integer> ids = new ArrayList<Integer>(
-                    Arrays.asList(844));
+                    Arrays.asList(868));
             PostServiceAPI.removePosts(ids);
 
             PostServiceAPI.restorePosts(ids);
-            ArrayList<Post> actual = (ArrayList<Post>) PostServiceAPI.getPosts(new PostsRequest("844", 1, 0));
+            ArrayList<Post> actual = (ArrayList<Post>) PostServiceAPI.getPosts(new PostsRequest("868", 1, 0));
 
             assertEquals(false, actual.get(0).IsRemoved);
         }
@@ -128,7 +128,7 @@ class PostServiceAPITest {
         @Test
         public void doRemovePost_whenPostExist_ThenGetWallDontReturnThisPost() throws Exception {
 
-            Collection<Integer> ids = new ArrayList<Integer>(Arrays.asList(844));
+            Collection<Integer> ids = new ArrayList<Integer>(Arrays.asList(868));
             PostServiceAPI.removePosts(ids);
 
             ArrayList<Post> actual = (ArrayList<Post>) PostServiceAPI.getWall(TestUtils.createRequestWall(500));
