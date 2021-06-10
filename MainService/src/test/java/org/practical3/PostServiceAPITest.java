@@ -44,14 +44,14 @@ class PostServiceAPITest {
     public void testGetWall() throws Exception {
         WallRequest wallRequest = createRequestWall(405);
 
-        Collection posts =  PostServiceAPI.getWall(wallRequest);
+        Collection<Post> posts =  PostServiceAPI.getWall(wallRequest);
 
         assertEquals(2,posts.size());
     }
     @Test
     public void testInsertPosts() throws Exception {
         TestUtils.clearTestData();
-        Collection posts = TestUtils.getTestPosts(888,889);
+        Collection<Post> posts = TestUtils.getTestPosts(888,889, 400);
 
         int affectedRows =  PostServiceAPI.insertPosts(posts);
 
@@ -85,34 +85,35 @@ class PostServiceAPITest {
 
     }
 
-    @Disabled
+
     @Nested
     class softDeleteTests {
 
         @BeforeEach
-        void beforeEach() {
-            System.out.println("Before each test method of the A class");
+        void beforeEach() throws Exception {
+            Collection<Post> posts = TestUtils.getTestPosts(868,869, 500);
+            PostServiceAPI.insertPosts(posts);
         }
 
         @AfterEach
-        void afterEach() {
-            System.out.println("After each test method of the A class");
+        void afterEach() throws Exception {
+            PostServiceAPI.deletePosts(Arrays.asList(868,869 ));
         }
 
         @Test
-        public void testRemovePosts() throws Exception {
+        public void doRemovePost_whenPostExist_ThenPostIsRemovedTrue() throws Exception {
 
             Collection<Integer> ids = new ArrayList<Integer>(
-                    Arrays.asList(844));
+                    Arrays.asList(868));
             PostServiceAPI.removePosts(ids);
-            ArrayList<Post> actual = (ArrayList<Post>) PostServiceAPI.getPosts(new PostsRequest("844", 1, 0));
+            ArrayList<Post> actual = (ArrayList<Post>) PostServiceAPI.getPosts(new PostsRequest("868", 1, 0));
 
             assertEquals(false, actual.get(0).IsRemoved);
             PostServiceAPI.restorePosts(ids);
         }
 
         @Test
-        public void testRestorePosts() throws Exception {
+        public void doRestorePost_whenPostIsRemoveTrue_ThenPostIsRemovedBecameFalse() throws Exception {
 
             Collection<Integer> ids = new ArrayList<Integer>(
                     Arrays.asList(844));
@@ -123,6 +124,18 @@ class PostServiceAPITest {
 
             assertEquals(false, actual.get(0).IsRemoved);
         }
+
+        @Test
+        public void doRemovePost_whenPostExist_ThenGetWallDontReturnThisPost() throws Exception {
+
+            Collection<Integer> ids = new ArrayList<Integer>(Arrays.asList(844));
+            PostServiceAPI.removePosts(ids);
+
+            ArrayList<Post> actual = (ArrayList<Post>) PostServiceAPI.getWall(TestUtils.createRequestWall(500));
+
+            assertEquals(1, actual.size());
+        }
+
     }
 
 }

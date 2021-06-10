@@ -5,7 +5,7 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
 import org.practical3.utils.Commons;
-import org.practical3.utils.PostsDataBaseManager;
+import org.practical3.logic.PostsDataBaseManager;
 import org.practical3.handlers.PostsServlet;
 
 import org.practical3.utils.PropertyManager;

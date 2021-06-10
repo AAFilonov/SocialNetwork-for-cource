@@ -36,22 +36,18 @@ public class TestUtils {
 
         return new WallRequest(ownerIds, dateTimeBegin, dateTimeEnd, Count, Offset);
     }
-    public static Collection<Integer> getTestPostsIds() {
-        return  Arrays.asList(TestUtils.FirstPostId, TestUtils.SecondPostId);
-    }
 
 
-    public static Collection<Post> getTestPosts(int id1,int id2) {
+    public static Collection<Post> getTestPosts(int id1,int id2, int ownerID) {
         return  new ArrayList<>(
-                Arrays.asList(new Post(id1, TestOwnerId, "First post",Instant.now()), new Post(id2, TestOwnerId, "Second post",Instant.now()))
+                Arrays.asList(new Post(id1, ownerID, "First post",Instant.now()), new Post(id2, ownerID, "Second post",Instant.now()))
         );
     }
-
 
     public static void insertTestData()  {
         try {
 
-            Collection<Post> inserted = TestUtils.getTestPosts(888, 889);
+            Collection<Post> inserted = TestUtils.getTestPosts(888, 889, 400);
             PostServiceAPI.insertPosts(inserted);
         } catch (Exception e) {
             //уже вставлены

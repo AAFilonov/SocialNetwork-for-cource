@@ -74,7 +74,7 @@ public class PostsServlet extends HttpServlet {
                 break;
 
             default:
-                resp.setContentType("application/json");
+
                 resp.setStatus(HttpServletResponse.SC_NOT_IMPLEMENTED);
                 resp.getWriter().println(Commons.gson.toJson(new Answer("Error: wrong action or no action "+ action, null)));
 

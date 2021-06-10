@@ -1,5 +1,6 @@
 package org.practical3.utils;
 
+import com.google.common.reflect.TypeToken;
 import org.apache.http.HttpResponse;
 import org.practical3.model.data.Post;
 import org.practical3.model.transfer.Answer;
@@ -10,6 +11,7 @@ import org.practical3.utils.testing.HttpClientManager;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -19,10 +21,7 @@ public class InnerAPI {
         return PropertyManager.getPropertyAsString("service.posts.addr", "http://localhost:8027");
     }
 
-    private static Answer sendRequest(String url, Object request) throws Exception {
-        HttpResponse response = HttpClientManager.sendPost(url, request);
-        return processResponce(response);
-    }
+
 
     static Answer processResponce(HttpResponse response) throws Exception {
         int code = response.getStatusLine().getStatusCode();
@@ -45,31 +44,38 @@ public class InnerAPI {
 
     public static Collection<Post> getPosts(PostsRequest postsRequest) throws Exception {
         String url = String.format("%s/posts?action=getPosts", getBaseURL());
-        Answer postServiceAnswer = sendRequest(url, postsRequest);
-        return (postServiceAnswer != null) ? (Collection<Post>) postServiceAnswer.Data : new ArrayList<Post>();
+
+        HttpResponse response = HttpClientManager.sendPost(url, postsRequest);
+
+        Collection<Post> posts = HttpClientManager.getPostsCollection(response);
+        return  posts;
     }
 
     public static Collection<Post> getWall(WallRequest wallRequest) throws Exception {
         String url = String.format("%s/posts?action=getWall", getBaseURL());
-        Answer postServiceAnswer = sendRequest(url, wallRequest);
-        return (postServiceAnswer != null) ? (Collection<Post>) postServiceAnswer.Data : new ArrayList<Post>();
+        HttpResponse response = HttpClientManager.sendPost(url, wallRequest);
+        Collection<Post> posts = HttpClientManager.getPostsCollection(response);
+        return  posts;
     }
 
     public static int insertPosts(Collection<Post> posts) throws Exception {
         String url = String.format("%s/posts?action=insertPosts", getBaseURL());
-        Answer postServiceAnswer = sendRequest(url, posts);
+        HttpResponse response = HttpClientManager.sendPost(url, posts);
+        Answer postServiceAnswer  =processResponce(response);
         return (postServiceAnswer != null) ? postServiceAnswer.AffectedRows : 0;
     }
 
     public static int deletePosts(Collection<Integer> post_ids) throws Exception {
         String url = String.format("%s/posts?action=deletePosts", getBaseURL());
-        Answer postServiceAnswer = sendRequest(url, post_ids);
+        HttpResponse response = HttpClientManager.sendPost(url, post_ids);
+        Answer postServiceAnswer  =processResponce(response);
         return (postServiceAnswer != null) ? postServiceAnswer.AffectedRows : 0;
     }
 
     public static int updatePost(Collection<Post> posts) throws Exception {
         String url = String.format("%s/posts?action=updatePosts", getBaseURL());
-        Answer postServiceAnswer = sendRequest(url, posts);
+        HttpResponse response = HttpClientManager.sendPost(url, posts);
+        Answer postServiceAnswer  =processResponce(response);
         return (postServiceAnswer != null) ? postServiceAnswer.AffectedRows : 0;
     }
 
