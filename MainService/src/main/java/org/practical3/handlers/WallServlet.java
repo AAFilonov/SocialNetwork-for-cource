@@ -25,10 +25,7 @@ public class WallServlet extends HttpServlet {
         Commons.processAndReply(req, resp, this::getWall);
     }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Commons.processAndReply(req, resp, this::insertPosts);
-    }
+
 
 
 
@@ -50,10 +47,6 @@ public class WallServlet extends HttpServlet {
 
         Commons.sendOk(posts, resp);
     }
-    private void insertPosts(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 
-        Collection<Post> posts =  Commons.getCollectionFromRequest(req);
-        PostServiceAPI. insertPosts(posts);
-    }
 
 }

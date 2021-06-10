@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 
-@SuppressWarnings({"UnstableApiUsage", "deprecation"})
+
 public class PostsServlet extends HttpServlet {
 
    
@@ -38,8 +38,6 @@ public class PostsServlet extends HttpServlet {
             String action = req.getParameter("action");
             doAction(action, req, resp);
         } catch (IllegalArgumentException e) {
-
-
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             resp.getWriter().println(Commons.toJson(new Answer("Error: wrong arguments",e)));
         } catch (Exception e) {
@@ -76,6 +74,7 @@ public class PostsServlet extends HttpServlet {
                 break;
 
             default:
+                resp.setContentType("application/json");
                 resp.setStatus(HttpServletResponse.SC_NOT_IMPLEMENTED);
                 resp.getWriter().println(Commons.gson.toJson(new Answer("Error: wrong action or no action "+ action, null)));
 

@@ -14,9 +14,10 @@ public class PostsDataBaseManager extends DataBaseManager {
         super(DB_URL, DB_Name, user, password);
     }
 
-    public java.sql.Connection getConnection(){
+    public java.sql.Connection getConnection() {
         return super.Connection;
     }
+
     public String getData() throws SQLException {
 
         String str = super.Connection.nativeSQL("select * from db.posts");
@@ -31,7 +32,7 @@ public class PostsDataBaseManager extends DataBaseManager {
     }
 
 
-    public Collection<Post> getPosts(Collection<Integer> ids, Integer count, Integer offset) throws SQLException, ClassNotFoundException {
+    public Collection<Post> getPosts(Collection<Integer> ids, Integer count, Integer offset) throws SQLException {
 
 
         String query = String.format("select * from db.posts WHERE post_id IN (%s) LIMIT %d OFFSET %d",
@@ -50,27 +51,27 @@ public class PostsDataBaseManager extends DataBaseManager {
 
     public int insertPosts(Collection<Post> posts) throws SQLException {
         PreparedStatement statement = super.Connection.prepareStatement
-                ( String.format("INSERT INTO db.posts VALUES %s",
-                getPostsAsString(posts))
+                (String.format("INSERT INTO db.posts VALUES %s",
+                        getPostsAsString(posts))
                 );
 
         return statement.executeUpdate();
     }
 
-    public int  updatePosts(Collection<Post> posts) throws SQLException {
-        String sql =      "update db.posts set " +
-         "owner_id = COALESCE(? , owner_id ) ," +
-         "content = COALESCE(?,content )," +
-         "post_timestamp = COALESCE(?,post_timestamp  ), " +
-         "\"isRemoved\" = COALESCE(?,\"isRemoved\") ," +
-         "isredacted = COALESCE(?,isredacted) ," +
-         "\"isCommentable\"= COALESCE(?,\"isCommentable\") ," +
-         "\"CountLikes\" = COALESCE(?,\"CountLikes\"), " +
-         "\"CountReposts\"= COALESCE(?,\"CountReposts\") " +
-         "where post_id = ?;" ;
+    public int updatePosts(Collection<Post> posts) throws SQLException {
+        String sql = "update db.posts set " +
+                "owner_id = COALESCE(? , owner_id ) ," +
+                "content = COALESCE(?,content )," +
+                "post_timestamp = COALESCE(?,post_timestamp  ), " +
+                "\"isRemoved\" = COALESCE(?,\"isRemoved\") ," +
+                "isredacted = COALESCE(?,isredacted) ," +
+                "\"isCommentable\"= COALESCE(?,\"isCommentable\") ," +
+                "\"CountLikes\" = COALESCE(?,\"CountLikes\"), " +
+                "\"CountReposts\"= COALESCE(?,\"CountReposts\") " +
+                "where post_id = ?;";
         int affectedRows = 0;
-        for (Post post :posts) {
-            PreparedStatement statement = super.Connection.prepareStatement (sql);
+        for (Post post : posts) {
+            PreparedStatement statement = super.Connection.prepareStatement(sql);
 
             if ((post.OwnerId != null)) statement.setInt(1, post.OwnerId);
             else statement.setNull(1, Types.INTEGER);
@@ -89,7 +90,7 @@ public class PostsDataBaseManager extends DataBaseManager {
             if ((post.CountReposts != null)) statement.setInt(8, post.CountReposts);
             else statement.setNull(8, Types.INTEGER);
             statement.setInt(9, post.PostId);
-            affectedRows+= statement.executeUpdate();
+            affectedRows += statement.executeUpdate();
             statement.close();
         }
         return affectedRows;
@@ -99,7 +100,7 @@ public class PostsDataBaseManager extends DataBaseManager {
 
     public int deletePosts(Collection<Integer> ids) throws SQLException {
         PreparedStatement statement = super.Connection.prepareStatement
-                ( String.format("DELETE from db.posts WHERE post_id IN (%s)",
+                (String.format("DELETE from db.posts WHERE post_id IN (%s)",
                         getIdsASString(ids))
                 );
 
@@ -108,7 +109,7 @@ public class PostsDataBaseManager extends DataBaseManager {
     }
 
     public Collection<Post> getWall(WallRequest wallRequest) throws SQLException {
-        PreparedStatement statement = super.Connection.prepareStatement (String.format("SELECT * FROM db.posts " +
+        PreparedStatement statement = super.Connection.prepareStatement(String.format("SELECT * FROM db.posts " +
                 "WHERE owner_id IN (%s) " +
                 "AND post_timestamp BETWEEN ? AND ?" +
                 "LIMIT ? OFFSET ?", getIdsASString(wallRequest.OwnerIds)));

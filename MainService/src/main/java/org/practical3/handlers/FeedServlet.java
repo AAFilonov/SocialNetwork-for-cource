@@ -48,10 +48,6 @@ public class FeedServlet extends HttpServlet {
 
         Commons.sendOk(posts, resp);
     }
-    private void insertPosts(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 
-        Collection<Post> posts =  Commons.getCollectionFromRequest(req);
-        PostServiceAPI. insertPosts(posts);
-    }
 
 }
