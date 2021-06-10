@@ -34,9 +34,11 @@ public class InnerAPI {
                 return null;
             case HttpServletResponse.SC_NOT_IMPLEMENTED:
             case HttpServletResponse.SC_BAD_REQUEST:
-                System.out.println("[POST SERVICE ERROR]: " + HttpClientManager.getResponseBody(response).Status);
             default:
-                throw new Exception();
+                System.out.println("[POST SERVICE ERROR]: " + HttpClientManager.getResponseBody(response).Status);
+                return  null;
+
+
         }
     }
 
@@ -56,7 +58,7 @@ public class InnerAPI {
     public static int insertPosts(Collection<Post> posts) throws Exception {
         String url = String.format("%s/posts?action=insertPosts", getBaseURL());
         Answer postServiceAnswer = sendRequest(url, posts);
-        return (postServiceAnswer != null) ? 1 : 0;
+        return (postServiceAnswer != null) ? postServiceAnswer.AffectedRows : 0;
     }
 
     public static int deletePosts(Collection<Integer> post_ids) throws Exception {
@@ -66,7 +68,7 @@ public class InnerAPI {
     }
 
     public static int updatePost(Collection<Post> posts) throws Exception {
-        String url = String.format("%s/posts?action=insertPosts", getBaseURL());
+        String url = String.format("%s/posts?action=updatePosts", getBaseURL());
         Answer postServiceAnswer = sendRequest(url, posts);
         return (postServiceAnswer != null) ? postServiceAnswer.AffectedRows : 0;
     }

@@ -24,7 +24,8 @@ public class Main {
     {
       PropertyManager.load("./post.props");
       initDB();
-      runServer();
+        if( Commons.dataBaseManager !=null)  runServer();
+
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             @Override
             public void run() {
@@ -70,6 +71,7 @@ public class Main {
             String Password =   PropertyManager.getPropertyAsString("database.password", "1");
 
             Commons.dataBaseManager = new PostsDataBaseManager(DB_URL,DB_Name,User,Password);
+
         }
        catch (Exception ex){
            System.out.println( String.format("Error while connect to database: %s", ex.getMessage()));

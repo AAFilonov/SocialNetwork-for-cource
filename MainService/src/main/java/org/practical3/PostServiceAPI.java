@@ -40,9 +40,9 @@ public class PostServiceAPI {
                 return null;
             case HttpServletResponse.SC_NOT_IMPLEMENTED:
             case HttpServletResponse.SC_BAD_REQUEST:
-                System.out.println("[POST SERVICE ERROR]: " + HttpClientManager.getResponseBody(response).Status);
             default:
-                throw new Exception();
+                System.out.println("[POST SERVICE ERROR]: " + HttpClientManager.getResponseBody(response).Status);
+                return null;
         }
     }
 
@@ -62,7 +62,7 @@ public class PostServiceAPI {
     public static int insertPosts(Collection<Post> posts) throws Exception {
         String url = String.format("%s/posts?action=insertPosts", getBaseURL());
         Answer postServiceAnswer =  sendRequest(url,posts);
-        return (postServiceAnswer!=null)? 1: 0;
+        return (postServiceAnswer!=null)?  postServiceAnswer.AffectedRows: 0;
     }
     public static int deletePosts(Collection<Integer> post_ids) throws Exception {
         String url = String.format("%s/posts?action=deletePosts", getBaseURL());
@@ -70,16 +70,38 @@ public class PostServiceAPI {
         return (postServiceAnswer!=null)? postServiceAnswer.AffectedRows: 0;
     }
     public static int updatePost(Collection<Post> posts)throws Exception {
-        String url = String.format("%s/posts?action=insertPosts", getBaseURL());
+        String url = String.format("%s/posts?action=updatePosts", getBaseURL());
         Answer postServiceAnswer =  sendRequest(url,posts);
         return (postServiceAnswer!=null)? postServiceAnswer.AffectedRows: 0;
     }
 
     public static int removePosts(Collection<Integer> post_ids)throws Exception {
-        throw new NotImplementedException();
+         ArrayList<Post> postsToUpdateRemovedField= new ArrayList<Post>();
+
+        for (int id:post_ids) {
+            Post  post = new Post();
+            post.PostId = id;
+            post.IsRemoved = true;
+            postsToUpdateRemovedField.add(post);
+        }
+
+        String url = String.format("%s/posts?action=updatePosts", getBaseURL());
+        Answer postServiceAnswer =  sendRequest(url,postsToUpdateRemovedField);
+        return (postServiceAnswer!=null)? postServiceAnswer.AffectedRows: 0;
     }
     public static int restorePosts(Collection<Integer> post_ids)throws Exception {
-        throw new NotImplementedException();
+        ArrayList<Post> postsToUpdateRemovedField= new ArrayList<Post>();
+
+        for (int id:post_ids) {
+            Post  post = new Post();
+            post.PostId = id;
+            post.IsRemoved = false;
+            postsToUpdateRemovedField.add(post);
+        }
+
+        String url = String.format("%s/posts?action=updatePosts", getBaseURL());
+        Answer postServiceAnswer =  sendRequest(url,postsToUpdateRemovedField);
+        return (postServiceAnswer!=null)? postServiceAnswer.AffectedRows: 0;
     }
 
 

@@ -61,7 +61,7 @@ class InnerAPITest {
     public void testGetWall() throws Exception {
         WallRequest wallRequest = TestUtils.createRequestWall(405);
 
-        Collection<Post> posts = InnerAPI.getWall(wallRequest);
+            Collection<Post> posts = InnerAPI.getWall(wallRequest);
 
         assertEquals(2, posts.size());
     }
@@ -73,7 +73,7 @@ class InnerAPITest {
         int affectedRows = InnerAPI.insertPosts(posts);
 
         assertEquals(2, affectedRows);
-        testDeletePosts();
+       TestUtils.clearTestData();
     }
 
     @Test
@@ -85,10 +85,10 @@ class InnerAPITest {
                             new Post(888, null, null, Instant.now()),
                             new Post(889, null, null, Instant.now()))
             );
-            int affectedRows = InnerAPI.insertPosts(posts);
+            int affectedRows = InnerAPI.updatePost(posts);
 
             assertEquals(2, affectedRows);
-
+        TestUtils.clearTestData();
 
     }
 

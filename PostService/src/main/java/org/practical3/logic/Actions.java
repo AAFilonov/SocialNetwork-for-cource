@@ -70,8 +70,8 @@ public class Actions {
         Type userListType = new TypeToken<ArrayList<Post>>() {
         }.getType();
         Collection<Post> posts = Commons.getRequestBodyAsCollection(req, userListType);
-        Commons.dataBaseManager.updatePosts(posts);
-        sendOk(resp, new Answer("OK", null, null));
+        int affectedRows =  Commons.dataBaseManager.updatePosts(posts);
+        sendOk(resp, new Answer("OK", null, affectedRows));
     }
 
     public static void searchPosts(HttpServletRequest req, HttpServletResponse resp) {

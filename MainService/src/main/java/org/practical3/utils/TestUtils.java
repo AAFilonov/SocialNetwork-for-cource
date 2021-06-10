@@ -2,9 +2,11 @@ package org.practical3.utils;
 
 
 
+import org.practical3.PostServiceAPI;
 import org.practical3.model.data.Post;
 import org.practical3.model.transfer.requests.WallRequest;
 
+import java.sql.SQLException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -44,9 +46,26 @@ public class TestUtils {
                 Arrays.asList(new Post(id1, TestOwnerId, "First post",Instant.now()), new Post(id2, TestOwnerId, "Second post",Instant.now()))
         );
     }
-    public static Collection<Post> getExistingPosts() {
-        return  new ArrayList<>(
-                Arrays.asList(new Post(PostId3, TestOwnerId, null), new Post(PostId4, TestOwnerId, null))
-        );
+
+
+    public static void insertTestData()  {
+        try {
+
+            Collection<Post> inserted = TestUtils.getTestPosts(888, 889);
+            PostServiceAPI.insertPosts(inserted);
+        } catch (Exception e) {
+            //уже вставлены
+        }
     }
+
+    public static void clearTestData()  {
+        try {
+        PostServiceAPI.deletePosts(Arrays.asList(888, 889));
+        } catch (Exception e) {
+            //уже удалены
+        }
+    }
+
+
+
 }
