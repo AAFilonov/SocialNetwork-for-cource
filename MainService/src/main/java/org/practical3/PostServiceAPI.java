@@ -49,14 +49,18 @@ public class PostServiceAPI {
 
     public static Collection<Post> getPosts(PostsRequest postsRequest) throws Exception {
         String url = String.format("%s/posts?action=getPosts", getBaseURL());
-        Answer postServiceAnswer =  sendRequest(url,postsRequest);
-        return (postServiceAnswer!=null)? (Collection<Post>) postServiceAnswer.Data: new ArrayList<Post>();
+
+        HttpResponse response = HttpClientManager.sendPost(url, postsRequest);
+
+        Collection<Post> posts = HttpClientManager.getPostsCollection(response);
+        return  posts;
     }
 
     public static Collection<Post> getWall(WallRequest wallRequest) throws Exception {
         String url = String.format("%s/posts?action=getWall", getBaseURL());
-        Answer postServiceAnswer =  sendRequest(url,wallRequest);
-        return (postServiceAnswer!=null)? (Collection<Post>) postServiceAnswer.Data: new ArrayList<Post>();
+        HttpResponse response = HttpClientManager.sendPost(url, wallRequest);
+        Collection<Post> posts = HttpClientManager.getPostsCollection(response);
+        return  posts;
     }
 
     public static int insertPosts(Collection<Post> posts) throws Exception {

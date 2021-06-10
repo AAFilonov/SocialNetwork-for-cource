@@ -17,13 +17,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class HttpClientManager {
-    public HttpClient httpClient;
+    public static  HttpClient httpClient;
 
     HttpClientManager() {
         httpClient = HttpClientBuilder.create().build();
     }
 
-    public HttpResponse sendPost(String url, Object body) throws IOException {
+    public static HttpResponse sendPost(String url, Object body) throws IOException {
         HttpPost request = new HttpPost(url);
         String jsonBody = Commons.toJson(body);
         StringEntity entity = new StringEntity(jsonBody);
