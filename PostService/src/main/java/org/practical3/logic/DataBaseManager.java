@@ -1,4 +1,4 @@
-package org.practical3.utils;
+package org.practical3.logic;
 
 
 import java.sql.*;

@@ -16,7 +16,8 @@ public class GetSubscriptionsInUserService extends UserService {
     }
 
     String generateQuery() {
-        return "SELECT userid, username FROM users WHERE userid IN (SELECT * FROM unnest((SELECT subscriptions FROM users WHERE userid = " + user.userid + ")))";
+        return "SELECT userid, username FROM users WHERE userid IN " +
+                Arrays.toString(user.followers).replace("(", "").replace("]", ")");
     }
 
     @Override

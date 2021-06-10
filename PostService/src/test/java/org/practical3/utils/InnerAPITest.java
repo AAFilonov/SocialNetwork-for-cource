@@ -3,6 +3,7 @@ package org.practical3.utils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.practical3.Main;
+import org.practical3.logic.PostsDataBaseManager;
 import org.practical3.model.data.Post;
 import org.practical3.model.transfer.PostsRequest;
 import org.practical3.model.transfer.WallRequest;
@@ -27,7 +28,7 @@ class InnerAPITest {
         String Password = PropertyManager.getPropertyAsString("database.password", "1");
 
 
-        Commons.dataBaseManager = new PostsDataBaseManager(DB_URL,DB_Name,User,Password);
+        Commons.dataBaseManager = new PostsDataBaseManager(DB_URL, DB_Name, User, Password);
 
         Thread newThread = new Thread(() -> {
             try {
@@ -39,7 +40,7 @@ class InnerAPITest {
                         Main.stopServer();
 
                     }
-                },"Stop Jetty Hook"));
+                }, "Stop Jetty Hook"));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -61,9 +62,10 @@ class InnerAPITest {
     public void testGetWall() throws Exception {
         WallRequest wallRequest = TestUtils.createRequestWall(405);
 
-        Collection<Post> posts = InnerAPI.getWall(wallRequest);
+        ArrayList<Post> posts = ( ArrayList<Post> )InnerAPI.getWall(wallRequest);
 
         assertEquals(2, posts.size());
+        assertEquals(405, posts.get(0).OwnerId);
     }
 
     @Test
@@ -73,28 +75,28 @@ class InnerAPITest {
         int affectedRows = InnerAPI.insertPosts(posts);
 
         assertEquals(2, affectedRows);
-        testDeletePosts();
+        TestUtils.clearTestData();
     }
 
     @Test
     public void testUpdatePosts() throws Exception {
         TestUtils.insertTestData();
 
-            ArrayList<Post> posts = new ArrayList<>(
-                    Arrays.asList(
-                            new Post(888, null, null, Instant.now()),
-                            new Post(889, null, null, Instant.now()))
-            );
-            int affectedRows = InnerAPI.insertPosts(posts);
+        ArrayList<Post> posts = new ArrayList<>(
+                Arrays.asList(
+                        new Post(888, null, null, Instant.now()),
+                        new Post(889, null, null, Instant.now()))
+        );
+        int affectedRows = InnerAPI.updatePost(posts);
 
-            assertEquals(2, affectedRows);
-
+        assertEquals(2, affectedRows);
+        TestUtils.clearTestData();
 
     }
 
     @Test
     public void testDeletePosts() throws Exception {
-       TestUtils.insertTestData();
+        TestUtils.insertTestData();
 
         Collection<Integer> ids = new ArrayList<Integer>(
                 Arrays.asList(888, 889));

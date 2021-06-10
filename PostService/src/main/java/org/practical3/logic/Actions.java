@@ -18,24 +18,16 @@ import java.util.Collection;
 
 public class Actions {
 
-
-    public static void sendOk(HttpServletResponse resp, Answer a) throws IOException {
-        resp.setContentType("application/json");
-        resp.setStatus(HttpServletResponse.SC_OK);
-        resp.getWriter().println(Commons.gson.toJson(a));
-    }
-
     public static void sendOk(HttpServletResponse resp, Object data) throws IOException {
-        Answer a = new Answer("OK", data);
-        resp.setContentType("application/json");
         resp.setStatus(HttpServletResponse.SC_OK);
-        resp.getWriter().println(Commons.gson.toJson(a));
+        resp.getWriter().println(Commons.gson.toJson(data));
     }
 
 
     public static void getWall(HttpServletRequest req, HttpServletResponse resp) throws SQLException, IOException {
         WallRequest wallRequest = Commons.getRequestBodyAsObject(req, WallRequest.class);
         Collection<Post> posts = Commons.dataBaseManager.getWall(wallRequest);
+
         sendOk(resp, posts);
 
     }
@@ -70,8 +62,8 @@ public class Actions {
         Type userListType = new TypeToken<ArrayList<Post>>() {
         }.getType();
         Collection<Post> posts = Commons.getRequestBodyAsCollection(req, userListType);
-        Commons.dataBaseManager.updatePosts(posts);
-        sendOk(resp, new Answer("OK", null, null));
+        int affectedRows =  Commons.dataBaseManager.updatePosts(posts);
+        sendOk(resp, new Answer("OK", null, affectedRows));
     }
 
     public static void searchPosts(HttpServletRequest req, HttpServletResponse resp) {
