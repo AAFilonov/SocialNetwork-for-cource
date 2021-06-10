@@ -1,7 +1,7 @@
 package org.practical3.utils;
 
-import org.practical3.model.Post;
-import org.practical3.model.WallRequest;
+import org.practical3.model.data.Post;
+import org.practical3.model.transfer.WallRequest;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;

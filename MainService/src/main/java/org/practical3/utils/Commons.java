@@ -23,9 +23,6 @@ public  class Commons {
     public static String toJson(Object o){
         return  gson.toJson(o);
     }
-    public static <T> T fromJson(String s,Class<T> dataType){
-        return gson.fromJson(s,dataType);
-    }
     public static <T> T fromJson(String s,Type dataType){
         return gson.fromJson(s,dataType);
     }
@@ -85,8 +82,10 @@ public  class Commons {
         return Commons.fromJson(reqStr,userListType);
     }
 
-    public  static <T> T getObjectFromRequest (HttpServletRequest req, Class<T> type) throws IOException {
+    public  static <T> T getObjectFromRequest (HttpServletRequest req) throws IOException {
         String reqStr = IOUtils.toString(req.getInputStream());
-        return Commons.fromJson(reqStr, type);
+        Type userListType = new TypeToken<Class<T>>() {}.getType();
+        return Commons.fromJson(reqStr, userListType );
     }
+
 }

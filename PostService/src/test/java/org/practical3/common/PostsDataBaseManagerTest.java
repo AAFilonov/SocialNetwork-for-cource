@@ -1,8 +1,8 @@
 package org.practical3.common;
 
 import org.junit.jupiter.api.*;
-import org.practical3.model.Post;
-import org.practical3.model.WallRequest;
+import org.practical3.model.data.Post;
+import org.practical3.model.transfer.WallRequest;
 import org.practical3.utils.PostsDataBaseManager;
 import org.practical3.utils.PropertyManager;
 import org.practical3.utils.TestUtils;

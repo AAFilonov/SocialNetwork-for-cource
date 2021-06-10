@@ -1,4 +1,4 @@
-package org.practical3.model;
+package org.practical3.model.transfer;
 
 import java.util.Collection;
 

@@ -1,7 +1,6 @@
-package org.practical3.model;
+package org.practical3.model.data;
 
 import java.time.Instant;
-import java.util.Date;
 
 public class Post {
     public Integer PostId=null;

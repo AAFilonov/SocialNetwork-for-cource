@@ -1,10 +1,9 @@
 package org.practical3.utils;
 
 
-import org.practical3.model.PostField;
-import org.practical3.model.Post;
-import org.practical3.model.WallRequest;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import org.practical3.model.data.PostField;
+import org.practical3.model.data.Post;
+import org.practical3.model.transfer.WallRequest;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -49,18 +48,16 @@ public class PostsDataBaseManager extends DataBaseManager {
 
     }
 
-
     public int insertPosts(Collection<Post> posts) throws SQLException {
+        PreparedStatement statement = super.Connection.prepareStatement
+                ( String.format("INSERT INTO db.posts VALUES %s",
+                getPostsAsString(posts))
+                );
 
-        String query = String.format("INSERT INTO db.posts VALUES %s",
-                getPostsAsString(posts)
-        );
-        return super.executeUpdate(query);
+        return statement.executeUpdate();
     }
 
     public int  updatePosts(Collection<Post> posts) throws SQLException {
-
-
         String sql =      "update db.posts set " +
          "owner_id = COALESCE(? , owner_id ) ," +
          "content = COALESCE(?,content )," +
@@ -100,17 +97,13 @@ public class PostsDataBaseManager extends DataBaseManager {
     }
 
 
-    public void removePosts(Collection<Integer> ids) {
-        throw new NotImplementedException();
-    }
-
-
     public int deletePosts(Collection<Integer> ids) throws SQLException {
+        PreparedStatement statement = super.Connection.prepareStatement
+                ( String.format("DELETE from db.posts WHERE post_id IN (%s)",
+                        getIdsASString(ids))
+                );
 
-        String query = String.format("DELETE from db.posts WHERE post_id IN (%s)",
-                getIdsASString(ids));
-
-        return super.executeUpdate(query);
+        return statement.executeUpdate();
 
     }
 

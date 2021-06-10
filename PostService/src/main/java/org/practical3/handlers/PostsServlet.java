@@ -2,11 +2,11 @@ package org.practical3.handlers;
 
 import org.apache.commons.io.IOUtils;
 import com.google.common.reflect.TypeToken;
-import org.practical3.model.WallRequest;
+import org.practical3.model.transfer.WallRequest;
 import org.practical3.utils.Commons;
-import org.practical3.model.Post;
-import org.practical3.model.Answer;
-import org.practical3.model.PostsRequest;
+import org.practical3.model.data.Post;
+import org.practical3.model.transfer.Answer;
+import org.practical3.model.transfer.PostsRequest;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 

@@ -1,4 +1,4 @@
-package org.practical3.model;
+package org.practical3.model.data;
 
 import java.util.ArrayList;
 import java.util.Arrays;

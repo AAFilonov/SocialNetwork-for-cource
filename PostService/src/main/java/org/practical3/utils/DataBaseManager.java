@@ -28,14 +28,6 @@ public class DataBaseManager {
         }
     }
 
-    ResultSet execute(String querry) throws SQLException {
-        Statement statement = Connection.createStatement();
-        return  statement.executeQuery(querry);
-    }
 
-    int executeUpdate(String querry) throws SQLException {
-        Statement statement = Connection.createStatement();
-        return  statement.executeUpdate(querry);
-    }
 
 }
