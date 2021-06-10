@@ -12,22 +12,22 @@ import org.practical3.model.transfer.Answer;
 import java.io.IOException;
 
 public class HttpClientManager {
-    public HttpClient httpClient ;
-    HttpClientManager(){
-        httpClient =  HttpClientBuilder.create().build();
+    public HttpClient httpClient;
+
+    HttpClientManager() {
+        httpClient = HttpClientBuilder.create().build();
     }
 
-    public HttpResponse  sendPost(String url, Object body) throws IOException {
+    public HttpResponse sendPost(String url, Object body) throws IOException {
         HttpPost request = new HttpPost(url);
-        String  jsonBody = Commons.toJson(body);
-        StringEntity entity = new StringEntity( jsonBody);
+        String jsonBody = Commons.toJson(body);
+        StringEntity entity = new StringEntity(jsonBody);
         request.setEntity(entity);
         return httpClient.execute(request);
     }
 
-
-    public  static Answer getResponseBody(HttpResponse response) throws IOException {
-        HttpEntity resp  = response.getEntity();
+    public static Answer getResponseBody(HttpResponse response) throws IOException {
+        HttpEntity resp = response.getEntity();
         String respStr = EntityUtils.toString(resp);
         return Commons.fromJson(respStr, Answer.class);
     }

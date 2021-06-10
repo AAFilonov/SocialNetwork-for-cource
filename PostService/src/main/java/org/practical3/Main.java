@@ -90,7 +90,7 @@ public class Main {
 
     private static void setServlets()
     {
-        setServlet(new PostsServlet(commons),"/posts/*");
+        setServlet(new PostsServlet(),"/posts/*");
 
     }
 
