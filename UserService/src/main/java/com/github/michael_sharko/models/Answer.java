@@ -1,10 +1,34 @@
 package com.github.michael_sharko.models;
 
+<<<<<<< Updated upstream
 import java.util.ArrayList;
 import java.util.List;
 
 public class Answer<Table>
 {
+=======
+public class Answer {
+    public String Status;
+    public Object Data;
+    public Integer AffectedRows;
+
+    public Answer(String status, Object data) {
+        this.Status = status;
+        this.Data = data;
+    }
+
+    public String getStatus() {
+        return this.Status;
+    }
+
+    public Object getData() {
+        return this.Data;
+    }
+}
+
+/*
+public class Answer {
+>>>>>>> Stashed changes
     private final String status;
     private String message;
     private List<Table> list;
@@ -44,3 +68,4 @@ public class Answer<Table>
         return message;
     }
 }
+ */

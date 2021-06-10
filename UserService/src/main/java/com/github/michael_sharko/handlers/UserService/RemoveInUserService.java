@@ -1,6 +1,5 @@
 package com.github.michael_sharko.handlers.UserService;
 
-import com.github.michael_sharko.handlers.UserService.SubscriptionsUserService.SubscriptionsUserService;
 import com.github.michael_sharko.models.Answer;
 import com.github.michael_sharko.models.UserRequest;
 import com.github.michael_sharko.utils.DatabaseManager;
@@ -12,12 +11,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
 
-public class GetSubscriptionsInUserService extends UserService {
+public class RemoveInUserService extends UserService {
     UserRequest userRequest;
 
-    public GetSubscriptionsInUserService(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public RemoveInUserService(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("application/json");
         String reqStr = IOUtils.toString(req.getInputStream());
         if (StringUtils.isBlank(reqStr)) {
@@ -32,21 +30,18 @@ public class GetSubscriptionsInUserService extends UserService {
         this.resp = resp;
     }
 
-    String generateQuery() {
-<<<<<<< Updated upstream
-        return "SELECT userid, username FROM users WHERE userid IN " +
-                Arrays.toString(user.followers).replace("(", "").replace("]", ")");
-=======
-        return "SELECT unnest((SELECT followers FROM users WHERE " +
-                (userRequest.userid != null ? ("userid = " + userRequest.userid) :
-                        (userRequest.username != null ? "username = '" + userRequest.username + "'" : "") +
-                ")) AS userid");
->>>>>>> Stashed changes
+    private static String generateQuery(UserRequest userRequest) {
+        String query = "DELETE FROM users WHERE %s %s %s";
+        query = String.format(query,
+                userRequest.userid != null ? ("userid = " + userRequest.userid) : "",
+                userRequest.userid != null && userRequest.username != null ? "AND" : "",
+                userRequest.username != null ? ("userid = " + userRequest.username) : "");
+        return query;
     }
 
     @Override
     public void execute() throws IOException {
-        ArrayList<Integer> userids = DatabaseManager.executeQueryToArrayList(generateQuery(), new Integer(0), "userid");
-        sendMessage(HttpServletResponse.SC_OK, new Answer("Success", userids));
+        if (DatabaseManager.executeSimpleUpdate(generateQuery(userRequest)) > 0)
+            sendMessage(HttpServletResponse.SC_OK, new Answer("Success: User was deleted successfully", null));
     }
 }

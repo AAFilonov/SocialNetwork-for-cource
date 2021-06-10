@@ -1,9 +1,14 @@
 package com.github.michael_sharko.utils;
 
+<<<<<<< Updated upstream
 import com.github.michael_sharko.handlers.SubscribesServlet;
 import com.github.michael_sharko.models.tables.SubscribesTable;
 import com.github.michael_sharko.models.tables.UserTable;
 
+=======
+import java.lang.reflect.Field;
+import java.lang.reflect.Type;
+>>>>>>> Stashed changes
 import java.sql.*;
 import java.util.Arrays;
 import java.util.List;
@@ -39,6 +44,7 @@ public class DatabaseManager
         return connection;
     }
 
+<<<<<<< Updated upstream
     public static void registerUser(UserTable newUser) throws SQLException
     {
         String insertIntoUserTableSql = "INSERT INTO users" +
@@ -97,8 +103,59 @@ public class DatabaseManager
             showUniversity = Arrays.binarySearch(params, "university") >= 0;
 
             showAll = false;
+=======
+    private static <T> boolean isFieldOfType(Field field, Class<T> clazz) {
+        return clazz.getName().equals(field.getType().getName());
+    }
+
+    public static <T> ArrayList<T> executeQueryToArrayList(String sql, Class<T> classOfT) {
+        ArrayList<T> result = null;
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            result = new ArrayList<>();
+            Field[] fields = classOfT.getFields();
+
+            while (resultSet.next()) {
+                T instance = classOfT.newInstance();
+                for (Field field : fields) {
+                    Object value = null;
+                    String fieldName = field.getName();
+
+                    try {
+                        if (isFieldOfType(field, String.class)) {
+                            if (resultSet.findColumn(fieldName) > 0)
+                                value = resultSet.getString(fieldName);
+                        } else if (isFieldOfType(field, Integer.class)) {
+                            if (resultSet.findColumn(fieldName) > 0)
+                                value = resultSet.getInt(fieldName);
+                        } else if (isFieldOfType(field, java.sql.Date.class)) {
+                            if (resultSet.findColumn(fieldName) > 0)
+                                value = resultSet.getDate(fieldName);
+                        } else if (isFieldOfType(field, Integer[].class)) {
+                            if (resultSet.findColumn(fieldName) > 0) {
+                                Array array = resultSet.getArray(fieldName);
+                                if (array != null)
+                                    value = array.getArray();
+                            }
+                        } else
+                            throw new SQLException(fieldName + "'s field contains an unknown data type");
+                    } catch (SQLException e) {
+                        continue;
+                    }
+
+                    field.set(instance, value);
+                }
+                result.add(instance);
+            }
+            statement.close();
+        } catch (SQLException | IllegalAccessException | InstantiationException throwables) {
+            throwables.printStackTrace();
+>>>>>>> Stashed changes
         }
 
+<<<<<<< Updated upstream
         while (resultSet.next())
         {
             UserTable user = new UserTable();
@@ -131,6 +188,36 @@ public class DatabaseManager
                 user.university = resultSet.getString("university");
 
             result.add(user);
+=======
+    public static <T> ArrayList<T> executeQueryToArrayList(String sql, T type, String column) {
+        ArrayList<Object> result = new ArrayList<>();
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            while(resultSet.next()) {
+                if (resultSet.findColumn(column) > 0) {
+                    if (type.getClass().getTypeName().equals(String.class.getTypeName()))
+                        result.add(resultSet.getString(column));
+                    else if (type.getClass().getTypeName().equals(Integer.class.getTypeName()))
+                        result.add(resultSet.getInt(column));
+                }
+            }
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+        return (ArrayList<T>) result;
+    }
+
+    public static int executeSimpleUpdate(String sql) {
+        int result = -1;
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            result = statement.executeUpdate();
+            statement.close();
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+>>>>>>> Stashed changes
         }
         statement.close();
     }
@@ -152,10 +239,21 @@ public class DatabaseManager
         user.fullname = resultSet.getString("fullname");
         user.sex = resultSet.getInt("sex");
 
+<<<<<<< Updated upstream
         user.country = resultSet.getString("country");
         user.city = resultSet.getString("city");
         user.school = resultSet.getString("school");
         user.university = resultSet.getString("university");
+=======
+                else if (isFieldOfType(field, java.sql.Date.class))
+                    statement.setDate(index, (java.sql.Date) value);
+
+                else if (isFieldOfType(field, Integer[].class)) {
+                    Array array = connection.createArrayOf("INTEGER", (Integer[]) value);
+                    statement.setArray(index, array);
+                } else
+                    throw new SQLException(fieldName + "'s field contains an unknown data type");
+>>>>>>> Stashed changes
 
         String updateUserSql = "UPDATE users SET username = ?, password = ?, birthday = ?, fullname = ?, sex = ?, country = ?, city = ?, school = ?, university = ? WHERE id = ?";
         PreparedStatement prepareStatement = connection.prepareStatement(updateUserSql);
