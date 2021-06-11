@@ -1,11 +1,4 @@
-
 package org.practical3.model.data;
-
-
-public class User
-{
-    public Integer id;
-
 import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.io.IOUtils;
 import org.practical3.utils.Commons;

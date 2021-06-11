@@ -1,5 +1,6 @@
 package org.practical3;
 
+
 import org.junit.jupiter.api.*;
 import org.practical3.model.data.Post;
 import org.practical3.model.transfer.requests.PostsRequest;
@@ -12,8 +13,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.practical3.utils.TestUtils.createRequestWall;
+
 
 class PostServiceAPITest {
     @BeforeAll
@@ -131,7 +133,7 @@ class PostServiceAPITest {
             Collection<Integer> ids = new ArrayList<Integer>(Arrays.asList(868));
             PostServiceAPI.removePosts(ids);
 
-            ArrayList<Post> actual = (ArrayList<Post>) PostServiceAPI.getWall(TestUtils.createRequestWall(500));
+            ArrayList<Post> actual = (ArrayList<Post>) PostServiceAPI.getWall(createRequestWall(500));
 
             assertEquals(1, actual.size());
         }

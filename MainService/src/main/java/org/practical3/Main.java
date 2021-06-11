@@ -6,6 +6,10 @@ import org.eclipse.jetty.servlet.ServletHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.practical3.handlers.FeedServlet;
 import org.practical3.handlers.PostsServlet;
+import org.practical3.handlers.UserService.GetFollowersUserServiceServlet;
+import org.practical3.handlers.UserService.GetSubscriptionsUserServiceServlet;
+import org.practical3.handlers.UserService.SubscriptionsUserServiceServlet;
+import org.practical3.handlers.UserService.UserServiceServlet;
 import org.practical3.handlers.UsersServlet;
 import org.practical3.handlers.WallServlet;
 import org.practical3.utils.Commons;
@@ -87,7 +91,7 @@ public class Main {
         setServlet(new GetSubscriptionsUserServiceServlet(), "/getsubscriptions/*");
         setServlet(new SubscriptionsUserServiceServlet(), "/subscriptions/*");
     }
-    }
+
 
     private static void setServlet(Servlet servlet, String path ) {
 

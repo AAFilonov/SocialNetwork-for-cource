@@ -1,8 +1,7 @@
 package com.github.michael_sharko.utils;
 
 import com.github.michael_sharko.models.Answer;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;

@@ -21,13 +21,13 @@ public class PropertyManager
 
     public static Map<String, String> getPropertiesByPrefix(String prefix){
         Map<String, String> map = new HashMap<>();
-        
+
         for(String name: properties.stringPropertyNames()){
             if(name.startsWith(prefix)){
                 map.put(name.substring(prefix.length()), properties.getProperty(name));
             }
         }
-        
+
         return map;
     }
 
@@ -50,7 +50,7 @@ public class PropertyManager
     }
 
     private static boolean toBoolean(String val) {
-	return ((val != null) && val.equalsIgnoreCase("true"));
+        return ((val != null) && val.equalsIgnoreCase("true"));
     }
 
     public static Long getPropertyAsLong(String name, Long defaultVal) throws PropertyNotFindException {

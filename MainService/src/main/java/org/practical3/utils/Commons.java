@@ -1,9 +1,9 @@
 package org.practical3.utils;
 
-import com.google.common.reflect.TypeToken;
+
 import com.google.gson.Gson;
 import org.apache.commons.io.IOUtils;
-import org.practical3.model.data.Post;
+
 import org.practical3.model.transfer.Answer;
 
 ;
