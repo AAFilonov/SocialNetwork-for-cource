@@ -1,28 +1,52 @@
 package com.github.michael_sharko.handlers.UserService;
 
+import com.github.michael_sharko.handlers.UserService.SubscriptionsUserService.SubscriptionsUserService;
 import com.github.michael_sharko.models.Answer;
-import com.github.michael_sharko.models.User;
+import com.github.michael_sharko.models.UserRequest;
 import com.github.michael_sharko.utils.DatabaseManager;
+import com.github.michael_sharko.utils.StaticGson;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class GetSubscriptionsInUserService extends UserService {
+    UserRequest userRequest;
+
     public GetSubscriptionsInUserService(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        super(req, resp);
+        resp.setContentType("application/json");
+        String reqStr = IOUtils.toString(req.getInputStream());
+        if (StringUtils.isBlank(reqStr)) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write(StaticGson.gson.toJson(new Answer("The request cannot be empty!", null)));
+
+            throw new InvalidParameterException("The request cannot be empty!");
+        }
+
+        userRequest = StaticGson.gson.fromJson(reqStr, UserRequest.class);
+        this.req = req;
+        this.resp = resp;
     }
 
     String generateQuery() {
+<<<<<<< Updated upstream
         return "SELECT userid, username FROM users WHERE userid IN " +
                 Arrays.toString(user.followers).replace("(", "").replace("]", ")");
+=======
+        return "SELECT unnest((SELECT followers FROM users WHERE " +
+                (userRequest.userid != null ? ("userid = " + userRequest.userid) :
+                        (userRequest.username != null ? "username = '" + userRequest.username + "'" : "") +
+                ")) AS userid");
+>>>>>>> Stashed changes
     }
 
     @Override
     public void execute() throws IOException {
-        ArrayList<User> users = DatabaseManager.executeQueryToArrayList(generateQuery(), User.class);
-        sendMessage(HttpServletResponse.SC_OK, new Answer("Success", users));
+        ArrayList<Integer> userids = DatabaseManager.executeQueryToArrayList(generateQuery(), new Integer(0), "userid");
+        sendMessage(HttpServletResponse.SC_OK, new Answer("Success", userids));
     }
 }

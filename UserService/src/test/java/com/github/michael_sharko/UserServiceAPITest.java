@@ -1,14 +1,12 @@
 package com.github.michael_sharko;
 
-import com.github.michael_sharko.models.User;
+import com.github.michael_sharko.models.data.User;
 import com.github.michael_sharko.utils.PropertyManager;
-import com.google.gson.internal.LinkedTreeMap;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 
 class UserServiceAPITest {
@@ -49,7 +47,7 @@ class UserServiceAPITest {
         //System.out.println("name: " + users.get(0).userid);
 
         // todo: solve it:
-        // com.google.gson.internal.LinkedTreeMap cannot be cast to com.github.michael_sharko.models.User
+        // com.google.gson.internal.LinkedTreeMap cannot be cast to com.github.michael_sharko.models.data.User
     }
 
     @Test

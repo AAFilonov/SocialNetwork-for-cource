@@ -1,37 +1,111 @@
 package com.github.michael_sharko.utils;
 
-import java.lang.reflect.Field;
-import java.sql.*;
-import java.util.ArrayList;
+<<<<<<< Updated upstream
+import com.github.michael_sharko.handlers.SubscribesServlet;
+import com.github.michael_sharko.models.tables.SubscribesTable;
+import com.github.michael_sharko.models.tables.UserTable;
 
-public class DatabaseManager {
+=======
+import java.lang.reflect.Field;
+import java.lang.reflect.Type;
+>>>>>>> Stashed changes
+import java.sql.*;
+import java.util.Arrays;
+import java.util.List;
+
+public class DatabaseManager
+{
     private static Connection connection;
 
-    public static void connectTo(String url, String user, String password) {
-        try {
+    public static void connectTo(String url, String user, String password)
+    {
+        try
+        {
             connection = DriverManager.getConnection(url, user, password);
-            getConnection();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            if (connection != null)
+                System.out.println("[PSQL:Info]: Connected to PostgreSQL!");
+        }
+        catch (SQLException troubles)
+        {
+            System.out.println("[PSQL:Error]: " + troubles.getMessage());
+            troubles.printStackTrace();
         }
     }
 
-    public static boolean isConnected() {
+    public static boolean isConnected()
+    {
         return connection != null;
     }
 
-    public static Connection getConnection() {
-        try {
-            if (connection == null)
-                throw new SQLException("The connection was not established!");
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-        }
+    public static Connection getConnection() throws SQLNonTransientConnectionException {
+        if (connection == null)
+            throw new SQLNonTransientConnectionException("[PSQL:Error]: Database not connected!");
+
         return connection;
     }
 
-    private static <T> boolean isFieldOfType(Field field, Class<T> type) {
-        return type.getName().equals(field.getType().getName());
+<<<<<<< Updated upstream
+    public static void registerUser(UserTable newUser) throws SQLException
+    {
+        String insertIntoUserTableSql = "INSERT INTO users" +
+                " (username, password, birthday, fullname, sex, country, city, school, university)" +
+                " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT DO NOTHING";
+
+        PreparedStatement prepareStatement = connection.prepareStatement(insertIntoUserTableSql);
+
+        prepareStatement.setString(1, newUser.username);
+        prepareStatement.setString(2, newUser.password);
+        prepareStatement.setDate(3, newUser.birthday);
+        prepareStatement.setString(4, newUser.fullname);
+        prepareStatement.setInt(5, newUser.sex);
+        prepareStatement.setString(6, newUser.country);
+        prepareStatement.setString(7, newUser.city);
+        prepareStatement.setString(8, newUser.school);
+        prepareStatement.setString(9, newUser.university);
+
+        prepareStatement.executeUpdate();
+        prepareStatement.close();
+    }
+
+    public static void selectUsers(List<UserTable> result, String[] params, String condition) throws SQLException
+    {
+        Statement statement = connection.createStatement();
+
+        String sql = "SELECT " + ((params == null) ? ('*') : (String.join(",", params))) + " FROM users " + condition;
+        ResultSet resultSet = statement.executeQuery(sql);
+
+        boolean showId = false;
+        boolean showUsername = false;
+        boolean showBirthday = false;
+
+        boolean showFullname = false;
+        boolean showSex = false;
+
+        boolean showCountry = false;
+        boolean showCity = false;
+        boolean showSchool = false;
+        boolean showUniversity = false;
+
+        boolean showAll = true;
+
+        if (params != null)
+        {
+            Arrays.sort(params);
+
+            showId = Arrays.binarySearch(params, "id") >= 0;
+            showUsername = Arrays.binarySearch(params, "username") >= 0;
+            showBirthday = Arrays.binarySearch(params, "birthday") >= 0;
+            showFullname = Arrays.binarySearch(params, "fullname") >= 0;
+            showSex = Arrays.binarySearch(params, "sex") >= 0;
+            showCountry = Arrays.binarySearch(params, "country") >= 0;
+            showCity = Arrays.binarySearch(params, "city") >= 0;
+            showSchool = Arrays.binarySearch(params, "school") >= 0;
+            showUniversity = Arrays.binarySearch(params, "university") >= 0;
+
+            showAll = false;
+=======
+    private static <T> boolean isFieldOfType(Field field, Class<T> clazz) {
+        return clazz.getName().equals(field.getType().getName());
     }
 
     public static <T> ArrayList<T> executeQueryToArrayList(String sql, Class<T> classOfT) {
@@ -56,6 +130,9 @@ public class DatabaseManager {
                         } else if (isFieldOfType(field, Integer.class)) {
                             if (resultSet.findColumn(fieldName) > 0)
                                 value = resultSet.getInt(fieldName);
+                        } else if (isFieldOfType(field, java.sql.Date.class)) {
+                            if (resultSet.findColumn(fieldName) > 0)
+                                value = resultSet.getDate(fieldName);
                         } else if (isFieldOfType(field, Integer[].class)) {
                             if (resultSet.findColumn(fieldName) > 0) {
                                 Array array = resultSet.getArray(fieldName);
@@ -75,8 +152,61 @@ public class DatabaseManager {
             statement.close();
         } catch (SQLException | IllegalAccessException | InstantiationException throwables) {
             throwables.printStackTrace();
+>>>>>>> Stashed changes
         }
-        return result;
+
+<<<<<<< Updated upstream
+        while (resultSet.next())
+        {
+            UserTable user = new UserTable();
+
+            if (showAll || showId)
+                user.id = resultSet.getInt("id");
+
+            if (showAll || showUsername)
+                user.username = resultSet.getString("username");
+
+            if (showAll || showBirthday)
+                user.birthday = resultSet.getDate("birthday");
+
+            if (showAll || showFullname)
+                user.fullname = resultSet.getString("fullname");
+
+            if (showAll || showSex)
+                user.sex = resultSet.getInt("sex");
+
+            if (showAll || showCountry)
+                user.country = resultSet.getString("country");
+
+            if (showAll || showCity)
+                user.city = resultSet.getString("city");
+
+            if (showAll || showSchool)
+                user.school = resultSet.getString("school");
+
+            if (showAll || showUniversity)
+                user.university = resultSet.getString("university");
+
+            result.add(user);
+=======
+    public static <T> ArrayList<T> executeQueryToArrayList(String sql, T type, String column) {
+        ArrayList<Object> result = new ArrayList<>();
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            while(resultSet.next()) {
+                if (resultSet.findColumn(column) > 0) {
+                    if (type.getClass().getTypeName().equals(String.class.getTypeName()))
+                        result.add(resultSet.getString(column));
+                    else if (type.getClass().getTypeName().equals(Integer.class.getTypeName()))
+                        result.add(resultSet.getInt(column));
+                }
+            }
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+        return (ArrayList<T>) result;
     }
 
     public static int executeSimpleUpdate(String sql) {
@@ -87,100 +217,140 @@ public class DatabaseManager {
             statement.close();
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
+>>>>>>> Stashed changes
         }
-        return result;
+        statement.close();
     }
 
-    public static <T> int executeUpdate(String sql, T object) {
-        int result = -1;
-        try {
-            Class<?> classOfT = object.getClass();
-            Field[] fields = classOfT.getFields();
-            Object value = null;
+    public static void updateUser(UserTable updatedUser) throws SQLException
+    {
+        Statement statement = connection.createStatement();
 
-            PreparedStatement statement = connection.prepareStatement(sql);
-            int index = 1;
-            for (Field field : fields) {
-                String fieldName = field.getName();
-                value = field.get(object);
+        String sql = "SELECT * FROM users WHERE id = " + updatedUser.id;
+        ResultSet resultSet = statement.executeQuery(sql);
 
-                if (value == null)
-                    continue;
+        UserTable user = new UserTable();
+        resultSet.next();
 
-                if (isFieldOfType(field, String.class))
-                    statement.setString(index, (String) value);
+        user.username = resultSet.getString("username");
+        user.password = resultSet.getString("password");
+        user.birthday = resultSet.getDate("birthday");
 
-                else if (isFieldOfType(field, Integer.class))
-                    statement.setInt(index, (Integer) value);
+        user.fullname = resultSet.getString("fullname");
+        user.sex = resultSet.getInt("sex");
+
+<<<<<<< Updated upstream
+        user.country = resultSet.getString("country");
+        user.city = resultSet.getString("city");
+        user.school = resultSet.getString("school");
+        user.university = resultSet.getString("university");
+=======
+                else if (isFieldOfType(field, java.sql.Date.class))
+                    statement.setDate(index, (java.sql.Date) value);
 
                 else if (isFieldOfType(field, Integer[].class)) {
                     Array array = connection.createArrayOf("INTEGER", (Integer[]) value);
                     statement.setArray(index, array);
                 } else
                     throw new SQLException(fieldName + "'s field contains an unknown data type");
+>>>>>>> Stashed changes
 
-                ++index;
-            }
+        String updateUserSql = "UPDATE users SET username = ?, password = ?, birthday = ?, fullname = ?, sex = ?, country = ?, city = ?, school = ?, university = ? WHERE id = ?";
+        PreparedStatement prepareStatement = connection.prepareStatement(updateUserSql);
 
-            result = statement.executeUpdate();
-            statement.close();
-        } catch (SQLException | IllegalAccessException throwables) {
-            throwables.printStackTrace();
-        }
-        return result;
+        prepareStatement.setString(1, updatedUser.username == null ? user.username : updatedUser.username);
+        prepareStatement.setString(2, updatedUser.password == null ? user.password : updatedUser.password);
+        prepareStatement.setDate(3, updatedUser.birthday == null ? user.birthday : updatedUser.birthday);
+
+        prepareStatement.setString(4, updatedUser.fullname == null ? user.fullname : updatedUser.fullname);
+        prepareStatement.setInt(5, updatedUser.sex == null ? user.sex : updatedUser.sex);
+
+        prepareStatement.setString(6, updatedUser.country == null ? user.country : updatedUser.country);
+        prepareStatement.setString(7, updatedUser.city == null ? user.city : updatedUser.city);
+        prepareStatement.setString(8, updatedUser.school == null ? user.school : updatedUser.school);
+        prepareStatement.setString(9, updatedUser.university == null ? user.university : updatedUser.university);
+        prepareStatement.setInt(10, updatedUser.id);
+
+        prepareStatement.executeUpdate();
+        prepareStatement.close();
     }
 
-    public static <T> int executeInsertObject(String table, T object, String where) {
-        int result = 0;
-        try {
-            String query = "INSERT INTO %s(%s) VALUES(%s) %s";
+    public static void deleteUser(Integer id) throws SQLException
+    {
+        if (id == null)
+            return;
 
-            String vars = "";
-            String values = "";
+        Statement statement = connection.createStatement();
 
-            for (Field field : object.getClass().getFields()) {
-                if (field.get(object) != null) {
-                    vars += (!vars.equals("") ? ',' : "") + field.getName();
-                    values += (!values.equals("") ? ',' : "") + "?";
-                }
-            }
+        ResultSet resultSet = statement.executeQuery("SELECT ownerid FROM subscribes WHERE ownerid = " + id);
+        if (resultSet.next())
+            statement.executeQuery("DELETE FROM subscribes WHERE ownerid = " + id);
 
-            query = String.format(query, table, vars, values, where == null ? "" : where);
-            result = executeUpdate(query, object);
-
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-
-        return result;
+        statement.executeQuery("DELETE FROM users WHERE id = " + id);
+        statement.close();
     }
 
-    public static <T> int executeUpdateObject(String table, T object, String where) {
-        int result = 0;
-        try {
-            String query = "UPDATE %s SET %s %s";
-            String data = "";
+    public static void registerSubscribe(SubscribesTable subscribe) throws SQLException
+    {
+        String insertIntoSubscribesTableSql = "INSERT INTO subscribes" +
+                " (ownerid, subscriberid)" +
+                " VALUES (?, ?) ON CONFLICT DO NOTHING";
 
-            for (Field field : object.getClass().getFields())
-                if (field.get(object) != null) // to comment -> set ALL fields including null-elements
-                    data += (!data.equals("") ? ',' : "") + field.getName() + "=?";
+        PreparedStatement prepareStatement = connection.prepareStatement(insertIntoSubscribesTableSql);
 
-            query = String.format(query, table, data, where == null ? "" : where);
-            result = executeUpdate(query, object);
+        prepareStatement.setInt(1, subscribe.ownerid);
+        prepareStatement.setInt(2, subscribe.subscriberid);
 
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-
-        return result;
+        prepareStatement.executeUpdate();
+        prepareStatement.close();
     }
 
-    public static void disconnect() {
-        try {
+    public static void selectSubscribes(List<SubscribesTable> result, String condition) throws SQLException
+    {
+        Statement statement = connection.createStatement();
+
+        String sql = "SELECT * FROM subscribes " + condition;
+        ResultSet resultSet = statement.executeQuery(sql);
+
+        while (resultSet.next())
+        {
+            SubscribesTable subscribe = new SubscribesTable();
+
+            subscribe.ownerid = resultSet.getInt("ownerid");
+            subscribe.subscriberid = resultSet.getInt("subscriberid");
+
+            result.add(subscribe);
+        }
+
+        statement.close();
+    }
+
+    public static void deleteSubscribe(SubscribesTable subscribe) throws SQLException
+    {
+        if (subscribe.ownerid == null || subscribe.subscriberid == null)
+            return;
+
+        Statement statement = connection.createStatement();
+
+        String sql = "DELETE FROM subscribes WHERE ownerid = " + subscribe.ownerid + " AND subscriberid = " + subscribe.subscriberid;
+        statement.executeQuery(sql);
+
+        statement.close();
+    }
+
+    public static void disconnect()
+    {
+        try
+        {
             if (connection != null)
+            {
                 connection.close();
-
-        } catch (SQLException troubles) {
+                System.out.println("[PSQL:Info]: Connected to PostgreSQL!");
+            }
+        }
+        catch (SQLException troubles)
+        {
+            System.out.println("[PSQL:Error]: " + troubles.getMessage());
             troubles.printStackTrace();
         }
     }

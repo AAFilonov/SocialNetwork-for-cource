@@ -1,10 +1,8 @@
 package com.github.michael_sharko.handlers.UserService;
 
 import com.github.michael_sharko.models.Answer;
-import com.github.michael_sharko.models.User;
+import com.github.michael_sharko.models.data.User;
 import com.github.michael_sharko.utils.StaticGson;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 

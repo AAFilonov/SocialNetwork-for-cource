@@ -1,6 +1,5 @@
 package org.practical3;
 
-import com.google.gson.Gson;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHandler;
@@ -30,6 +29,7 @@ public class Main {
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             @Override
             public void run() {
+
                 stopServer();
 
             }
@@ -80,8 +80,14 @@ public class Main {
         setServlet(new UsersServlet(),"/users/*");
         setServlet(new FeedServlet(),"/feed/*");
         setServlet(new WallServlet(),"/wall/*");
-    }
 
+
+        setServlet(new UserServiceServlet(), "/users/*");
+        setServlet(new GetFollowersUserServiceServlet(), "/getfollowers/*");
+        setServlet(new GetSubscriptionsUserServiceServlet(), "/getsubscriptions/*");
+        setServlet(new SubscriptionsUserServiceServlet(), "/subscriptions/*");
+    }
+    }
 
     private static void setServlet(Servlet servlet, String path ) {
 
@@ -94,7 +100,6 @@ public class Main {
         try {
             if(server.isRunning()){
                 server.stop();
-
             }
         } catch (Exception e) {
             System.out.println( String.format("Error while stopping server: %s", e.getMessage()));

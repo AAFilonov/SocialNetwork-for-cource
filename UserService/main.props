@@ -1,0 +1,7 @@
+server.address = http://localhost:8080
+server.port = 8080
+server.contextPath = /
+
+database.server = jdbc:postgresql://localhost:5432/userservice
+database.user = michael_sharko
+database.password = aM0pt7SkY
