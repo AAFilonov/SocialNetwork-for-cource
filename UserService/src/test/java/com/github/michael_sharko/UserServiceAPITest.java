@@ -15,7 +15,7 @@ class UserServiceAPITest {
 
     @BeforeAll
     static void start() throws ClassNotFoundException {
-        PropertyManager.load("./main.props");
+        PropertyManager.load("./user.props");
         Main.runServer();
 
         user.userid = 7;
