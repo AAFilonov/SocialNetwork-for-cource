@@ -38,28 +38,28 @@ public class PostsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-        Commons.processAndReply(req, resp, (req1, resp1) -> getPosts(req1, resp1));
+        Commons.executeAndCatchExceptions(req, resp, this::getPosts);
 
 
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Commons.processAndReply(req, resp, (httpServletRequest, response) -> insertPosts(httpServletRequest, response));
+        Commons.executeAndCatchExceptions(req, resp, this::insertPosts);
     }
 
 
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Commons.processAndReply(req, resp, this::updatePosts);
+        Commons.executeAndCatchExceptions(req, resp, this::updatePosts);
     }
 
 
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Commons.processAndReply(req, resp, this::deletePosts);
+        Commons.executeAndCatchExceptions(req, resp, this::deletePosts);
     }
 
 

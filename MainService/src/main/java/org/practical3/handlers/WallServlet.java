@@ -24,7 +24,7 @@ public class WallServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Commons.processAndReply(req, resp, this::getWall);
+        Commons.executeAndCatchExceptions(req, resp, this::getWall);
     }
 
 
