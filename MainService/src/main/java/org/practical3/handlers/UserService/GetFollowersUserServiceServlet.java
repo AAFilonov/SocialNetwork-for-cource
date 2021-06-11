@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.Collection;
 
-@WebServlet("/getfollowers")
 public class GetFollowersUserServiceServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.Collection;
 
-@WebServlet("/users")
+
 public class UserServiceServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
