@@ -24,7 +24,7 @@ public class FeedServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Commons.processAndReply(req, resp, this::getFeed);
+        Commons.executeAndCatchExceptions(req, resp, this::getFeed);
     }
 
 
