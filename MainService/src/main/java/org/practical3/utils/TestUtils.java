@@ -30,8 +30,8 @@ public class TestUtils {
     public static WallRequest createRequestWall(int ownerId) {
         ArrayList<Integer> ownerIds = new ArrayList<Integer>(
                 Arrays.asList(ownerId));
-        Instant dateTimeBegin = currentPoint.minus(2, ChronoUnit.DAYS);
-        Instant dateTimeEnd =currentPoint.plus(2, ChronoUnit.DAYS);
+        Instant dateTimeBegin = currentPoint.minus(30, ChronoUnit.DAYS);
+        Instant dateTimeEnd =currentPoint.plus(30, ChronoUnit.DAYS);
 
         Integer Offset = 0;
         Integer Count = 10;

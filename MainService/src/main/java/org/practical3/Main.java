@@ -10,7 +10,7 @@ import org.practical3.handlers.UserService.GetFollowersUserServiceServlet;
 import org.practical3.handlers.UserService.GetSubscriptionsUserServiceServlet;
 import org.practical3.handlers.UserService.SubscriptionsUserServiceServlet;
 import org.practical3.handlers.UserService.UserServiceServlet;
-import org.practical3.handlers.UsersServlet;
+
 import org.practical3.handlers.WallServlet;
 import org.practical3.utils.Commons;
 import org.practical3.utils.HttpClientManager;
@@ -81,7 +81,6 @@ public class Main {
     private static void setServlets()
     {
         setServlet(new PostsServlet(),"/posts/*");
-        setServlet(new UsersServlet(),"/users/*");
         setServlet(new FeedServlet(),"/feed/*");
         setServlet(new WallServlet(),"/wall/*");
 

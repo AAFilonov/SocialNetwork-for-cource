@@ -17,11 +17,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class HttpClientManager {
-    public static  HttpClient httpClient;
+    public static  HttpClient httpClient = HttpClientBuilder.create().build();;
 
-    HttpClientManager() {
-        httpClient = HttpClientBuilder.create().build();
-    }
+
 
     public static HttpResponse sendPost(String url, Object body) throws IOException {
         HttpPost request = new HttpPost(url);
