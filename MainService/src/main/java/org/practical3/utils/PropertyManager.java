@@ -3,26 +3,27 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.github.michael_sharko.utils;
+package org.practical3.utils;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
 /**
+ *
  * @author A.Khalaev
  */
-public class PropertyManager {
+public class PropertyManager
+{
     private static final Properties properties = new Properties();
 
-    public static Map<String, String> getPropertiesByPrefix(String prefix) {
+    public static Map<String, String> getPropertiesByPrefix(String prefix){
         Map<String, String> map = new HashMap<>();
 
-        for (String name : properties.stringPropertyNames()) {
-            if (name.startsWith(prefix)) {
+        for(String name: properties.stringPropertyNames()){
+            if(name.startsWith(prefix)){
                 map.put(name.substring(prefix.length()), properties.getProperty(name));
             }
         }
@@ -30,15 +31,16 @@ public class PropertyManager {
         return map;
     }
 
-    public static void load(String propsPath) {
+    public static void load(String propsPath)
+    {
         try {
             properties.load(new FileInputStream(propsPath));
         } catch (IOException e) {
+            System.out.println(e.getMessage());
             e.printStackTrace();
         }
         //PropertyConfigurator.configure(properties);
     }
-
     public static Integer getPropertyAsInteger(String name, Integer defaultVal) throws PropertyNotFindException {
         return Integer.decode(getPropertyAsString(name, String.valueOf(defaultVal)));
     }
@@ -58,6 +60,7 @@ public class PropertyManager {
     public static String getPropertyAsString(String name, String defaultVal) throws PropertyNotFindException {
         String value = properties.getProperty(name);
         if (value == null) {
+            System.out.println("Can't find property " + name + ", use default value " +  defaultVal);
             return defaultVal;
         }
         return value;
@@ -67,7 +70,8 @@ public class PropertyManager {
         return properties.containsKey(name);
     }
 
-    public static final class PropertyNotFindException extends RuntimeException {
+    public static final class PropertyNotFindException extends RuntimeException
+    {
         public PropertyNotFindException(String message) {
             super(message);
         }

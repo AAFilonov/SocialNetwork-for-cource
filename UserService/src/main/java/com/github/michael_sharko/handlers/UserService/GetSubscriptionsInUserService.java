@@ -33,15 +33,10 @@ public class GetSubscriptionsInUserService extends UserService {
     }
 
     String generateQuery() {
-<<<<<<< Updated upstream
-        return "SELECT userid, username FROM users WHERE userid IN " +
-                Arrays.toString(user.followers).replace("(", "").replace("]", ")");
-=======
         return "SELECT unnest((SELECT followers FROM users WHERE " +
                 (userRequest.userid != null ? ("userid = " + userRequest.userid) :
                         (userRequest.username != null ? "username = '" + userRequest.username + "'" : "") +
                 ")) AS userid");
->>>>>>> Stashed changes
     }
 
     @Override

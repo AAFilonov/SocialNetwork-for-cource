@@ -1,6 +1,7 @@
 package org.practical3.handlers;
 
 
+import com.google.common.reflect.TypeToken;
 import org.practical3.PostServiceAPI;
 import org.practical3.model.data.Post;
 import org.practical3.model.transfer.Answer;
@@ -14,6 +15,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
@@ -61,7 +64,10 @@ public class PostsServlet extends HttpServlet {
 
 
     private void insertPosts(HttpServletRequest httpServletRequest, HttpServletResponse response) throws Exception {
-        Collection<Post> posts = Commons.getCollectionFromRequest(httpServletRequest);
+
+        Type userListType = new TypeToken<ArrayList<Post>>() {
+        }.getType();
+        Collection<Post> posts = Commons.getRequestBodyAsCollection(httpServletRequest, userListType);
         Integer affectedRows = PostServiceAPI.insertPosts(posts);
         Commons.sendOk(new Answer("OK",null,affectedRows), response);
 
@@ -79,13 +85,17 @@ public class PostsServlet extends HttpServlet {
     }
 
     private void updatePosts(HttpServletRequest httpServletRequest, HttpServletResponse response) throws Exception {
-        Collection<Post> posts = Commons.getCollectionFromRequest(httpServletRequest);
-        Integer affectedRows = PostServiceAPI.updatePostf(posts);
+        Type userListType = new TypeToken<ArrayList<Post>>() {
+        }.getType();
+        Collection<Post> posts = Commons.getRequestBodyAsCollection(httpServletRequest, userListType);
+        Integer affectedRows = PostServiceAPI.updatePost(posts);
         Commons.sendOk(new Answer("OK",null,affectedRows), response);
     }
 
     private void deletePosts(HttpServletRequest httpServletRequest, HttpServletResponse response) throws Exception {
-        Collection<Integer> ids = Commons.getCollectionFromRequest(httpServletRequest);
+        Type userListType = new TypeToken<ArrayList<Integer>>() {
+        }.getType();
+        Collection<Integer> ids = Commons.getRequestBodyAsCollection(httpServletRequest, userListType);
         Integer affectedRows = PostServiceAPI.deletePosts(ids);
         Commons.sendOk(new Answer("OK",null,affectedRows), response);
     }

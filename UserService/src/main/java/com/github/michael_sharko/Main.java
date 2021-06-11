@@ -1,12 +1,9 @@
 package com.github.michael_sharko;
 
-import com.github.michael_sharko.handlers.users.DeleteUserServlet;
-import com.github.michael_sharko.handlers.users.RegisterUserServlet;
-import com.github.michael_sharko.handlers.users.SearchUserServlet;
-import com.github.michael_sharko.handlers.users.UpdateUserServlet;
-
-import com.github.michael_sharko.handlers.SubscribesServlet;
-
+import com.github.michael_sharko.handlers.GetFollowersUserServiceServlet;
+import com.github.michael_sharko.handlers.GetSubscriptionsUserServiceServlet;
+import com.github.michael_sharko.handlers.SubscriptionsUserServiceServlet;
+import com.github.michael_sharko.handlers.UserServiceServlet;
 import com.github.michael_sharko.utils.DatabaseManager;
 import com.github.michael_sharko.utils.PropertyManager;
 import org.eclipse.jetty.server.Handler;
@@ -15,48 +12,37 @@ import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
-public class Main
-{
+public class Main {
     private static Server server;
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         PropertyManager.load("./main.props");
         runServer();
 
         Runtime.getRuntime().addShutdownHook(
-            new Thread(new Runnable()
-            {
-                public void run()
-                {
-                    stopServer();
-                }
-            })
+                new Thread(Main::stopServer)
         );
     }
 
-    private static void runServer()
-    {
+    public static void runServer() {
         int port = PropertyManager.getPropertyAsInteger("server.port", 8080);
         String contextPath = PropertyManager.getPropertyAsString("server.contextPath", "/");
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath(contextPath);
 
-        context.addServlet(new ServletHolder(new RegisterUserServlet()), "/register");
-        context.addServlet(new ServletHolder(new SearchUserServlet()), "/search");
-        context.addServlet(new ServletHolder(new UpdateUserServlet()), "/update");
-        context.addServlet(new ServletHolder(new DeleteUserServlet()), "/delete");
-        context.addServlet(new ServletHolder(new SubscribesServlet()), "/subscribes");
+        context.addServlet(new ServletHolder(new UserServiceServlet()), "/users");
+        context.addServlet(new ServletHolder(new SubscriptionsUserServiceServlet()), "/subscriptions");
+        context.addServlet(new ServletHolder(new GetSubscriptionsUserServiceServlet()), "/getsubscriptions");
+        context.addServlet(new ServletHolder(new GetFollowersUserServiceServlet()), "/getfollowers");
 
         HandlerList handlers = new HandlerList();
-        handlers.setHandlers(new Handler[] { context });
+        handlers.setHandlers(new Handler[]{context});
 
         runServer(port, handlers);
     }
 
-    private static void runServer(int port, HandlerList handlers)
-    {
+    public static void runServer(int port, HandlerList handlers) {
         server = new Server(port);
         server.setHandler(handlers);
 
@@ -66,32 +52,22 @@ public class Main
 
         DatabaseManager.connectTo(dbUrl, dbUser, dbPassword);
 
-        try
-        {
+        try {
             server.start();
-            System.out.println("Listening port: " + port);
-        }
-        catch (Exception e)
-        {
-            System.out.print("Error: " + e.getMessage());
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private static void stopServer()
-    {
-        try
-        {
+    public static void stopServer() {
+        try {
             if (DatabaseManager.isConnected())
                 DatabaseManager.disconnect();
 
             if (server.isRunning())
                 server.stop();
 
-        }
-        catch (Exception e)
-        {
-            System.out.print("Error while stopping server: " + e.getMessage());
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

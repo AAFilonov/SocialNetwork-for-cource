@@ -2,31 +2,30 @@ package org.practical3;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.practical3.common.DataBase;
-import org.practical3.common.PostsDataBase;
-import org.practical3.handlers.MainServlet;
-import org.practical3.model.ConfigData;
+
+import org.practical3.utils.Commons;
+import org.practical3.logic.PostsDataBaseManager;
+import org.practical3.handlers.PostsServlet;
+
+import org.practical3.utils.PropertyManager;
 
 import javax.servlet.Servlet;
-import javax.servlet.http.HttpServlet;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
 
 
 public class Main {
 
 
     private static Server server;
-    private static DataBase db;
+
     private static ServletContextHandler context;
-    public static void main(String[] args) throws Exception
+
+    public static void main(String[] args)
     {
-      runServer();
+      PropertyManager.load("./post.props");
+      initDB();
+        if( Commons.dataBaseManager !=null)  runServer();
+
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             @Override
             public void run() {
@@ -37,55 +36,12 @@ public class Main {
     }
 
 
-    private static void runServer() {
-        //TODO  сделать чтения файла конфигов из аргумента командной строки?
-        Path configPath = Paths.get(System.getProperty("user.dir")+"/config.conf");
-        ConfigData configData = readConfigs(configPath);
+    public static void runServer() {
+        int port = PropertyManager.getPropertyAsInteger("server.port", 8027);
+        String contextPath = PropertyManager.getPropertyAsString("server.contextPath", "/");
 
-        if(configData!=null) {
-            setConnection(configData);
-            if(db!=null) runServer(configData.ServerPort, configData.ServerPath);
-        }
+        initServer(port,contextPath);
 
-    }
-
-    private static ConfigData readConfigs(Path configFile) {
-        try {
-            //TODO временное решение, заменить на на json
-            List<String> args = Files.readAllLines(configFile);
-            String ServerPort = args.get(0);
-            String ServerPath = args.get(1);
-            String DB_URL = args.get(2);
-            String DB_Name = args.get(3);
-            String User = args.get(4);
-            String Password = args.get(5);
-            return new ConfigData(ServerPort, ServerPath, DB_URL, DB_Name, User, Password);
-        }
-        catch (IOException ex){
-            System.out.println( String.format("Error while open config file: %s", ex.getMessage()));
-            return null;
-        }
-    }
-
-    private static void setConnection(ConfigData configData) {
-        try {
-            db = new PostsDataBase(configData);
-        }
-       catch (Exception ex){
-           System.out.println( String.format("Error while connect to database: %s", ex.getMessage()));
-       }
-
-    }
-
-    public static void runServer(int port, String contextStr)
-    {
-        server = new Server(port);
-
-        context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.setContextPath(contextStr);
-        server.setHandler(context);
-
-        setServlets();
         try
         {
             server.start();
@@ -95,13 +51,50 @@ public class Main {
         }catch(Throwable t){
             System.out.println( String.format("Error while stopping server: %s", t.getMessage()));
         }
+
+    }
+
+    public static void initServer(int port, String contextStr){
+        server = new Server(port);
+
+        setContext(contextStr);
+        setServlets();
+
     }
 
 
-    private static void setServlets() {
-        setServlet(new MainServlet((PostsDataBase) db),"/posts/*");
+    private static void initDB() {
+        try {
+            String DB_URL =   PropertyManager.getPropertyAsString("database.server", "jdbc:postgresql://127.0.0.1:5432/");
+            String DB_Name =   PropertyManager.getPropertyAsString("database.database", "JavaPractice");
+            String User =   PropertyManager.getPropertyAsString("database.user", "postgres");
+            String Password =   PropertyManager.getPropertyAsString("database.password", "1");
+
+            Commons.dataBaseManager = new PostsDataBaseManager(DB_URL,DB_Name,User,Password);
+
+        }
+       catch (Exception ex){
+           System.out.println( String.format("Error while connect to database: %s", ex.getMessage()));
+       }
 
     }
+
+
+
+    private static void setContext(String contextStr ) {
+
+        context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        context.setContextPath(contextStr);
+        server.setHandler(context);
+
+    }
+
+    private static void setServlets()
+    {
+        setServlet(new PostsServlet(),"/posts/*");
+
+    }
+
 
     private static void setServlet(Servlet servlet,String path ) {
 
@@ -114,7 +107,7 @@ public class Main {
         try {
             if(server.isRunning()){
                 server.stop();
-                db.close();
+                Commons.dataBaseManager.close();
             }
         } catch (Exception e) {
             System.out.println( String.format("Error while stopping server: %s", e.getMessage()));
