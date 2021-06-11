@@ -13,6 +13,7 @@ import org.practical3.model.data.Post;
 import org.practical3.model.data.User;
 import org.practical3.model.transfer.Answer;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -65,6 +66,12 @@ public class HttpClientManager {
         Type userListType = new TypeToken<ArrayList<Integer>>() {
         }.getType();
         return HttpClientManager.getResponseBodyAsCollection(response, userListType);
+    }
+
+
+    public static void sendOk(Object a, HttpServletResponse resp) throws Exception {
+        resp.setStatus(HttpServletResponse.SC_OK);
+        resp.getWriter().println(StaticGson.toJson( a));
     }
 
 }

@@ -2,11 +2,13 @@ package org.practical3.handlers;
 
 
 import com.google.common.reflect.TypeToken;
+import org.apache.http.client.HttpClient;
 import org.practical3.PostServiceAPI;
 import org.practical3.model.data.Post;
 import org.practical3.model.transfer.Answer;
 import org.practical3.model.transfer.requests.PostsRequest;
 import org.practical3.utils.Commons;
+import org.practical3.utils.HttpClientManager;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -69,7 +71,7 @@ public class PostsServlet extends HttpServlet {
         }.getType();
         Collection<Post> posts = Commons.getRequestBodyAsCollection(httpServletRequest, userListType);
         Integer affectedRows = PostServiceAPI.insertPosts(posts);
-        Commons.sendOk(new Answer("OK",null,affectedRows), response);
+        HttpClientManager.sendOk(new Answer("OK",null,affectedRows), response);
 
     }
     private void getPosts(HttpServletRequest req, HttpServletResponse resp) throws Exception {
@@ -81,7 +83,7 @@ public class PostsServlet extends HttpServlet {
         );
         Collection<Post> posts  = PostServiceAPI.getPosts(request);
 
-        Commons.sendOk(posts, resp);
+        HttpClientManager.sendOk(posts, resp);
     }
 
     private void updatePosts(HttpServletRequest httpServletRequest, HttpServletResponse response) throws Exception {
@@ -89,7 +91,7 @@ public class PostsServlet extends HttpServlet {
         }.getType();
         Collection<Post> posts = Commons.getRequestBodyAsCollection(httpServletRequest, userListType);
         Integer affectedRows = PostServiceAPI.updatePost(posts);
-        Commons.sendOk(new Answer("OK",null,affectedRows), response);
+        HttpClientManager.sendOk(new Answer("OK",null,affectedRows), response);
     }
 
     private void deletePosts(HttpServletRequest httpServletRequest, HttpServletResponse response) throws Exception {
@@ -97,7 +99,7 @@ public class PostsServlet extends HttpServlet {
         }.getType();
         Collection<Integer> ids = Commons.getRequestBodyAsCollection(httpServletRequest, userListType);
         Integer affectedRows = PostServiceAPI.deletePosts(ids);
-        Commons.sendOk(new Answer("OK",null,affectedRows), response);
+        HttpClientManager.sendOk(new Answer("OK",null,affectedRows), response);
     }
 
 
