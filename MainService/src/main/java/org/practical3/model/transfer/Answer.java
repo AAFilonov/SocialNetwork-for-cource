@@ -1,7 +1,5 @@
 package org.practical3.model.transfer;
 
-import java.util.ArrayList;
-import java.util.Collection;
 
 public class Answer {
     public Object Data;

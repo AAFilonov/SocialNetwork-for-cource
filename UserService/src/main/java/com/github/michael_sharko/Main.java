@@ -16,7 +16,7 @@ public class Main {
     private static Server server;
 
     public static void main(String[] args) {
-        PropertyManager.load("./user.props");
+        PropertyManager.load("./main.props");
         runServer();
 
         Runtime.getRuntime().addShutdownHook(

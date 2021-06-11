@@ -1,12 +1,15 @@
 package org.practical3;
 
-import com.google.gson.Gson;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.practical3.handlers.FeedServlet;
 import org.practical3.handlers.PostsServlet;
+import org.practical3.handlers.UserService.GetFollowersUserServiceServlet;
+import org.practical3.handlers.UserService.GetSubscriptionsUserServiceServlet;
+import org.practical3.handlers.UserService.SubscriptionsUserServiceServlet;
+import org.practical3.handlers.UserService.UserServiceServlet;
 import org.practical3.handlers.UsersServlet;
 import org.practical3.handlers.WallServlet;
 import org.practical3.utils.Commons;
@@ -30,6 +33,7 @@ public class Main {
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             @Override
             public void run() {
+
                 stopServer();
 
             }
@@ -80,6 +84,12 @@ public class Main {
         setServlet(new UsersServlet(),"/users/*");
         setServlet(new FeedServlet(),"/feed/*");
         setServlet(new WallServlet(),"/wall/*");
+
+
+        setServlet(new UserServiceServlet(), "/users/*");
+        setServlet(new GetFollowersUserServiceServlet(), "/getfollowers/*");
+        setServlet(new GetSubscriptionsUserServiceServlet(), "/getsubscriptions/*");
+        setServlet(new SubscriptionsUserServiceServlet(), "/subscriptions/*");
     }
 
 
@@ -94,7 +104,6 @@ public class Main {
         try {
             if(server.isRunning()){
                 server.stop();
-
             }
         } catch (Exception e) {
             System.out.println( String.format("Error while stopping server: %s", e.getMessage()));

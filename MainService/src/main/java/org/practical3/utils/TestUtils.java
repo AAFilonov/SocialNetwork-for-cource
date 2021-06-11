@@ -2,11 +2,13 @@ package org.practical3.utils;
 
 
 
+
+
+
 import org.practical3.PostServiceAPI;
 import org.practical3.model.data.Post;
 import org.practical3.model.transfer.requests.WallRequest;
 
-import java.sql.SQLException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -38,7 +40,7 @@ public class TestUtils {
     }
 
 
-    public static Collection<Post> getTestPosts(int id1,int id2, int ownerID) {
+    public static Collection<Post> getTestPosts(int id1, int id2, int ownerID) {
         return  new ArrayList<>(
                 Arrays.asList(new Post(id1, ownerID, "First post",Instant.now()), new Post(id2, ownerID, "Second post",Instant.now()))
         );

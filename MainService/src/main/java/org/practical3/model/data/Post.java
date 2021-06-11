@@ -19,7 +19,7 @@ public class Post {
     public Post(Integer postId,
                 Integer ownerId,
                 String content
-               ){
+    ){
         PostId = postId;
         OwnerId = ownerId;
         Content = content;
@@ -58,26 +58,26 @@ public class Post {
 
     @Override
     public int hashCode() {
-       if (PostId!=null)
-           return (int)PostId;
-       else
-           return  0;
+        if (PostId!=null)
+            return (int)PostId;
+        else
+            return  0;
     }
 
     @Override
     public String toString() {
         //TODO заменить на рефлексию
-      return String.format("(%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-              ,(PostId!=null)? PostId.toString():"NULL"
-              ,(OwnerId!=null)?OwnerId.toString():"NULL"
-              ,(Content!=null)?Content:"NULL"
-              ,(Timestamp!=null)?Timestamp.toString():"NULL"
-              ,(IsRemoved!=null)?IsRemoved.toString():"NULL"
-              ,(IsRedacted!=null)?IsRedacted.toString():"NULL"
-              ,(IsCommentable!=null)?IsCommentable.toString():"NULL"
-              ,(CountLikes!=null)?CountLikes.toString():"NULL"
-              ,(CountReposts!=null)?CountReposts.toString():"NULL"
-      );
+        return String.format("(%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+                ,(PostId!=null)? PostId.toString():"NULL"
+                ,(OwnerId!=null)?OwnerId.toString():"NULL"
+                ,(Content!=null)?Content:"NULL"
+                ,(Timestamp!=null)?Timestamp.toString():"NULL"
+                ,(IsRemoved!=null)?IsRemoved.toString():"NULL"
+                ,(IsRedacted!=null)?IsRedacted.toString():"NULL"
+                ,(IsCommentable!=null)?IsCommentable.toString():"NULL"
+                ,(CountLikes!=null)?CountLikes.toString():"NULL"
+                ,(CountReposts!=null)?CountReposts.toString():"NULL"
+        );
     }
 
 

@@ -1,7 +1,7 @@
 package com.github.michael_sharko;
 
-import com.github.michael_sharko.models.Subscription;
-import com.github.michael_sharko.models.User;
+import com.github.michael_sharko.models.data.SubscriptionRequest;
+import com.github.michael_sharko.models.data.User;
 import com.github.michael_sharko.utils.HttpManager;
 import org.apache.http.HttpResponse;
 
@@ -29,39 +29,39 @@ public class UserServiceAPI {
         HttpManager.sendDelete("/users", new User(userid));
     }
 
-    public static Collection<Subscription> getSubscriptions(User user) throws IOException {
+    public static Collection<SubscriptionRequest> getSubscriptions(User user) throws IOException {
         HttpResponse response = HttpManager.sendPost("/getsubscriptions", user);
-        return (Collection<Subscription>) HttpManager.readResponse(response).getData();
+        return (Collection<SubscriptionRequest>) HttpManager.readResponse(response).getData();
     }
-    public static Collection<Subscription> getSubscriptions(Integer userid) throws IOException {
+    public static Collection<SubscriptionRequest> getSubscriptions(Integer userid) throws IOException {
         HttpResponse response = HttpManager.sendPost("/getsubscriptions", new User(userid));
-        return (Collection<Subscription>) HttpManager.readResponse(response).getData();
+        return (Collection<SubscriptionRequest>) HttpManager.readResponse(response).getData();
     }
 
-    public static Collection<Subscription> getFollowers(User user) throws IOException {
+    public static Collection<SubscriptionRequest> getFollowers(User user) throws IOException {
         HttpResponse response = HttpManager.sendPost("/getfollowers", user);
-        return (Collection<Subscription>) HttpManager.readResponse(response).getData();
+        return (Collection<SubscriptionRequest>) HttpManager.readResponse(response).getData();
     }
-    public static Collection<Subscription> getFollowers(Integer userid) throws IOException {
+    public static Collection<SubscriptionRequest> getFollowers(Integer userid) throws IOException {
         HttpResponse response = HttpManager.sendPost("/getfollowers", new User(userid));
-        return (Collection<Subscription>) HttpManager.readResponse(response).getData();
+        return (Collection<SubscriptionRequest>) HttpManager.readResponse(response).getData();
     }
 
-    public static Collection<Subscription> subscribe(User user) throws IOException {
+    public static Collection<SubscriptionRequest> subscribe(User user) throws IOException {
         HttpResponse response = HttpManager.sendPost("/subscriptions", user);
-        return (Collection<Subscription>) HttpManager.readResponse(response).getData();
+        return (Collection<SubscriptionRequest>) HttpManager.readResponse(response).getData();
     }
-    public static Collection<Subscription> subscribe(Integer userid) throws IOException {
+    public static Collection<SubscriptionRequest> subscribe(Integer userid) throws IOException {
         HttpResponse response = HttpManager.sendPost("/subscriptions", new User(userid));
-        return (Collection<Subscription>) HttpManager.readResponse(response).getData();
+        return (Collection<SubscriptionRequest>) HttpManager.readResponse(response).getData();
     }
 
-    public static Collection<Subscription> unsubscribe(User user) throws IOException {
+    public static Collection<SubscriptionRequest> unsubscribe(User user) throws IOException {
         HttpResponse response = HttpManager.sendDelete("/subscriptions", user);
-        return (Collection<Subscription>) HttpManager.readResponse(response).getData();
+        return (Collection<SubscriptionRequest>) HttpManager.readResponse(response).getData();
     }
-    public static Collection<Subscription> unsubscribe(Integer userid) throws IOException {
+    public static Collection<SubscriptionRequest> unsubscribe(Integer userid) throws IOException {
         HttpResponse response = HttpManager.sendDelete("/subscriptions", new User(userid));
-        return (Collection<Subscription>) HttpManager.readResponse(response).getData();
+        return (Collection<SubscriptionRequest>) HttpManager.readResponse(response).getData();
     }
 }

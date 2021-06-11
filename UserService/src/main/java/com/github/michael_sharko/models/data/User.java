@@ -1,15 +1,7 @@
-package org.practical3.model.data;
-import org.apache.commons.codec.binary.StringUtils;
-import org.apache.commons.io.IOUtils;
-import org.practical3.utils.Commons;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.security.InvalidParameterException;
+package com.github.michael_sharko.models.data;
 
 public class User {
     public Integer userid;
-
 
     public String username;
     public String password;

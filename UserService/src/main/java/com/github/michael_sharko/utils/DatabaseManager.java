@@ -1,6 +1,7 @@
 package com.github.michael_sharko.utils;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -30,8 +31,8 @@ public class DatabaseManager {
         return connection;
     }
 
-    private static <T> boolean isFieldOfType(Field field, Class<T> type) {
-        return type.getName().equals(field.getType().getName());
+    private static <T> boolean isFieldOfType(Field field, Class<T> clazz) {
+        return clazz.getName().equals(field.getType().getName());
     }
 
     public static <T> ArrayList<T> executeQueryToArrayList(String sql, Class<T> classOfT) {
@@ -56,6 +57,9 @@ public class DatabaseManager {
                         } else if (isFieldOfType(field, Integer.class)) {
                             if (resultSet.findColumn(fieldName) > 0)
                                 value = resultSet.getInt(fieldName);
+                        } else if (isFieldOfType(field, java.sql.Date.class)) {
+                            if (resultSet.findColumn(fieldName) > 0)
+                                value = resultSet.getDate(fieldName);
                         } else if (isFieldOfType(field, Integer[].class)) {
                             if (resultSet.findColumn(fieldName) > 0) {
                                 Array array = resultSet.getArray(fieldName);
@@ -77,6 +81,26 @@ public class DatabaseManager {
             throwables.printStackTrace();
         }
         return result;
+    }
+
+    public static <T> ArrayList<T> executeQueryToArrayList(String sql, T type, String column) {
+        ArrayList<Object> result = new ArrayList<>();
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            while(resultSet.next()) {
+                if (resultSet.findColumn(column) > 0) {
+                    if (type.getClass().getTypeName().equals(String.class.getTypeName()))
+                        result.add(resultSet.getString(column));
+                    else if (type.getClass().getTypeName().equals(Integer.class.getTypeName()))
+                        result.add(resultSet.getInt(column));
+                }
+            }
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+        return (ArrayList<T>) result;
     }
 
     public static int executeSimpleUpdate(String sql) {
@@ -112,6 +136,9 @@ public class DatabaseManager {
 
                 else if (isFieldOfType(field, Integer.class))
                     statement.setInt(index, (Integer) value);
+
+                else if (isFieldOfType(field, java.sql.Date.class))
+                    statement.setDate(index, (java.sql.Date) value);
 
                 else if (isFieldOfType(field, Integer[].class)) {
                     Array array = connection.createArrayOf("INTEGER", (Integer[]) value);

@@ -2,7 +2,7 @@ package org.practical3.model.transfer.requests;
 
 import org.practical3.utils.Commons;
 
-import java.util.ArrayList;
+
 import java.util.Collection;
 
 public class PostsRequest {

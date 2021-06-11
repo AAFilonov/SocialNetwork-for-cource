@@ -2,11 +2,9 @@ package com.github.michael_sharko.handlers;
 
 import com.github.michael_sharko.Main;
 import com.github.michael_sharko.models.Answer;
-import com.github.michael_sharko.models.User;
+import com.github.michael_sharko.models.data.User;
 import com.github.michael_sharko.utils.PropertyManager;
 import com.github.michael_sharko.utils.StaticGson;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;

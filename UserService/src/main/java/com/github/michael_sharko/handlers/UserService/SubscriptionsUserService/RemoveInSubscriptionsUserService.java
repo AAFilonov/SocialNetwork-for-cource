@@ -14,7 +14,7 @@ public class RemoveInSubscriptionsUserService extends SubscriptionsUserService {
 
     private String generateQuery() {
         String query = "call unsubscribe(%d, %d)";
-        query = String.format(query, subscription.followerid, subscription.userid);
+        query = String.format(query, subscriptionRequest.followerid, subscriptionRequest.userid);
 
         return query;
     }

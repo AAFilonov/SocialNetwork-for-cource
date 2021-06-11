@@ -1,6 +1,4 @@
-package com.github.michael_sharko.utils;
-
-import com.github.michael_sharko.models.Answer;
+package org.practical3.utils;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -13,10 +11,12 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
+import org.practical3.model.transfer.Answer;
+
 import java.io.IOException;
 import java.net.URI;
 
-public class HttpManager {
+public class HttpManagerForUserService {
     static class HttpDeleteWithBody extends HttpEntityEnclosingRequestBase {
         public static final String METHOD_NAME = "DELETE";
 
@@ -40,7 +40,7 @@ public class HttpManager {
     }
 
     private static final HttpClient client = HttpClientBuilder.create().build();
-    private static final String url = PropertyManager.getPropertyAsString("server.address", "http://localhost:8080");
+    private static final String url = PropertyManager.getPropertyAsString("service.users.address", "http://localhost:8080");
 
     public static HttpResponse sendPost(String path, Object data) throws IOException {
         HttpPost request = new HttpPost(url + path);

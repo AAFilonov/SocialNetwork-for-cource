@@ -6,5 +6,14 @@ CREATE TABLE users
 	password		VARCHAR(32) NOT NULL,
 
 	subscribes		INTEGER[] DEFAULT '{}',
-	followers		INTEGER[] DEFAULT '{}'
+	followers		INTEGER[] DEFAULT '{}',
+    birthday	    DATE,
+
+    fullname	    TEXT,
+    sex			    SMALLINT DEFAULT 0,
+
+    country		    TEXT,
+    city		    TEXT,
+    school		    TEXT,
+    university	    TEXT
 );

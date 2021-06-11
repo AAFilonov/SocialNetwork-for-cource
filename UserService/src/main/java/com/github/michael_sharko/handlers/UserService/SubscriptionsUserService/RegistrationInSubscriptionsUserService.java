@@ -14,7 +14,7 @@ public class RegistrationInSubscriptionsUserService extends SubscriptionsUserSer
 
     private String generateQuery() {
         String query = "call subscribe(%d, %d)";
-        query = String.format(query, subscription.followerid, subscription.userid);
+        query = String.format(query, subscriptionRequest.followerid, subscriptionRequest.userid);
 
         return query;
     }

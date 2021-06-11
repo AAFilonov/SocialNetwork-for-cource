@@ -1,6 +1,7 @@
 package com.github.michael_sharko.models;
 
-public class Subscription {
+public class UserRequest
+{
     public Integer userid;
-    public Integer followerid;
+    public String username;
 }
