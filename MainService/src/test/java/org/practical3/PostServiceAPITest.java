@@ -36,7 +36,7 @@ class PostServiceAPITest {
     public void testGetPosts() throws Exception {
         PostsRequest postsRequest = new PostsRequest("988,989",10,0);
 
-        Collection posts =  PostServiceAPI.getPosts(postsRequest);
+        Collection<Post> posts =  PostServiceAPI.getPosts(postsRequest);
 
         assertEquals(2,posts.size());
     }

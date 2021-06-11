@@ -23,7 +23,7 @@ public class UserServiceServlet extends HttpServlet {
         resp.setContentType("application/json");
 
         String reqStr = IOUtils.toString(req.getInputStream());
-        User user = Commons.fromJson(reqStr, User.class);
+        User user = StaticGson.fromJson(reqStr, User.class);
 
         UserServiceAPI.register(user);
     }
@@ -34,7 +34,7 @@ public class UserServiceServlet extends HttpServlet {
         Collection<User> users = UserServiceAPI.getUsers(req.getParameter("user_ids"));
 
         resp.setStatus(HttpServletResponse.SC_OK);
-        resp.getWriter().write(Commons.toJson(users));
+        resp.getWriter().write(StaticGson.toJson(users));
     }
 
     @Override
@@ -42,7 +42,7 @@ public class UserServiceServlet extends HttpServlet {
         resp.setContentType("application/json");
 
         String reqStr = IOUtils.toString(req.getInputStream());
-        User user = Commons.fromJson(reqStr, User.class);
+        User user = StaticGson.fromJson(reqStr, User.class);
 
         UserServiceAPI.update(user);
     }

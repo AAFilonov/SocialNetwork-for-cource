@@ -25,7 +25,7 @@ public class HttpClientManager {
 
     public static HttpResponse sendPost(String url, Object body) throws IOException {
         HttpPost request = new HttpPost(url);
-        String jsonBody = Commons.toJson(body);
+        String jsonBody = StaticGson.toJson(body);
         StringEntity entity = new StringEntity(jsonBody);
         request.setEntity(entity);
         return httpClient.execute(request);
@@ -34,13 +34,13 @@ public class HttpClientManager {
     public static Answer getResponseBody(HttpResponse response) throws IOException {
         HttpEntity resp = response.getEntity();
         String respStr = EntityUtils.toString(resp);
-        return Commons.fromJson(respStr, Answer.class);
+        return StaticGson.fromJson(respStr, Answer.class);
     }
 
     public static<T> Collection<T>  getResponseBodyAsCollection(HttpResponse response, Type userListType) throws IOException {
         HttpEntity resp = response.getEntity();
         String respStr = EntityUtils.toString(resp);
-        return (Collection<T>) Commons.fromJson(respStr, userListType);
+        return (Collection<T>) StaticGson.fromJson(respStr, userListType);
     }
 
 

@@ -34,6 +34,6 @@ public class GetSubscriptionsUserServiceServlet extends HttpServlet {
             throw new InvalidParameterException("Set userid or username");
 
         resp.setStatus(HttpServletResponse.SC_OK);
-        resp.getWriter().write(Commons.toJson(userids));
+        resp.getWriter().write(StaticGson.toJson(userids));
     }
 }
