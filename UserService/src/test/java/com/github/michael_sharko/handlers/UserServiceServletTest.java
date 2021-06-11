@@ -24,7 +24,7 @@ public class UserServiceServletTest {
 
     @BeforeAll
     static void start() throws ClassNotFoundException {
-        PropertyManager.load("./main.props");
+        PropertyManager.load("./user.props");
         Main.runServer();
     }
 
