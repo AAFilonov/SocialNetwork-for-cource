@@ -4,11 +4,13 @@ import com.google.common.reflect.TypeToken;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.practical3.model.data.Post;
+import org.practical3.model.data.User;
 import org.practical3.model.transfer.Answer;
 
 import java.io.IOException;
@@ -29,6 +31,12 @@ public class HttpClientManager {
         return httpClient.execute(request);
     }
 
+    public static HttpResponse sendGet(String url, String parameters) throws IOException {
+        HttpGet request = new HttpGet(url + parameters);
+        return httpClient.execute(request);
+    }
+
+
     public static Answer getResponseBody(HttpResponse response) throws IOException {
         HttpEntity resp = response.getEntity();
         String respStr = EntityUtils.toString(resp);
@@ -47,6 +55,12 @@ public class HttpClientManager {
         }.getType();
         return HttpClientManager.getResponseBodyAsCollection(response, userListType);
     }
+    public static Collection<User> getUsersCollection(HttpResponse response) throws IOException {
+        Type userListType = new TypeToken<ArrayList<User>>() {
+        }.getType();
+        return HttpClientManager.getResponseBodyAsCollection(response, userListType);
+    }
+
     public static Collection<Post>  getIntegerCollection(HttpResponse response) throws IOException {
         Type userListType = new TypeToken<ArrayList<Integer>>() {
         }.getType();

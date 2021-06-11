@@ -16,7 +16,7 @@ import java.util.Collection;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.practical3.utils.TestUtils.createRequestWall;
 
-
+@Disabled
 class PostServiceAPITest {
     @BeforeAll
     public  static  void init(){
