@@ -50,6 +50,9 @@ public class PostsServlet extends HttpServlet {
         } catch (SQLException e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             resp.getWriter().println(Commons.toJson(new Answer("SQL error ",e)));
+        } catch (ClassNotFoundException e) {
+            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            resp.getWriter().println(Commons.toJson(new Answer("SQL error ",e)));
         } catch (Exception e) {
 
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -78,6 +81,12 @@ public class PostsServlet extends HttpServlet {
                 break;
             case "deletePosts":
                 Actions.deletePosts(req, resp);
+                break;
+            case "doLike":
+                Actions.doLike(req, resp);
+                break;
+            case "doRepost":
+                Actions.DoRepost(req, resp);
                 break;
             case "searchPosts":
                Actions.searchPosts(req, resp);

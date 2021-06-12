@@ -92,6 +92,29 @@ class PostsDataBaseManagerTest {
     }
 
 
+    @Test
+    void doLikeTest() throws SQLException, ClassNotFoundException {
+        Commons.dataBaseManager.insertPosts(Arrays.asList(new Post(730,430,"Some content")));
+
+        Commons.dataBaseManager.doLike(730);
+        ArrayList<Post> actual = (ArrayList<Post>)
+                Commons.dataBaseManager.getPosts(Arrays.asList(730),10,0);
+        assertEquals(1, actual.get(0).CountLikes);
+        Commons.dataBaseManager.deletePosts(Arrays.asList(730));
+    }
+
+
+    @Test
+    void doRepostTest() throws SQLException, ClassNotFoundException {
+        Commons.dataBaseManager.insertPosts(Arrays.asList(new Post(730,430,"Some content")));
+
+        Commons.dataBaseManager.doRepost(730, 431);
+        ArrayList<Post> actual = (ArrayList<Post>)
+                Commons.dataBaseManager.getWall(TestUtils.createRequestWall(431));
+        assertEquals(1, actual.size());
+
+        Commons.dataBaseManager.deletePosts(Arrays.asList(730));
+    }
 
 
 

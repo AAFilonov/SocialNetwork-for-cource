@@ -140,4 +140,16 @@ class PostServiceAPITest {
 
     }
 
+
+    @Test
+    public void doLikeTest() throws Exception {
+
+        Collection<Integer> ids = new ArrayList<Integer>(Arrays.asList(868));
+        PostServiceAPI.removePosts(ids);
+
+        ArrayList<Post> actual = (ArrayList<Post>) PostServiceAPI.getWall(createRequestWall(500));
+
+        assertEquals(1, actual.size());
+    }
+
 }

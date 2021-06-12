@@ -110,7 +110,20 @@ public class PostServiceAPI {
         return (postServiceAnswer!=null)? postServiceAnswer.AffectedRows: 0;
     }
 
+    public static boolean doRepost(Integer post_id, Integer user_id)throws Exception {
 
+
+        String url = String.format("%s/posts?action=doRepost&post_id=%s&user_id=%s",
+                getBaseURL(), post_id.toString(), user_id.toString());
+        HttpResponse response = HttpClientManager.sendPost(url,null);
+        return  response.getStatusLine().getStatusCode() ==HttpServletResponse.SC_OK;
+    }
+    public static boolean dolike(Integer post_id)throws Exception {
+        String url = String.format("%s/posts?action=doLike&post_id=%s",
+                getBaseURL(), post_id.toString());
+        HttpResponse response = HttpClientManager.sendPost(url,null);
+        return  response.getStatusLine().getStatusCode() ==HttpServletResponse.SC_OK;
+    }
 
     public static int searchPosts()throws Exception {
         throw new NotImplementedException();

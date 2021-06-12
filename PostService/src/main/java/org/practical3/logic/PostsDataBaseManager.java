@@ -177,4 +177,32 @@ public class PostsDataBaseManager extends DataBaseManager {
     }
 
 
+    public void doLike(Integer post_id) throws SQLException, ClassNotFoundException {
+
+
+        PreparedStatement statement = super.Connection.prepareStatement
+                ("UPDATE db.posts SET \"CountLikes\" = \"CountLikes\" +1 where posts.post_id = ?");
+        statement.setInt(1, post_id);
+
+        int  affectedRows =  statement.executeUpdate();
+        statement.close();
+        if(affectedRows==0)
+            throw new ClassNotFoundException();
+
+    }
+
+    public void doRepost(Integer user_id, Integer post_id) throws SQLException, ClassNotFoundException {
+
+        PreparedStatement statement = super.Connection.prepareStatement
+                ("INSERT INTO db.posts(owner_id,\"content\")\n" +
+                        "Select ?,  posts.\"content\" FROM db.posts  WHERE posts.owner_id = ? LIMIT 1");
+        statement.setInt(1, user_id);
+        statement.setInt(2, post_id);
+
+        int  affectedRows =  statement.executeUpdate();
+        statement.close();
+        if(affectedRows==0)
+            throw new ClassNotFoundException();
+
+    }
 }
