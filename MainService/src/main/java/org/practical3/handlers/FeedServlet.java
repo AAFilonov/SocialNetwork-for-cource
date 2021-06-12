@@ -35,13 +35,13 @@ public class FeedServlet extends HttpServlet {
     private void getFeed(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         Map<String, String[]> args = req.getParameterMap();
 
-        String username = args.get("user")[0];
+        String username = args.get("user_login")[0];
         Collection<Integer> subscriptions  = UserServiceAPI.getSubscriptions(username);
 
         WallRequest request = new WallRequest(
                 subscriptions
-                , Instant.parse(args.get("after")[0])
                 , Instant.parse(args.get("before")[0])
+                , Instant.parse(args.get("after")[0])
                 , new Integer(args.get("count")[0])
                 , new Integer(args.get("offset")[0])
         );

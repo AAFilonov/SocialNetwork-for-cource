@@ -8,6 +8,7 @@ import org.practical3.model.transfer.requests.PostsRequest;
 import org.practical3.model.transfer.requests.WallRequest;
 import org.practical3.utils.HttpClientManager;
 import org.practical3.utils.PropertyManager;
+import org.practical3.utils.ResponseReader;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.servlet.http.HttpServletResponse;
@@ -22,7 +23,7 @@ public class PostServiceAPI {
 
     private static Answer sendRequest(String url, Object request) throws Exception {
         HttpResponse response = HttpClientManager.sendPost(url, request);
-        return isSuccessful(response) ? HttpClientManager.getResponseBody(response) : null;
+        return isSuccessful(response) ? ResponseReader.getResponseBody(response) : null;
     }
 
     static boolean isSuccessful(HttpResponse response) throws Exception {
@@ -36,7 +37,7 @@ public class PostServiceAPI {
             case HttpServletResponse.SC_BAD_REQUEST:
             default:
                 System.out.println("[POST SERVICE ERROR]: "
-                        + HttpClientManager.getResponseBody(response).Status);
+                        + ResponseReader.getResponseBody(response).Status);
                 throw new Exception();
         }
     }
@@ -47,7 +48,7 @@ public class PostServiceAPI {
 
         HttpResponse response = HttpClientManager.sendPost(url, postsRequest);
         if(isSuccessful(response)) {
-            Collection<Post> posts = HttpClientManager.getPostsCollection(response);
+            Collection<Post> posts = ResponseReader.getPostsCollection(response);
             return  posts;
         }
         return new ArrayList<Post>();
@@ -58,7 +59,7 @@ public class PostServiceAPI {
         String url = String.format("%s/posts?action=getWall", getBaseURL());
         HttpResponse response = HttpClientManager.sendPost(url, wallRequest);
         if(isSuccessful(response)) {
-            Collection<Post> posts = HttpClientManager.getPostsCollection(response);
+            Collection<Post> posts = ResponseReader.getPostsCollection(response);
             return  posts;
         }
         return new ArrayList<Post>();
