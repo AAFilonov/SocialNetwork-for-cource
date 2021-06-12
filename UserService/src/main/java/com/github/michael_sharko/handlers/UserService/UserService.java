@@ -37,8 +37,8 @@ public abstract class UserService {
 
     public abstract void execute() throws IOException;
 
-    protected void sendMessage(int statusCode, Answer answer) throws IOException {
+    protected void sendMessage(int statusCode, Object data) throws IOException {
         resp.setStatus(statusCode);
-        resp.getWriter().write(StaticGson.gson.toJson(answer));
+        resp.getWriter().write(StaticGson.gson.toJson(data));
     }
 }
