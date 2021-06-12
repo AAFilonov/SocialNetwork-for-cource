@@ -1,7 +1,6 @@
 package org.practical3.api;
 
 
-import api.PostServiceAPI;
 import org.junit.jupiter.api.*;
 import org.practical3.model.data.Post;
 import org.practical3.model.transfer.requests.PostsRequest;

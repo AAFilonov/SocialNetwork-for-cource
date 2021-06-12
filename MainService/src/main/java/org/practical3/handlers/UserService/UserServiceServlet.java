@@ -1,7 +1,7 @@
 package org.practical3.handlers.UserService;
 
 import org.apache.commons.io.IOUtils;
-import api.UserServiceAPI;
+import org.practical3.api.UserServiceAPI;
 import org.practical3.model.data.User;
 import org.practical3.model.transfer.requests.UserRequest;
 import org.practical3.utils.StaticGson;

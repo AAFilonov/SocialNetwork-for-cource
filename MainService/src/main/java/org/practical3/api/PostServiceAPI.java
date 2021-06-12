@@ -1,4 +1,4 @@
-package api;
+package org.practical3.api;
 
 
 import org.apache.http.HttpResponse;
@@ -6,7 +6,6 @@ import org.practical3.model.data.Post;
 import org.practical3.model.transfer.Answer;
 import org.practical3.model.transfer.requests.PostsRequest;
 import org.practical3.model.transfer.requests.WallRequest;
-import org.practical3.utils.Commons;
 import org.practical3.utils.HttpClientManager;
 import org.practical3.utils.PropertyManager;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
