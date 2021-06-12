@@ -60,6 +60,12 @@ public class MainServiceAPI {
     }
 
 
+    public static int updatePosts(Collection<Post> posts) throws IOException {
+        String url = String.format("%s/posts", getBaseURL());
+        HttpResponse response =  HttpClientManager.sendPut(url, posts);
+        Answer answer =  ResponseReader.getResponseBody(response);
+        return (answer!=null)?  answer.AffectedRows: 0;
+    }
 
     public static Collection<Post> getFeed(String user_login, Instant before, Instant after, Integer count, Integer offset ) throws IOException {
         String url = String.format("%s/feed", getBaseURL());
@@ -74,7 +80,6 @@ public class MainServiceAPI {
         Collection<Post> posts = ResponseReader.getPostsCollection(response);
         return posts;
     }
-
 
 
 }

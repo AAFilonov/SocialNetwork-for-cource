@@ -90,7 +90,7 @@ public class PostsServlet extends HttpServlet {
         Type userListType = new TypeToken<ArrayList<Post>>() {
         }.getType();
         Collection<Post> posts = RequestReader.getRequestBodyAsCollection(httpServletRequest, userListType);
-        Integer affectedRows = PostServiceAPI.updatePost(posts);
+        Integer affectedRows = PostServiceAPI.updatePosts(posts);
         HttpClientManager.sendOk(new Answer("OK",null,affectedRows), response);
     }
 

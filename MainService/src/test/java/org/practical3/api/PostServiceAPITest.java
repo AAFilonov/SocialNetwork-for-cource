@@ -69,7 +69,7 @@ class PostServiceAPITest {
                         new Post(888, null, null, Instant.now()),
                         new Post(889, null, null, Instant.now()))
         );
-        int affectedRows =  PostServiceAPI.updatePost(posts);
+        int affectedRows =  PostServiceAPI.updatePosts(posts);
 
         assertEquals(2,affectedRows);
 

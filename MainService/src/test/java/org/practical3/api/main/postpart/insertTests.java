@@ -20,14 +20,6 @@ public class insertTests {
     @BeforeAll
     public static void init() {
         StaticServerForTests.start();
-
-
-        Collection<Integer> ids = Arrays.asList(811, 812, 813);
-        try {
-            MainServiceAPI.deletePosts(ids);
-        } catch (IOException e) {
-            //уже удалены
-        }
     }
 
     @AfterAll

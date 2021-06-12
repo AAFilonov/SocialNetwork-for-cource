@@ -16,6 +16,8 @@ public class getTests {
     @BeforeAll
     public static void init() {
         StaticServerForTests.start();
+
+
     }
 
     @Test
