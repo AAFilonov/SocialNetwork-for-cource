@@ -5,7 +5,7 @@ package org.practical3.utils;
 
 
 
-import org.practical3.PostServiceAPI;
+import api.PostServiceAPI;
 import org.practical3.model.data.Post;
 import org.practical3.model.transfer.requests.WallRequest;
 

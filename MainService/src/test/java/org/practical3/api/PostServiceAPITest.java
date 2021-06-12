@@ -1,6 +1,7 @@
-package org.practical3;
+package org.practical3.api;
 
 
+import api.PostServiceAPI;
 import org.junit.jupiter.api.*;
 import org.practical3.model.data.Post;
 import org.practical3.model.transfer.requests.PostsRequest;
@@ -16,7 +17,7 @@ import java.util.Collection;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.practical3.utils.TestUtils.createRequestWall;
 
-
+@Disabled
 class PostServiceAPITest {
     @BeforeAll
     public  static  void init(){

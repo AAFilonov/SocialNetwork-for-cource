@@ -2,10 +2,11 @@ package org.practical3.handlers;
 
 
 
-import org.practical3.PostServiceAPI;
+import api.PostServiceAPI;
 import org.practical3.model.data.Post;
 import org.practical3.model.transfer.requests.WallRequest;
 import org.practical3.utils.Commons;
+import org.practical3.utils.HttpClientManager;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -47,7 +48,7 @@ public class WallServlet extends HttpServlet {
         );
         Collection<Post> posts = PostServiceAPI.getWall(request);
 
-        Commons.sendOk(posts, resp);
+        HttpClientManager.sendOk(posts, resp);
     }
 
 

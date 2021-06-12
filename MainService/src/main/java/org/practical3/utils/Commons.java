@@ -31,14 +31,6 @@ public  class Commons {
         return StaticGson.fromJson(requestString, type );
     }
 
-    public static void sendOk(Object data, HttpServletResponse resp) throws Exception {
-        resp.setStatus(HttpServletResponse.SC_OK);
-        resp.getWriter().println(StaticGson.toJson( new Answer("OK", data)));
-    }
-    public static void sendOk(Answer a, HttpServletResponse resp) throws Exception {
-        resp.setStatus(HttpServletResponse.SC_OK);
-        resp.getWriter().println(StaticGson.toJson( a));
-    }
 
     public static Collection<Integer> parseIds(String IdsString){
         String[] post_ids_s = IdsString.split(",");

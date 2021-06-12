@@ -1,6 +1,6 @@
-package org.practical3;
+package api;
 
-import com.sun.org.apache.xerces.internal.impl.PropertyManager;
+
 import org.apache.http.HttpResponse;
 import org.practical3.model.data.Post;
 import org.practical3.model.transfer.Answer;
@@ -8,6 +8,7 @@ import org.practical3.model.transfer.requests.PostsRequest;
 import org.practical3.model.transfer.requests.WallRequest;
 import org.practical3.utils.Commons;
 import org.practical3.utils.HttpClientManager;
+import org.practical3.utils.PropertyManager;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +18,7 @@ import java.util.Collection;
 public class PostServiceAPI {
 
     static String getBaseURL(){
-        return "http://localhost:8027";///PropertyManager.getPropertyAsString("service.posts.addr", "http://localhost:8027");
+        return PropertyManager.getPropertyAsString("service.posts.addr", "http://localhost:8027");
     }
 
     private static Answer sendRequest(String url, Object request) throws Exception {
