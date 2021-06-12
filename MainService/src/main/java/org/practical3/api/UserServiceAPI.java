@@ -5,6 +5,7 @@ import org.practical3.model.data.User;
 import org.practical3.model.transfer.requests.SubscriptionRequest;
 import org.practical3.model.transfer.requests.UserRequest;
 import org.practical3.utils.http.HttpManagerForUserService;
+import org.practical3.utils.http.ResponseReader;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,9 +21,10 @@ public class UserServiceAPI {
         HttpManagerForUserService.sendPut("/users", user);
     }
 
-    public static Collection<User> getUsers(String users) throws IOException {
-        HttpResponse response = HttpManagerForUserService.sendGet("/users?user_ids=", users);
-        return (ArrayList<User>) (HttpManagerForUserService.readResponse(response).Data);
+    public static Collection<User> getUsers(String user_ids) throws IOException {
+        HttpResponse response = HttpManagerForUserService.sendGet("/users?user_ids=", user_ids);
+        Collection<User> users = ResponseReader.getUsersCollection(response);
+        return  users;
     }
 
     public static void delete(Integer userid) throws IOException {
