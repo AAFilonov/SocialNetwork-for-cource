@@ -2,7 +2,6 @@ package org.practical3;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.practical3.handlers.FeedServlet;
 import org.practical3.handlers.PostsServlet;
@@ -12,8 +11,6 @@ import org.practical3.handlers.UserService.SubscriptionsUserServiceServlet;
 import org.practical3.handlers.UserService.UserServiceServlet;
 
 import org.practical3.handlers.WallServlet;
-import org.practical3.utils.Commons;
-import org.practical3.utils.HttpClientManager;
 import org.practical3.utils.PropertyManager;
 
 import javax.servlet.Servlet;

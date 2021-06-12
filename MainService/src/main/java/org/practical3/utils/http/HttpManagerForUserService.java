@@ -1,4 +1,4 @@
-package org.practical3.utils;
+package org.practical3.utils.http;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -12,6 +12,8 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
 import org.practical3.model.transfer.Answer;
+import org.practical3.utils.PropertyManager;
+import org.practical3.utils.StaticGson;
 
 import java.io.IOException;
 import java.net.URI;

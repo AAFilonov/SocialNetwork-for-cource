@@ -5,7 +5,7 @@ import org.practical3.api.UserServiceAPI;
 import org.practical3.model.data.Post;
 import org.practical3.model.transfer.requests.WallRequest;
 import org.practical3.utils.Commons;
-import org.practical3.utils.HttpClientManager;
+import org.practical3.utils.http.HttpClientManager;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;

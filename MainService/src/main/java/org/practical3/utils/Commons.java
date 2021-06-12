@@ -1,10 +1,10 @@
 package org.practical3.utils;
 
 
-import com.google.gson.Gson;
 import org.apache.commons.io.IOUtils;
 
 import org.practical3.model.transfer.Answer;
+import org.practical3.utils.http.HttpClientManager;
 
 ;
 import javax.servlet.http.HttpServletRequest;
@@ -16,20 +16,12 @@ import java.util.Collection;
 
 public  class Commons {
 
-    static public HttpClientManager HttpClientManager = new HttpClientManager();
+    static public org.practical3.utils.http.HttpClientManager HttpClientManager = new HttpClientManager();
 
 
 
 
 
-    public  static <T> Collection<T> getRequestBodyAsCollection(HttpServletRequest req, Type userListType) throws IOException {
-        String requestString = IOUtils.toString(req.getInputStream());
-        return StaticGson.fromJson(requestString,userListType);
-    }
-    public  static <T> T getRequestBodyAsObject (HttpServletRequest req, Class<T> type) throws IOException {
-        String requestString = IOUtils.toString(req.getInputStream());
-        return StaticGson.fromJson(requestString, type );
-    }
 
 
     public static Collection<Integer> parseIds(String IdsString){

@@ -6,9 +6,9 @@ import org.practical3.model.data.Post;
 import org.practical3.model.transfer.Answer;
 import org.practical3.model.transfer.requests.PostsRequest;
 import org.practical3.model.transfer.requests.WallRequest;
-import org.practical3.utils.HttpClientManager;
+import org.practical3.utils.http.HttpClientManager;
 import org.practical3.utils.PropertyManager;
-import org.practical3.utils.ResponseReader;
+import org.practical3.utils.http.ResponseReader;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.servlet.http.HttpServletResponse;
