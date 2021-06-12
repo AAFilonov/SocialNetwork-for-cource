@@ -2,7 +2,7 @@ package org.practical3.handlers;
 
 
 import com.google.common.reflect.TypeToken;
-import api.PostServiceAPI;
+import org.practical3.api.PostServiceAPI;
 import org.practical3.model.data.Post;
 import org.practical3.model.transfer.Answer;
 import org.practical3.model.transfer.requests.PostsRequest;

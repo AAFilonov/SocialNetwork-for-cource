@@ -1,8 +1,7 @@
-package api;
+package org.practical3.api;
 
 import org.apache.http.HttpResponse;
 import org.practical3.model.data.User;
-import org.practical3.model.transfer.Answer;
 import org.practical3.model.transfer.requests.SubscriptionRequest;
 import org.practical3.model.transfer.requests.UserRequest;
 import org.practical3.utils.HttpManagerForUserService;

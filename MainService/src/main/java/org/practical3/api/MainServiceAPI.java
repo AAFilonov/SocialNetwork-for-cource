@@ -1,4 +1,4 @@
-package api;
+package org.practical3.api;
 
 import org.apache.http.HttpResponse;
 import org.practical3.model.data.Post;
@@ -8,7 +8,6 @@ import org.practical3.utils.PropertyManager;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 
 public class MainServiceAPI {

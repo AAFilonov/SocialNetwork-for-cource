@@ -1,6 +1,5 @@
 package org.practical3.api;
 
-import api.MainServiceAPI;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeAll;

@@ -1,7 +1,7 @@
 package org.practical3.handlers;
 
-import api.PostServiceAPI;
-import api.UserServiceAPI;
+import org.practical3.api.PostServiceAPI;
+import org.practical3.api.UserServiceAPI;
 import org.practical3.model.data.Post;
 import org.practical3.model.transfer.requests.WallRequest;
 import org.practical3.utils.Commons;

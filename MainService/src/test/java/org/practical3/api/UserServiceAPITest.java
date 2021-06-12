@@ -1,6 +1,5 @@
 package org.practical3.api;
 
-import api.UserServiceAPI;
 import org.junit.Test;
 import org.practical3.model.data.User;
 
