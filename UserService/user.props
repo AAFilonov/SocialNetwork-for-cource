@@ -3,5 +3,5 @@ server.port = 8080
 server.contextPath = /
 
 database.server = jdbc:postgresql://localhost:5432/userservice
-database.user = postgres
-database.password = 1
+database.user = michael_sharko
+database.password = aM0pt7SkY
