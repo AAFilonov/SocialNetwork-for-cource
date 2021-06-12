@@ -47,7 +47,7 @@ public class Main {
         try
         {
             server.start();
-            System.out.println( String.format("PostService server start on port %d", port ));
+            System.out.println( String.format("MainService server start on port %d", port ));
 
             server.join();
         }catch(Throwable t){

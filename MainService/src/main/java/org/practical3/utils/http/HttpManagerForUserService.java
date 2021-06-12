@@ -42,7 +42,7 @@ public class HttpManagerForUserService {
     }
 
     private static final HttpClient client = HttpClientBuilder.create().build();
-    private static final String url = PropertyManager.getPropertyAsString("service.users.address", "http://localhost:8080");
+    private static final String url = PropertyManager.getPropertyAsString("service.users.addr", "http://localhost:8080");
 
     public static HttpResponse sendPost(String path, Object data) throws IOException {
         HttpPost request = new HttpPost(url + path);
