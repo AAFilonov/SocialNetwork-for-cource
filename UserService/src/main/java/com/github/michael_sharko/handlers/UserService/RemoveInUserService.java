@@ -43,5 +43,8 @@ public class RemoveInUserService extends UserService {
     public void execute() throws IOException {
         if (DatabaseManager.executeSimpleUpdate(generateQuery(userRequest)) > 0)
             sendMessage(HttpServletResponse.SC_OK, new Answer("Success: User was deleted successfully", null));
+        //саня вкручивает костыль:  отправка ответа при фейле удаления
+        else
+            sendMessage(HttpServletResponse.SC_NOT_FOUND, new Answer("Delete fail: no user found to delete", null));
     }
 }
