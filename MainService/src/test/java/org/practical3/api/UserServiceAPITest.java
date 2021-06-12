@@ -11,9 +11,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 
-@Disabled
+
 public class UserServiceAPITest {
-    @Disabled
+
     @Test
     public void getUserReturnNotHashMap() throws IOException {
 
@@ -22,7 +22,7 @@ public class UserServiceAPITest {
         assertEquals("java_username",users.get(0).username);
 
     }
-    @Disabled
+
     @Test
     public void getUserReturnElements() throws IOException {
 

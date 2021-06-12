@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@Disabled //не работает так как гет возвращает хэшмап
+
 public class getTests {
 
     @BeforeAll
