@@ -1,4 +1,4 @@
-package org.practical3;
+package api;
 
 import org.apache.http.HttpResponse;
 import org.practical3.model.data.User;

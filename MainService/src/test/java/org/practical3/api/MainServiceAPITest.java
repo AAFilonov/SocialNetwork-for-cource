@@ -1,15 +1,15 @@
-package org.practical3;
+package org.practical3.api;
 
+import api.MainServiceAPI;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+import org.practical3.Main;
 import org.practical3.model.data.Post;
 import org.practical3.model.data.User;
 import org.practical3.utils.PropertyManager;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

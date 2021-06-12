@@ -1,11 +1,11 @@
-package org.practical3;
+package org.practical3.api;
 
+import api.UserServiceAPI;
 import org.junit.Test;
 import org.practical3.model.data.User;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.*;
 

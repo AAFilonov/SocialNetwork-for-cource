@@ -67,6 +67,10 @@ public class HttpClientManager {
         }.getType();
         return HttpClientManager.getResponseBodyAsCollection(response, userListType);
     }
+    public static <T> Collection<T> getCollection(HttpResponse response) throws IOException {
+        Type userListType = new TypeToken<ArrayList<T>>() {}.getType();
+        return HttpClientManager.getResponseBodyAsCollection(response, userListType);
+    }
 
 
     public static void sendOk(Object a, HttpServletResponse resp) throws Exception {

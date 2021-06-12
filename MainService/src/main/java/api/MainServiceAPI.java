@@ -1,4 +1,4 @@
-package org.practical3;
+package api;
 
 import org.apache.http.HttpResponse;
 import org.practical3.model.data.Post;
@@ -27,7 +27,7 @@ public class MainServiceAPI {
     }
 
 
-    static Collection<User> getUsers(String user_ids) throws IOException {
+    public static Collection<User> getUsers(String user_ids) throws IOException {
         String url = String.format("%s/users", getBaseURL());
         String params= "?user_ids="+user_ids;
         HttpResponse response = HttpClientManager.sendGet(url, params);
@@ -35,7 +35,7 @@ public class MainServiceAPI {
         return users;
     }
 
-    static Collection<Post> getPosts(String post_ids, Integer count, Integer offset) throws IOException {
+    public static Collection<Post> getPosts(String post_ids, Integer count, Integer offset) throws IOException {
         String url = String.format("%s/posts", getBaseURL());
         String params= String.format("?post_ids=%s&count=%s&offset=%s",post_ids,count.toString(),offset.toString());
         HttpResponse response = HttpClientManager.sendGet(url, params);
