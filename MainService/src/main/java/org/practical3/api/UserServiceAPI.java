@@ -60,7 +60,7 @@ public class UserServiceAPI {
         Collection<Double> doubleCollection = (ArrayList<Double>) HttpManagerForUserService.readResponse(response).Data;
         return Arrays.asList(doubleCollection.stream().map(Double::intValue).toArray(Integer[]::new));
     }
-
+//ничего не возвращает для проверки?
     public static void subscribe(SubscriptionRequest subscription) throws IOException {
         HttpResponse response = HttpManagerForUserService.sendPost("/subscriptions", subscription);
     }

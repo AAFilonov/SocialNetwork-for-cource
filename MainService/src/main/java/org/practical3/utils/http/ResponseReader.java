@@ -40,7 +40,7 @@ public class ResponseReader {
         return getResponseBodyAsCollection(response, userListType);
     }
 
-    public static Collection<Post>  getIntegerCollection(HttpResponse response) throws IOException {
+    public static Collection<Integer>  getIntegerCollection(HttpResponse response) throws IOException {
         Type userListType = new TypeToken<ArrayList<Integer>>() {
         }.getType();
         return getResponseBodyAsCollection(response, userListType);
