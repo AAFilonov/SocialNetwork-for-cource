@@ -16,14 +16,6 @@ import java.util.Collection;
 
 public  class Commons {
 
-    static public org.practical3.utils.http.HttpClientManager HttpClientManager = new HttpClientManager();
-
-
-
-
-
-
-
     public static Collection<Integer> parseIds(String IdsString){
         String[] post_ids_s = IdsString.split(",");
         ArrayList<Integer> ids= new ArrayList<>();

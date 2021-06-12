@@ -11,8 +11,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MainServiceAPITest {
     @BeforeAll
@@ -80,6 +82,16 @@ public class MainServiceAPITest {
         }
         @Nested
         class  insertPostsTests {
+            @AfterEach
+            public void cleanTestPosts()  {
+                Collection<Integer> ids = Arrays.asList(811,812,813);
+                try {
+                    MainServiceAPI.deletePosts(ids);
+                } catch (IOException e) {
+                    //уже удалены
+                }
+            }
+
             @Test
             public void insertPostReturnNotZero() throws IOException {
                 Collection<Post> posts = Arrays.asList(
@@ -130,24 +142,18 @@ public class MainServiceAPITest {
 
             @Test
             public void deletePostReturnNotZero() throws IOException {
-                Collection<Post> posts = Arrays.asList(
-                        new Post(821,450,"Post1 to delete"),
-                        new Post(822,450,"Post2 to delete")
-                );
-                int affectedRows =  MainServiceAPI.insertPosts(posts);
+                Collection<Integer> ids = Arrays.asList(821,822);
+                int affectedRows =  MainServiceAPI.deletePosts(ids);
                 assertEquals(2,affectedRows);
 
             }
 
             @Test
             public void deletePostActuallyInsert() throws IOException {
-
-                Collection<Post> insertedPost = Arrays.asList(
-                        new Post(823,450,"Post3 to delete")
-                );
-                MainServiceAPI.insertPosts(insertedPost);
-                Post actualPost = ((ArrayList<Post>) MainServiceAPI.getPosts("823", 10, 0)).get(0);
-                assertEquals("Post3 to insert",actualPost.Content);
+                Collection<Integer> ids = Collections.singletonList(823);
+                MainServiceAPI.deletePosts(ids);
+                ArrayList<Post>  shouldBeEmptyArray = ((ArrayList<Post>) MainServiceAPI.getPosts("823", 10, 0));
+                assertTrue(shouldBeEmptyArray.isEmpty());
 
             }
         }
