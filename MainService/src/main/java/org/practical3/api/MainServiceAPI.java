@@ -37,6 +37,25 @@ public class MainServiceAPI {
         return users;
     }
 
+
+    public static int registerUser(User user) throws IOException {
+        String url = String.format("%s/users", getBaseURL());
+
+        HttpResponse response = HttpClientManager.sendPost(url, user);
+        //нужно чтоб вернул что нибудь для проверки
+        return 0;
+    }
+
+
+    public static int deleteUser(String username) throws IOException {
+        String url = String.format("%s/users", getBaseURL());
+
+        HttpResponse response = HttpClientManager.sendDelete(url, username);
+        //нужно чтоб вернул что нибудь для проверки
+        return 0;
+    }
+
+
     public static Collection<Post> getPosts(String post_ids, Integer count, Integer offset) throws IOException {
         String url = String.format("%s/posts", getBaseURL());
         String params= String.format("?post_ids=%s&count=%s&offset=%s",post_ids,count.toString(),offset.toString());
