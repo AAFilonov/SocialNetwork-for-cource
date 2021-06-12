@@ -41,7 +41,7 @@ public class FindUserByIdAndNameInUserService extends UserService {
         InputParameters inputs = readParametersFrom(req);
 
         ArrayList<User> users = DatabaseManager.executeQueryToArrayList(generateQuery(inputs), User.class);
-        sendMessage(HttpServletResponse.SC_OK, new Answer("Success", users));
+        sendMessage(HttpServletResponse.SC_OK,users.toArray() );
     }
 
     public static class InputParameters {
