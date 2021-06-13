@@ -46,12 +46,12 @@ public class PostServiceAPI {
     }
 
 
-    public static Collection<Post> getPosts(PostsRequest postsRequest) throws Exception {
+    public static ArrayList<Post> getPosts(PostsRequest postsRequest) throws Exception {
         String url = String.format("%s/posts?action=getPosts", getBaseURL());
 
         HttpResponse response = HttpClientManager.sendPost(url, postsRequest);
         if (isSuccessful(response)) {
-            Collection<Post> posts = ResponseReader.getPostsCollection(response);
+            ArrayList<Post> posts = (ArrayList<Post>)ResponseReader.getPostsCollection(response);
             return posts;
         }
         return new ArrayList<Post>();

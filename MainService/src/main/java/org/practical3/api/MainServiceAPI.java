@@ -129,11 +129,11 @@ public class MainServiceAPI {
 
 
     public static User getOwner(Integer post_id) throws IOException {
-        String url = String.format("%s/posts/getowner", getBaseURL());
+        String url = String.format("%s/get_owner", getBaseURL());
         String params = String.format("?post_id=%s", post_id.toString());
         HttpResponse response = HttpClientManager.sendGet(url, params);
         if (response.getStatusLine().getStatusCode() == HttpServletResponse.SC_OK)
-            return (User) ResponseReader.getAnswer(response).Data;
+            return (User) ResponseReader.getBodyAsObject(response, User.class);
         else return null;
     }
 

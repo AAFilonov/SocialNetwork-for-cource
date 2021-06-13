@@ -79,6 +79,7 @@ public class Main {
         setServlet(new DoLikeServlet(),"/posts_like");
         setServlet(new DoRepostServlet(),"/posts_repost");
         setServlet(new SearchPostsServlet(),"/posts_search");
+        setServlet(new GetOwnerServlet(),"/get_owner");
         setServlet(new FeedServlet(),"/feed/");
         setServlet(new WallServlet(),"/wall/");
 

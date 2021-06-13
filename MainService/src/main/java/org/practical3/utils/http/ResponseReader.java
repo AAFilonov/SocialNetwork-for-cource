@@ -27,6 +27,18 @@ public class ResponseReader {
             return null;
         }
     }
+    public static <T>T getBodyAsObject(HttpResponse response, Class<T> tClass) throws IOException {
+        try {
+            HttpEntity resp = response.getEntity();
+            String respStr = EntityUtils.toString(resp);
+            return StaticGson.fromJson(respStr,tClass );
+
+        } catch (Exception e) {
+            System.out.println("Error while read request: " + e.getMessage());
+            return null;
+        }
+    }
+
 
     public static <T> Collection<T> getResponseBodyAsCollection(HttpResponse response, Type userListType) {
         try {
