@@ -3,6 +3,7 @@ package org.practical3.api.main.postpart;
 import org.junit.After;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.practical3.api.MainServiceAPI;
 import org.practical3.api.PostServiceAPI;
@@ -35,6 +36,7 @@ public class doLikeTests {
         TestUtils.cleanPosts(Arrays.asList(201,202, 204));
     }
 
+    @Disabled
     @Test
     public void doLike_WhenPostExist_ShouldReturnTrue() throws IOException {
         boolean result = MainServiceAPI.doLike(204);
