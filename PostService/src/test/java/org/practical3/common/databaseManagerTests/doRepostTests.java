@@ -11,8 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class doRepostTests {
 
@@ -30,25 +29,20 @@ public class doRepostTests {
 
     @Test
     void doRepost_ShouldCreatePost() throws SQLException, ClassNotFoundException {
-        int insertedPostID = Commons.dataBaseManager.doRepost(431, 730);
-        postsToClean.add(insertedPostID);
-        ArrayList<Post> actual = (ArrayList<Post>)
-                Commons.dataBaseManager.getPosts(Arrays.asList(insertedPostID), 10, 0);
-
-        assertEquals(1, actual.size());
+        Post post  = Commons.dataBaseManager.doRepost(431, 730);
+        postsToClean.add(post.PostId);
+        assertNotNull(post);
 
 
     }
 
     @Test
     void doRepost_CreatedPostShouldMatch() throws SQLException, ClassNotFoundException {
-        int insertedPostID = Commons.dataBaseManager.doRepost(432, 730);
-        postsToClean.add(insertedPostID);
+        Post post  = Commons.dataBaseManager.doRepost(432, 730);
+        postsToClean.add(post.PostId);
 
-        ArrayList<Post> actual = (ArrayList<Post>)
-                Commons.dataBaseManager.getPosts(Arrays.asList(insertedPostID), 10, 0);
 
-        assertEquals(1, actual.size());
+        assertEquals("Some content", post.Content);
     }
 
     @Test

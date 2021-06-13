@@ -2,13 +2,14 @@ package org.practical3.model.transfer;
 
 public class SearchPostRequest {
     public String Content;
-    public Integer OwnerId;
+    public String Username;
+    public Integer UserId;
     public Integer Count =10;
     public Integer Offset =0;
 
-    public SearchPostRequest(String content, Integer ownerId){
+    public SearchPostRequest(String content, Integer userId){
         Content =content;
-        OwnerId =ownerId;
+        UserId =userId;
     }
 
 }

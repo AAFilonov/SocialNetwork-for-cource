@@ -7,17 +7,20 @@ import org.practical3.model.transfer.Answer;
 import org.practical3.model.transfer.requests.PostsRequest;
 import org.practical3.model.transfer.requests.SearchPostRequest;
 import org.practical3.model.transfer.requests.WallRequest;
+import org.practical3.utils.PostServiceException;
 import org.practical3.utils.http.HttpClientManager;
 import org.practical3.utils.PropertyManager;
 import org.practical3.utils.http.ResponseReader;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.function.Function;
 
 public class PostServiceAPI {
 
-    static String getBaseURL(){
+    static String getBaseURL() {
         return PropertyManager.getPropertyAsString("service.posts.addr", "http://localhost:8027");
     }
 
@@ -47,9 +50,9 @@ public class PostServiceAPI {
         String url = String.format("%s/posts?action=getPosts", getBaseURL());
 
         HttpResponse response = HttpClientManager.sendPost(url, postsRequest);
-        if(isSuccessful(response)) {
+        if (isSuccessful(response)) {
             Collection<Post> posts = ResponseReader.getPostsCollection(response);
-            return  posts;
+            return posts;
         }
         return new ArrayList<Post>();
     }
@@ -58,82 +61,101 @@ public class PostServiceAPI {
 
         String url = String.format("%s/posts?action=getWall", getBaseURL());
         HttpResponse response = HttpClientManager.sendPost(url, wallRequest);
-        if(isSuccessful(response)) {
+        if (isSuccessful(response)) {
             Collection<Post> posts = ResponseReader.getPostsCollection(response);
-            return  posts;
+            return posts;
         }
         return new ArrayList<Post>();
     }
 
     public static int insertPosts(Collection<Post> posts) throws Exception {
         String url = String.format("%s/posts?action=insertPosts", getBaseURL());
-        Answer postServiceAnswer =  sendRequest(url,posts);
-        return (postServiceAnswer!=null)?  postServiceAnswer.AffectedRows: 0;
+        Answer postServiceAnswer = sendRequest(url, posts);
+        return (postServiceAnswer != null) ? postServiceAnswer.AffectedRows : 0;
     }
+
     public static int deletePosts(Collection<Integer> post_ids) throws Exception {
         String url = String.format("%s/posts?action=deletePosts", getBaseURL());
-        Answer postServiceAnswer =  sendRequest(url,post_ids);
-        return (postServiceAnswer!=null)? postServiceAnswer.AffectedRows: 0;
+        Answer postServiceAnswer = sendRequest(url, post_ids);
+        return (postServiceAnswer != null) ? postServiceAnswer.AffectedRows : 0;
     }
-    public static int updatePosts(Collection<Post> posts)throws Exception {
+
+    public static int updatePosts(Collection<Post> posts) throws Exception {
         String url = String.format("%s/posts?action=updatePosts", getBaseURL());
-        Answer postServiceAnswer =  sendRequest(url,posts);
-        return (postServiceAnswer!=null)? postServiceAnswer.AffectedRows: 0;
+        Answer postServiceAnswer = sendRequest(url, posts);
+        return (postServiceAnswer != null) ? postServiceAnswer.AffectedRows : 0;
     }
 
-    public static int removePosts(Collection<Integer> post_ids)throws Exception {
-        ArrayList<Post> postsToUpdateRemovedField= new ArrayList<Post>();
+    public static int removePosts(Collection<Integer> post_ids) throws Exception {
+        ArrayList<Post> postsToUpdateRemovedField = new ArrayList<Post>();
 
-        for (int id:post_ids) {
-            Post  post = new Post();
+        for (int id : post_ids) {
+            Post post = new Post();
             post.PostId = id;
             post.IsRemoved = true;
             postsToUpdateRemovedField.add(post);
         }
 
         String url = String.format("%s/posts?action=updatePosts", getBaseURL());
-        Answer postServiceAnswer =  sendRequest(url,postsToUpdateRemovedField);
-        return (postServiceAnswer!=null)? postServiceAnswer.AffectedRows: 0;
+        Answer postServiceAnswer = sendRequest(url, postsToUpdateRemovedField);
+        return (postServiceAnswer != null) ? postServiceAnswer.AffectedRows : 0;
     }
-    public static int restorePosts(Collection<Integer> post_ids)throws Exception {
-        ArrayList<Post> postsToUpdateRemovedField= new ArrayList<Post>();
 
-        for (int id:post_ids) {
-            Post  post = new Post();
+    public static int restorePosts(Collection<Integer> post_ids) throws Exception {
+        ArrayList<Post> postsToUpdateRemovedField = new ArrayList<Post>();
+
+        for (int id : post_ids) {
+            Post post = new Post();
             post.PostId = id;
             post.IsRemoved = false;
             postsToUpdateRemovedField.add(post);
         }
 
         String url = String.format("%s/posts?action=updatePosts", getBaseURL());
-        Answer postServiceAnswer =  sendRequest(url,postsToUpdateRemovedField);
-        return (postServiceAnswer!=null)? postServiceAnswer.AffectedRows: 0;
+        Answer postServiceAnswer = sendRequest(url, postsToUpdateRemovedField);
+        return (postServiceAnswer != null) ? postServiceAnswer.AffectedRows : 0;
     }
 
-    public static boolean doRepost(Integer post_id, Integer user_id)throws Exception {
-
-
+    public static Object doRepost(Integer post_id, Integer user_id) throws Exception {
         String url = String.format("%s/posts?action=doRepost&post_id=%s&user_id=%s",
                 getBaseURL(), post_id.toString(), user_id.toString());
-        HttpResponse response = HttpClientManager.sendPost(url,null);
-        return  response.getStatusLine().getStatusCode() ==HttpServletResponse.SC_OK;
+        HttpResponse response = HttpClientManager.sendPost(url, null);
+        return  checkResponse(response, (response1)-> {
+            return ResponseReader.getPostsCollection(response1);
+        });
     }
 
-    public static boolean dolike(Integer post_id)throws Exception {
+    public static Answer dolike(Integer post_id) throws Exception {
         String url = String.format("%s/posts?action=doLike&post_id=%s",
                 getBaseURL(), post_id.toString());
-        HttpResponse response = HttpClientManager.sendPost(url,null);
-        return  response.getStatusLine().getStatusCode() ==HttpServletResponse.SC_OK;
+        HttpResponse response = HttpClientManager.sendPost(url, null);
+        return (Answer) checkResponse(response, (response1)-> {return new Answer("OK", null);});
     }
 
-    public static Collection<Post> searchPosts(SearchPostRequest request)throws Exception {
+    public static Collection<Post> searchPosts(SearchPostRequest request) throws Exception {
         String url = String.format("%s/posts?action=searchPosts",
                 getBaseURL());
-        HttpResponse response = HttpClientManager.sendPost(url,request);
-        return  (isSuccessful(response))?
-                ResponseReader.getPostsCollection(response):
-                null;
+        HttpResponse response = HttpClientManager.sendPost(url, request);
+        return checkResponse(response, ResponseReader::getPostsCollection);
+
+
     }
 
+    public static   <T> T checkResponse(HttpResponse response, Function<HttpResponse,T> returnIfOk) throws IOException, PostServiceException {
 
+        if( response.getStatusLine().getStatusCode() == HttpServletResponse.SC_OK)
+            return returnIfOk.apply(response);
+        else {
+            pullExceptionByResponseCode(response);
+            return null;
+        }
+    }
+
+    private static void pullExceptionByResponseCode(HttpResponse response) throws IOException, PostServiceException {
+        Answer postServiceAnswer = ResponseReader.getAnswer(response);
+        System.out.println("[POST SERVICE ERROR]: "+ postServiceAnswer.Status);
+
+        throw  new PostServiceException(postServiceAnswer,
+                response.getStatusLine().getStatusCode());
+    }
 }

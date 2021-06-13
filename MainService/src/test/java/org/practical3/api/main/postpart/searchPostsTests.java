@@ -42,20 +42,25 @@ public class searchPostsTests {
     }
 
     @Test
-    void search_WhenOwnerNull_ShouldReturnPosts() throws SQLException, ClassNotFoundException, IOException {
-        ArrayList<Post> actual = (ArrayList<Post>) MainServiceAPI.searchPost(new SearchPostRequest("goat", null));
+    void search_WhenOwnerNull_ShouldReturnPosts() throws IOException {
+        ArrayList<Post> actual = (ArrayList<Post>) MainServiceAPI.searchPost(new SearchPostRequest("goat"));
         assertEquals(2, actual.size());
     }
 
     @Test
-    void search_WhenOwnerNotNull_ShouldReturnPosts() throws SQLException, ClassNotFoundException, IOException {
-        ArrayList<Post> actual = (ArrayList<Post>) MainServiceAPI.searchPost(new SearchPostRequest("goat", 1401));
+    void search_WhenUserIdNotNull_ShouldReturnPosts() throws IOException {
+        ArrayList<Post> actual = (ArrayList<Post>) MainServiceAPI.searchPost(new SearchPostRequest("goat", 1401, null));
+        assertEquals(1, actual.size());
+    }
+    @Test
+    void search_WhenUsernameNotNull_ShouldReturnPosts() throws IOException {
+        ArrayList<Post> actual = (ArrayList<Post>) MainServiceAPI.searchPost(new SearchPostRequest("goat", null, "User1401"));
         assertEquals(1, actual.size());
     }
 
     @Test
-    void search_WhenOwnerNotReal_ShouldReturnAnswer() throws SQLException, ClassNotFoundException, IOException {
-        Object actual = MainServiceAPI.searchPost(new SearchPostRequest("goat", null));
+    void search_WhenOwnerNotReal_ShouldReturnAnswer() throws  IOException {
+        Object actual = MainServiceAPI.searchPost(new SearchPostRequest("goat",null,"NoRealUser"));
         assertEquals(Answer.class ,actual.getClass());
     }
 }

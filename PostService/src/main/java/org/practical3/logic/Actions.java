@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 public class Actions {
@@ -86,7 +87,7 @@ public class Actions {
     public static void doRepost(HttpServletRequest req, HttpServletResponse resp) throws NumberFormatException, IOException, SQLException, ClassNotFoundException {
         Integer post_id = new Integer( req.getParameter("post_id"));
         Integer user_id = new Integer( req.getParameter("user_id"));
-        Commons.dataBaseManager.doRepost(user_id, post_id );
-        sendOk(resp, new Answer("OK", null, null));
+        Post post = Commons.dataBaseManager.doRepost(user_id, post_id );
+        sendOk(resp, Arrays.asList(post));
     }
 }

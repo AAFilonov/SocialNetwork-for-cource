@@ -32,9 +32,17 @@ public  class Commons {
             processor.process(req,resp);
 
         }
+        catch (PostServiceException e){
+            resp.setStatus(e.FailureStatusCode);
+            resp.getWriter().println(StaticGson.toJson(e.PostServiceAnswer));
+        }
         catch (IllegalArgumentException e){
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             resp.getWriter().println(StaticGson.toJson(new Answer("Error: wrong arguments",null)));
+        }
+        catch (ClassNotFoundException e){
+            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            resp.getWriter().println(StaticGson.toJson(new Answer("Error: data not found",null)));
         }
         catch (Exception e){
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

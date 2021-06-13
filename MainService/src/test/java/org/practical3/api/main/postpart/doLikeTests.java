@@ -1,5 +1,7 @@
 package org.practical3.api.main.postpart;
 
+import org.junit.After;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.practical3.api.MainServiceAPI;
@@ -23,18 +25,20 @@ public class doLikeTests {
         StaticServerForTests.start();
         TestUtils.createPosts(Arrays.asList(
                 new Post(201,701,"Post to check Like from MainAPI"),
-                new Post(202,701,"Post to check Like from MainAPI")
+                new Post(202,701,"Post to check Like from MainAPI"),
+                new Post(204,701,"Post to check Like from MainAPI")
         ));
 
     }
-    @BeforeAll
+    @AfterAll
     public static void cleanup() {
-        TestUtils.cleanData(Arrays.asList(201,202));
+        TestUtils.cleanPosts(Arrays.asList(201,202, 204));
     }
 
     @Test
     public void doLike_WhenPostExist_ShouldReturnTrue() throws IOException {
-        assertTrue(MainServiceAPI.doLike(201));
+        boolean result = MainServiceAPI.doLike(204);
+        assertTrue(result);
     }
 
     @Test

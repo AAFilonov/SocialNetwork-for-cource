@@ -138,21 +138,24 @@ public class MainServiceAPI {
     }
 
     public static boolean doLike(Integer post_id) throws IOException {
-        String url = String.format("%s/posts/like", getBaseURL());
+        String url = String.format("%s/posts_like", getBaseURL());
         String params = String.format("?post_id=%s", post_id.toString());
         HttpResponse response = HttpClientManager.sendPost(url + params, null);
         return response.getStatusLine().getStatusCode() == HttpServletResponse.SC_OK;
     }
 
-    public static boolean doRepost(String username, Integer post_id) throws IOException {
-        String url = String.format("%s/posts/repost", getBaseURL());
+    public static Object doRepost(String username, Integer post_id) throws IOException {
+        String url = String.format("%s/posts_repost", getBaseURL());
         String params = String.format("?post_id=%s&username=%s", post_id.toString(), username);
         HttpResponse response = HttpClientManager.sendPost(url + params, null);
-        return response.getStatusLine().getStatusCode() == HttpServletResponse.SC_OK;
+        if (response.getStatusLine().getStatusCode() == HttpServletResponse.SC_OK)
+            return ResponseReader.getPostsCollection(response);
+        else
+            return ResponseReader.getAnswer(response);
     }
 
     public static Object searchPost(SearchPostRequest request) throws IOException {
-        String url = String.format("%s/posts/search", getBaseURL());
+        String url = String.format("%s/posts_search", getBaseURL());
         HttpResponse response = HttpClientManager.sendPost(url, request);
         if (response.getStatusLine().getStatusCode() == HttpServletResponse.SC_OK)
             return ResponseReader.getPostsCollection(response);

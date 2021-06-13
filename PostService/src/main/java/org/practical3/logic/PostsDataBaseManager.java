@@ -8,6 +8,7 @@ import org.practical3.model.transfer.WallRequest;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 public class PostsDataBaseManager extends DataBaseManager {
@@ -33,7 +34,7 @@ public class PostsDataBaseManager extends DataBaseManager {
     }
 
 
-    public Collection<Post> getPosts(Collection<Integer> ids, Integer count, Integer offset) throws SQLException {
+    public ArrayList<Post> getPosts(Collection<Integer> ids, Integer count, Integer offset) throws SQLException {
 
 
         String query = String.format("select * from db.posts WHERE post_id IN (%s) LIMIT %d OFFSET %d",
@@ -158,10 +159,20 @@ public class PostsDataBaseManager extends DataBaseManager {
 
     }
 
-    public int doRepost(Integer user_id, Integer post_id) throws SQLException, ClassNotFoundException {
+    public Post doRepost(Integer user_id, Integer post_id) throws SQLException, ClassNotFoundException {
         String sql = super.Connection.nativeSQL(
                 String.format("INSERT INTO db.posts(owner_id,\"content\")\nSelect %s, posts.\"content\" FROM db.posts  WHERE posts.post_id = %s LIMIT 1", user_id.toString(), post_id.toString()));
-        return executeAndReturnInt(sql);
+        int repostId =  executeAndReturnInt(sql);
+
+
+        PreparedStatement statement = super.Connection.prepareStatement
+                ("UPDATE db.posts SET \"CountReposts\" = \"CountReposts\" +1 where posts.post_id = ?");
+        statement.setInt(1, post_id);
+        int affectedRows = statement.executeUpdate();
+        statement.close();
+
+
+        return getPosts(Arrays.asList(repostId),1,0).get(0);
     }
 
 
@@ -170,7 +181,7 @@ public class PostsDataBaseManager extends DataBaseManager {
         String query = super.Connection.nativeSQL(String.format(
                 "SELECT * FROM db.posts WHERE " + "to_tsvector(\"content\") @@ plainto_tsquery('%s')%s LIMIT %s OFFSET %s",
                 req.Content,
-                        (req.OwnerId!=null)?"  and owner_id ="+ req.OwnerId.toString():"",
+                        (req.UserId!=null)?"  and owner_id ="+ req.UserId.toString():"",
                 req.Count.toString(),
                 req.Offset.toString()
                 )

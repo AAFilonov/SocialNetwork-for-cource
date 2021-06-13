@@ -17,39 +17,50 @@ import java.util.Collection;
 public class ResponseReader {
 
     public static Answer getAnswer(HttpResponse response) throws IOException {
-        HttpEntity resp = response.getEntity();
-        String respStr = EntityUtils.toString(resp);
-        return StaticGson.fromJson(respStr, Answer.class);
+        try {
+            HttpEntity resp = response.getEntity();
+            String respStr = EntityUtils.toString(resp);
+            return StaticGson.fromJson(respStr, Answer.class);
+
+        } catch (Exception e) {
+            System.out.println("Error while read request: " + e.getMessage());
+            return null;
+        }
     }
 
-    public static<T> Collection<T> getResponseBodyAsCollection(HttpResponse response, Type userListType) throws IOException {
-        HttpEntity resp = response.getEntity();
-        String respStr = EntityUtils.toString(resp);
-        return  StaticGson.fromJson(respStr, userListType);
+    public static <T> Collection<T> getResponseBodyAsCollection(HttpResponse response, Type userListType) {
+        try {
+            HttpEntity resp = response.getEntity();
+            String respStr = EntityUtils.toString(resp);
+            return StaticGson.fromJson(respStr, userListType);
+        } catch (Exception e) {
+            System.out.println("Error while read request: " + e.getMessage());
+            return null;
+        }
+
     }
 
 
-    public static Collection<Post> getPostsCollection(HttpResponse response) throws IOException {
+    public static Collection<Post> getPostsCollection(HttpResponse response) {
+
         Type userListType = new TypeToken<ArrayList<Post>>() {
         }.getType();
         return getResponseBodyAsCollection(response, userListType);
     }
-    public static Collection<User> getUsersCollection(HttpResponse response) throws IOException {
+
+    public static Collection<User> getUsersCollection(HttpResponse response) {
         Type userListType = new TypeToken<ArrayList<User>>() {
         }.getType();
         return getResponseBodyAsCollection(response, userListType);
     }
 
-    public static Collection<Integer>  getIntegerCollection(HttpResponse response) throws IOException {
+    public static Collection<Integer> getIntegerCollection(HttpResponse response) {
         Type userListType = new TypeToken<ArrayList<Integer>>() {
         }.getType();
         return getResponseBodyAsCollection(response, userListType);
     }
-    //возвращает хэшмап
-    public static <T> Collection<T> getCollection(HttpResponse response) throws IOException {
-        Type userListType = new TypeToken<ArrayList<T>>() {}.getType();
-        return getResponseBodyAsCollection(response, userListType);
-    }
+
+
 
 
 }

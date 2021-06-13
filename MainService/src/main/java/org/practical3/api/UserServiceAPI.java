@@ -68,4 +68,16 @@ public class UserServiceAPI {
     public static void unsubscribe(SubscriptionRequest subscription) throws IOException {
         HttpResponse response = HttpManagerForUserService.sendDelete("/subscriptions", subscription);
     }
+    //саня: обертка вокруг getUsers для получения только id
+    public static ArrayList<Integer> getUsersIds(String username) throws IOException, ClassNotFoundException {
+        Collection<User> users = getUsers (username);
+        if(users.isEmpty()) throw new ClassNotFoundException();
+
+
+        ArrayList<Integer> user_ids = new ArrayList<>();
+        for (User user:users) {
+            user_ids.add(user.userid);
+        }
+        return user_ids;
+    }
 }
