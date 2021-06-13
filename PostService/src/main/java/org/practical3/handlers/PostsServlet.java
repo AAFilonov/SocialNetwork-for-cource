@@ -46,23 +46,23 @@ public class PostsServlet extends HttpServlet {
             doAction(action, req, resp);
         } catch (IllegalArgumentException e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().println(Commons.toJson(new Answer("Wrong arguments",e)));
+            resp.getWriter().println(Commons.toJson(new Answer("Data already exists",e)));
         } catch (SQLException e) {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().println(Commons.toJson(new Answer("SQL error ",e)));
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            resp.getWriter().println(Commons.toJson(new Answer("Failed to connect to DataBase",e)));
         } catch (ClassNotFoundException e) {
             resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            resp.getWriter().println(Commons.toJson(new Answer("SQL error ",e)));
+            resp.getWriter().println(Commons.toJson(new Answer("No data found ",e)));
         } catch (Exception e) {
-
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().println(Commons.toJson(new Answer( "Internal server error\n" + e.getMessage(),e)));
+            resp.getWriter().println(Commons.toJson(new Answer("Internal server error - " + e.getMessage(),e)));
 
         }
 
     }
 
-    private void doAction(String action, HttpServletRequest req, HttpServletResponse resp) throws IOException, ClassNotFoundException, SQLException {
+    private void doAction(String action, HttpServletRequest req, HttpServletResponse resp)
+            throws IOException, ClassNotFoundException, SQLException, NumberFormatException   {
         switch (action) {
             case "getPosts":
                 Actions.getPosts(req, resp);

@@ -14,11 +14,11 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class PostsDataBaseManagerTest {
+public class PostsDataBaseManagerTestBase {
 
 
     @BeforeAll
-    public  static void init() {
+    public static void init() {
         PropertyManager.load("./post.props");
         String DB_URL = PropertyManager.getPropertyAsString("database.server", "jdbc:postgresql://127.0.0.1:5432/");
         String DB_Name = "javaPracticeTest";
@@ -27,25 +27,28 @@ class PostsDataBaseManagerTest {
 
 
         try {
-            Commons.dataBaseManager= new PostsDataBaseManager(DB_URL, DB_Name, User, Password);
+            Commons.dataBaseManager = new PostsDataBaseManager(DB_URL, DB_Name, User, Password);
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
     }
-
-    @Nested
-    class insertTests {
-        @Test
-        void insertTest() throws SQLException {
-
-            Collection<Post> inserted = TestUtils.getTestPosts(888,889);
-            int actualRowsAffected =  Commons.dataBaseManager.insertPosts(inserted);
-            assertEquals(2, actualRowsAffected);
-            TestUtils.clearTestData();
+    public static void insertData(Collection<Post> data){
+        try {
+            Commons.dataBaseManager.insertPosts(data);
+        } catch (Exception e) {
+            //уже вставлен
         }
-
-
     }
+
+    public static void cleanData(Collection<Integer> data){
+        try {
+            Commons.dataBaseManager.deletePosts(data);
+        } catch (Exception e) {
+            //уже удален
+        }
+    }
+
+
 
 
     @Test
@@ -92,29 +95,7 @@ class PostsDataBaseManagerTest {
     }
 
 
-    @Test
-    void doLikeTest() throws SQLException, ClassNotFoundException {
-        Commons.dataBaseManager.insertPosts(Arrays.asList(new Post(730,430,"Some content")));
 
-        Commons.dataBaseManager.doLike(730);
-        ArrayList<Post> actual = (ArrayList<Post>)
-                Commons.dataBaseManager.getPosts(Arrays.asList(730),10,0);
-        assertEquals(1, actual.get(0).CountLikes);
-        Commons.dataBaseManager.deletePosts(Arrays.asList(730));
-    }
-
-
-    @Test
-    void doRepostTest() throws SQLException, ClassNotFoundException {
-        Commons.dataBaseManager.insertPosts(Arrays.asList(new Post(730,430,"Some content")));
-
-        Commons.dataBaseManager.doRepost(730, 431);
-        ArrayList<Post> actual = (ArrayList<Post>)
-                Commons.dataBaseManager.getWall(TestUtils.createRequestWall(431));
-        assertEquals(1, actual.size());
-
-        Commons.dataBaseManager.deletePosts(Arrays.asList(730));
-    }
 
 
 

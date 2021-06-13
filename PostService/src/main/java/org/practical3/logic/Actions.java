@@ -66,17 +66,20 @@ public class Actions {
         sendOk(resp, new Answer("OK", null, affectedRows));
     }
 
-    public static void searchPosts(HttpServletRequest req, HttpServletResponse resp) {
-        throw new NotImplementedException();
+    public static void searchPosts(HttpServletRequest req, HttpServletResponse resp) throws NumberFormatException, SQLException {
+        String searchString = req.getParameter("content");
+        Integer owner_id = new Integer( req.getParameter("owner_id"));
+
+        Collection<Post> posts =  Commons.dataBaseManager.search(searchString, owner_id);
     }
 
-    public static void doLike(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException, ClassNotFoundException {
+    public static void doLike(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException, NumberFormatException {
         Integer post_id = new Integer( req.getParameter("post_id"));
         Commons.dataBaseManager.doLike(post_id);
         sendOk(resp, new Answer("OK", null, null));
     }
 
-    public static void DoRepost(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException, ClassNotFoundException {
+    public static void DoRepost(HttpServletRequest req, HttpServletResponse resp) throws NumberFormatException, IOException, SQLException, ClassNotFoundException {
         Integer post_id = new Integer( req.getParameter("post_id"));
         Integer user_id = new Integer( req.getParameter("user_id"));
         Commons.dataBaseManager.doRepost(user_id, post_id );

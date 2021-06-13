@@ -1,7 +1,7 @@
 package org.practical3.logic;
 
 
-import org.practical3.model.data.PostField;
+import org.postgresql.util.PSQLException;
 import org.practical3.model.data.Post;
 import org.practical3.model.transfer.WallRequest;
 
@@ -50,12 +50,22 @@ public class PostsDataBaseManager extends DataBaseManager {
     }
 
     public int insertPosts(Collection<Post> posts) throws SQLException {
+
         PreparedStatement statement = super.Connection.prepareStatement
                 (String.format("INSERT INTO db.posts VALUES %s",
-                        getPostsAsString(posts))
-                );
+                        getPostsAsString(posts)));
 
-        return statement.executeUpdate();
+        try {
+            return statement.executeUpdate();
+
+        } catch (PSQLException t) {
+            //объект с таким id уже вставлен
+            throw new IllegalArgumentException();
+
+        } finally {
+            statement.close();
+        }
+
     }
 
     public int updatePosts(Collection<Post> posts) throws SQLException {
@@ -130,79 +140,41 @@ public class PostsDataBaseManager extends DataBaseManager {
     }
 
 
-    ArrayList<Post> fetchPosts(ResultSet resultSet) throws SQLException {
-
-        ArrayList<Post> posts = new ArrayList<>();
-        while (resultSet.next()) {
-            posts.add(fetchPost(resultSet));
-        }
-        return posts;
-    }
 
 
-    String getIdsASString(Collection<Integer> ids) {
-        String output;
-
-        ArrayList<String> idsVals = new ArrayList<>();
-        for (Integer id : ids) {
-            idsVals.add("'" + id.toString() + "'");
-        }
-
-        return String.join(",", idsVals);
-
-    }
-
-    private String getPostsAsString(Collection<Post> posts) {
-        Collection<String> postsAsString = new ArrayList<>();
-        for (Post post : posts) {
-            postsAsString.add(post.toSqlValues());
-        }
-        return String.join(",", postsAsString);
-    }
-
-    Post fetchPost(ResultSet resultSet) throws SQLException {
-        Post post = new Post();
-        post.PostId = resultSet.getInt(PostField.POST_ID.getVal());
-        post.OwnerId = resultSet.getInt(PostField.OWNER_ID.getVal());
-        post.Content = resultSet.getString(PostField.CONTENT.getVal());
-        post.Timestamp = resultSet.getTimestamp(PostField.TIMESTAMP.getVal()).toInstant();
-        post.IsRedacted = resultSet.getBoolean(PostField.IS_REDACTED.getVal());
-        post.IsRemoved = resultSet.getBoolean(PostField.IS_REMOVED.getVal());
-        post.IsCommentable = resultSet.getBoolean(PostField.IS_COMMENTABLE.getVal());
-        post.CountLikes = resultSet.getInt(PostField.COUNT_LIKES.getVal());
-        post.CountReposts = resultSet.getInt(PostField.COUNT_REPOSTS.getVal());
-
-
-        return post;
-    }
-
-
-    public void doLike(Integer post_id) throws SQLException, ClassNotFoundException {
+    public void doLike(Integer post_id) throws SQLException, IllegalArgumentException {
 
 
         PreparedStatement statement = super.Connection.prepareStatement
                 ("UPDATE db.posts SET \"CountLikes\" = \"CountLikes\" +1 where posts.post_id = ?");
         statement.setInt(1, post_id);
 
-        int  affectedRows =  statement.executeUpdate();
+        int affectedRows = statement.executeUpdate();
         statement.close();
-        if(affectedRows==0)
-            throw new ClassNotFoundException();
+
+        if (affectedRows == 0)
+            throw new IllegalArgumentException();
 
     }
 
-    public void doRepost(Integer user_id, Integer post_id) throws SQLException, ClassNotFoundException {
+    public int doRepost(Integer user_id, Integer post_id) throws SQLException, ClassNotFoundException {
+        String sql = super.Connection.nativeSQL(
+                String.format("INSERT INTO db.posts(owner_id,\"content\")\nSelect %s, posts.\"content\" FROM db.posts  WHERE posts.post_id = %s LIMIT 1", user_id.toString(), post_id.toString()));
+        return executeAndReturnInt(sql);
+    }
 
-        PreparedStatement statement = super.Connection.prepareStatement
-                ("INSERT INTO db.posts(owner_id,\"content\")\n" +
-                        "Select ?,  posts.\"content\" FROM db.posts  WHERE posts.owner_id = ? LIMIT 1");
-        statement.setInt(1, user_id);
-        statement.setInt(2, post_id);
 
-        int  affectedRows =  statement.executeUpdate();
+    public Collection<Post> search(String searchString, Integer owner_id) throws SQLException {
+
+        String query = super.Connection.nativeSQL(String.format(
+                "SELECT * FROM db.posts WHERE " + "to_tsvector(\"content\") @@ plainto_tsquery('%s')%s",
+                        searchString,
+                        (owner_id!=null)?"  and owner_id ="+ owner_id.toString():""));
+
+        Statement statement = Connection.createStatement();
+        ResultSet result = statement.executeQuery(query);
+        ArrayList<Post> items = fetchPosts(result);
         statement.close();
-        if(affectedRows==0)
-            throw new ClassNotFoundException();
-
+        return items;
     }
 }
