@@ -16,7 +16,7 @@ import java.util.Collection;
 
 public class ResponseReader {
 
-    public static Answer getResponseBody(HttpResponse response) throws IOException {
+    public static Answer getAnswer(HttpResponse response) throws IOException {
         HttpEntity resp = response.getEntity();
         String respStr = EntityUtils.toString(resp);
         return StaticGson.fromJson(respStr, Answer.class);

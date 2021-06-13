@@ -1,17 +1,10 @@
 package org.practical3.handlers;
 
-import com.google.gson.reflect.TypeToken;
-import org.apache.commons.io.IOUtils;
 import org.practical3.logic.Actions;
-import org.practical3.model.transfer.WallRequest;
 import org.practical3.utils.Commons;
-import org.practical3.model.data.Post;
 import org.practical3.model.transfer.Answer;
-import org.practical3.model.transfer.PostsRequest;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -19,11 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-
 
 
 public class PostsServlet extends HttpServlet {
@@ -86,7 +75,7 @@ public class PostsServlet extends HttpServlet {
                 Actions.doLike(req, resp);
                 break;
             case "doRepost":
-                Actions.DoRepost(req, resp);
+                Actions.doRepost(req, resp);
                 break;
             case "searchPosts":
                Actions.searchPosts(req, resp);

@@ -5,11 +5,11 @@ import org.apache.http.HttpResponse;
 import org.practical3.model.data.Post;
 import org.practical3.model.transfer.Answer;
 import org.practical3.model.transfer.requests.PostsRequest;
+import org.practical3.model.transfer.requests.SearchPostRequest;
 import org.practical3.model.transfer.requests.WallRequest;
 import org.practical3.utils.http.HttpClientManager;
 import org.practical3.utils.PropertyManager;
 import org.practical3.utils.http.ResponseReader;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class PostServiceAPI {
 
     private static Answer sendRequest(String url, Object request) throws Exception {
         HttpResponse response = HttpClientManager.sendPost(url, request);
-        return isSuccessful(response) ? ResponseReader.getResponseBody(response) : null;
+        return isSuccessful(response) ? ResponseReader.getAnswer(response) : null;
     }
 
     static boolean isSuccessful(HttpResponse response) throws Exception {
@@ -37,7 +37,7 @@ public class PostServiceAPI {
             case HttpServletResponse.SC_BAD_REQUEST:
             default:
                 System.out.println("[POST SERVICE ERROR]: "
-                        + ResponseReader.getResponseBody(response).Status);
+                        + ResponseReader.getAnswer(response).Status);
                 throw new Exception();
         }
     }
@@ -126,8 +126,13 @@ public class PostServiceAPI {
         return  response.getStatusLine().getStatusCode() ==HttpServletResponse.SC_OK;
     }
 
-    public static int searchPosts()throws Exception {
-
+    public static Collection<Post> searchPosts(SearchPostRequest request)throws Exception {
+        String url = String.format("%s/posts?action=searchPosts",
+                getBaseURL());
+        HttpResponse response = HttpClientManager.sendPost(url,request);
+        return  (isSuccessful(response))?
+                ResponseReader.getPostsCollection(response):
+                null;
     }
 
 

@@ -9,8 +9,12 @@ public class PostsRequest {
 
     public Collection<Integer> ids ;
 
-    public int Count  ;
-    public int Offset ;
+    public int Count  =10;
+    public int Offset =0;
+
+    public PostsRequest(String IdsString) {
+        ids = Commons.parseIds(IdsString);
+    }
 
     public PostsRequest(String IdsString, int count, int offset ) {
 
