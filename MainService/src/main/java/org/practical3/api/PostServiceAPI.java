@@ -118,6 +118,7 @@ public class PostServiceAPI {
         HttpResponse response = HttpClientManager.sendPost(url,null);
         return  response.getStatusLine().getStatusCode() ==HttpServletResponse.SC_OK;
     }
+
     public static boolean dolike(Integer post_id)throws Exception {
         String url = String.format("%s/posts?action=doLike&post_id=%s",
                 getBaseURL(), post_id.toString());
@@ -126,7 +127,7 @@ public class PostServiceAPI {
     }
 
     public static int searchPosts()throws Exception {
-        throw new NotImplementedException();
+
     }
 
 

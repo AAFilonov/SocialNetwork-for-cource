@@ -6,7 +6,9 @@ import org.practical3.Main;
 import org.practical3.logic.PostsDataBaseManager;
 import org.practical3.model.data.Post;
 import org.practical3.model.transfer.PostsRequest;
+import org.practical3.model.transfer.SearchPostRequest;
 import org.practical3.model.transfer.WallRequest;
+import org.practical3.utils.testing.DBTestsUtils;
 import org.practical3.utils.testing.TestUtils;
 
 import java.sql.SQLException;
@@ -107,7 +109,18 @@ class InnerAPITest {
     }
 
 
+    @Test
+    public void searchPostTest() throws Exception {
+        DBTestsUtils.insertData(Arrays.asList(
+                new Post(611, 441, "Sanya inserted a text here"),
+                new Post(612, 441, "Goat goes here"),
+                new Post(613, 440, "goat  inserted a text")));
 
+        ArrayList<Post> posts = (ArrayList<Post> )InnerAPI.searchPosts(new SearchPostRequest("Goat", null));
+        DBTestsUtils.cleanData(Arrays.asList( 611,612,613));
+        assertEquals(2, posts.size());
+
+    }
 
 }
 

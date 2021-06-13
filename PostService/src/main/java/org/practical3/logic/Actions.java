@@ -4,8 +4,11 @@ import com.google.common.reflect.TypeToken;
 import org.practical3.model.data.Post;
 import org.practical3.model.transfer.Answer;
 import org.practical3.model.transfer.PostsRequest;
+import org.practical3.model.transfer.SearchPostRequest;
 import org.practical3.model.transfer.WallRequest;
 import org.practical3.utils.Commons;
+import org.practical3.utils.RequestReader;
+import org.practical3.utils.ResponseReader;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -66,13 +69,12 @@ public class Actions {
         sendOk(resp, new Answer("OK", null, affectedRows));
     }
 
-    public static void searchPosts(HttpServletRequest req, HttpServletResponse resp) throws NumberFormatException, SQLException, IOException {
-        String searchString = req.getParameter("content");
-        Integer owner_id = new Integer( req.getParameter("owner_id"));
+    public static void searchPosts(HttpServletRequest req, HttpServletResponse resp) throws NumberFormatException, SQLException, IOException, ClassNotFoundException {
+        SearchPostRequest searchPostRequest = RequestReader.getRequestBodyAsObject(req, SearchPostRequest.class);
 
-        Collection<Post> posts =  Commons.dataBaseManager.search(searchString, owner_id);
-        if(posts.isEmpty() )throw new ClassCastException();
-        sendOk(resp, new Answer("OK", posts));
+        Collection<Post> posts =  Commons.dataBaseManager.search(searchPostRequest);
+        if(posts.isEmpty() )throw new ClassNotFoundException();
+        sendOk(resp, posts);
     }
 
     public static void doLike(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException, NumberFormatException {

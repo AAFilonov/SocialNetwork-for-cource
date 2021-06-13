@@ -3,6 +3,7 @@ package org.practical3.logic;
 
 import org.postgresql.util.PSQLException;
 import org.practical3.model.data.Post;
+import org.practical3.model.transfer.SearchPostRequest;
 import org.practical3.model.transfer.WallRequest;
 
 import java.sql.*;
@@ -164,12 +165,16 @@ public class PostsDataBaseManager extends DataBaseManager {
     }
 
 
-    public Collection<Post> search(String searchString, Integer owner_id) throws SQLException {
+    public Collection<Post> search(SearchPostRequest req) throws SQLException {
 
         String query = super.Connection.nativeSQL(String.format(
-                "SELECT * FROM db.posts WHERE " + "to_tsvector(\"content\") @@ plainto_tsquery('%s')%s",
-                        searchString,
-                        (owner_id!=null)?"  and owner_id ="+ owner_id.toString():""));
+                "SELECT * FROM db.posts WHERE " + "to_tsvector(\"content\") @@ plainto_tsquery('%s')%s LIMIT %s OFFSET %s",
+                req.Content,
+                        (req.OwnerId!=null)?"  and owner_id ="+ req.OwnerId.toString():"",
+                req.Count.toString(),
+                req.Offset.toString()
+                )
+        );
 
         Statement statement = Connection.createStatement();
         ResultSet result = statement.executeQuery(query);
