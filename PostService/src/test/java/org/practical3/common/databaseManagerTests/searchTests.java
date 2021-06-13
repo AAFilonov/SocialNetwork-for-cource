@@ -3,7 +3,7 @@ package org.practical3.common.databaseManagerTests;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.practical3.common.PostsDataBaseManagerTestBase;
+import org.practical3.utils.testing.DBTestsUtils;
 import org.practical3.model.data.Post;
 import org.practical3.utils.Commons;
 
@@ -20,8 +20,8 @@ public class searchTests {
     static ArrayList<Integer> postsToClean = new ArrayList<>(Arrays.asList(601,602,603,604,605,606));
     @BeforeAll
     public static void init() {
-        PostsDataBaseManagerTestBase.init();
-        PostsDataBaseManagerTestBase.insertData(Arrays.asList(
+        DBTestsUtils.init();
+        DBTestsUtils.insertData(Arrays.asList(
                 new Post(601, 441, "Саня вставил сюда текст"),
                 new Post(602, 441, "Сюда идет утка"),
                 new Post(603, 440, "утка вставит текст"),
@@ -34,7 +34,7 @@ public class searchTests {
 
     @AfterAll
     public static void cleanup() {
-        PostsDataBaseManagerTestBase.cleanData(postsToClean);
+        DBTestsUtils.cleanData(postsToClean);
     }
 
     @Test

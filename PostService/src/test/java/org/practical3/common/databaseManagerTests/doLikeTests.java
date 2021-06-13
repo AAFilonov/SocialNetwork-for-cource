@@ -3,7 +3,7 @@ package org.practical3.common.databaseManagerTests;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.practical3.common.PostsDataBaseManagerTestBase;
+import org.practical3.utils.testing.DBTestsUtils;
 import org.practical3.model.data.Post;
 import org.practical3.utils.Commons;
 
@@ -18,15 +18,15 @@ public class doLikeTests {
 
     @BeforeAll
     public static void init() {
-        PostsDataBaseManagerTestBase.init();
-        PostsDataBaseManagerTestBase.insertData(Arrays.asList(
+        DBTestsUtils.init();
+        DBTestsUtils.insertData(Arrays.asList(
                 new Post(720, 420, "Post to test like")
         ));
     }
 
     @AfterAll
     public static void cleanup() {
-        PostsDataBaseManagerTestBase.cleanData(Arrays.asList(720));
+        DBTestsUtils.cleanData(Arrays.asList(720));
     }
 
     @Test

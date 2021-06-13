@@ -3,16 +3,14 @@ package org.practical3.common.databaseManagerTests;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.practical3.common.PostsDataBaseManagerTestBase;
+import org.practical3.utils.testing.DBTestsUtils;
 import org.practical3.model.data.Post;
 import org.practical3.utils.Commons;
-import org.practical3.utils.testing.TestUtils;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -22,13 +20,13 @@ public class insertTests {
 
     @BeforeAll
     public static void init() {
-        PostsDataBaseManagerTestBase.init();
+        DBTestsUtils.init();
 
     }
 
     @AfterAll
     public static void cleanup() {
-        PostsDataBaseManagerTestBase.cleanData(Arrays.asList(887,888,889,890));
+        DBTestsUtils.cleanData(Arrays.asList(887,888,889,890));
     }
 
     @Test

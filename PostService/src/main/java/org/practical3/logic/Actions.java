@@ -66,11 +66,13 @@ public class Actions {
         sendOk(resp, new Answer("OK", null, affectedRows));
     }
 
-    public static void searchPosts(HttpServletRequest req, HttpServletResponse resp) throws NumberFormatException, SQLException {
+    public static void searchPosts(HttpServletRequest req, HttpServletResponse resp) throws NumberFormatException, SQLException, IOException {
         String searchString = req.getParameter("content");
         Integer owner_id = new Integer( req.getParameter("owner_id"));
 
         Collection<Post> posts =  Commons.dataBaseManager.search(searchString, owner_id);
+        if(posts.isEmpty() )throw new ClassCastException();
+        sendOk(resp, new Answer("OK", posts));
     }
 
     public static void doLike(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException, NumberFormatException {
