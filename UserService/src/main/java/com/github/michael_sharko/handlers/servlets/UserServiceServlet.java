@@ -1,9 +1,7 @@
-package com.github.michael_sharko.handlers;
+package com.github.michael_sharko.handlers.servlets;
 
-import com.github.michael_sharko.handlers.UserService.FindUserByIdAndNameInUserService;
-import com.github.michael_sharko.handlers.UserService.RegistrationInUserService;
-import com.github.michael_sharko.handlers.UserService.RemoveInUserService;
-import com.github.michael_sharko.handlers.UserService.UpdateInUserService;
+import com.github.michael_sharko.handlers.ExceptionHandler;
+import com.github.michael_sharko.handlers.servlets.UserService.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,23 +12,24 @@ import java.io.IOException;
 
 @WebServlet("/users")
 public class UserServiceServlet extends HttpServlet {
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        new RegistrationInUserService(req, resp).execute();
+        ExceptionHandler.execute(req, resp, UserService::register);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        new FindUserByIdAndNameInUserService(req, resp).execute();
+        ExceptionHandler.execute(req, resp, UserService::getUsers);
     }
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        new UpdateInUserService(req, resp).execute();
+        ExceptionHandler.execute(req, resp, UserService::update);
     }
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        new RemoveInUserService(req, resp).execute();
+        ExceptionHandler.execute(req, resp, UserService::remove);
     }
 }

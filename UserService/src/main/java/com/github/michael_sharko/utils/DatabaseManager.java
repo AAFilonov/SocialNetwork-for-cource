@@ -157,10 +157,10 @@ public class DatabaseManager {
         return result;
     }
 
-    public static <T> int executeInsertObject(String table, T object, String where) {
+    public static <T> int executeInsertObject(String table, T object) {
         int result = 0;
         try {
-            String query = "INSERT INTO %s(%s) VALUES(%s) %s";
+            String query = "INSERT INTO %s(%s) VALUES(%s)";
 
             String vars = "";
             String values = "";
@@ -172,7 +172,7 @@ public class DatabaseManager {
                 }
             }
 
-            query = String.format(query, table, vars, values, where == null ? "" : where);
+            query = String.format(query, table, vars, values);
             result = executeUpdate(query, object);
 
         } catch (IllegalAccessException e) {

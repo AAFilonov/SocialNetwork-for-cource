@@ -5,8 +5,6 @@ CREATE TABLE users
 	username		VARCHAR(16) UNIQUE NOT NULL,
 	password		VARCHAR(32) NOT NULL,
 
-	subscribes		INTEGER[] DEFAULT '{}',
-	followers		INTEGER[] DEFAULT '{}',
     birthday	    DATE,
 
     fullname	    TEXT,
