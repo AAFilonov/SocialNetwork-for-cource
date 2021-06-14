@@ -3,10 +3,11 @@ package org.practical3.common.databaseManagerTests;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.practical3.logic.PostsDataBaseManager;
 import org.practical3.model.transfer.SearchPostRequest;
 import org.practical3.utils.testing.DBTestsUtils;
 import org.practical3.model.data.Post;
-import org.practical3.utils.Commons;
+
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -40,35 +41,35 @@ public class searchTests {
 
     @Test
     void search_WhenOwnerNull_ShouldReturnPosts() throws SQLException, ClassNotFoundException {
-        ArrayList<Post> actual = (ArrayList<Post>) Commons.dataBaseManager.search(new SearchPostRequest("утка", null));
+        ArrayList<Post> actual = (ArrayList<Post>) PostsDataBaseManager.search(new SearchPostRequest("утка", null));
         assertEquals(2, actual.size());
     }
 
     @Test
     void search_WhenOwnerReal_ShouldReturnPosts() throws SQLException, ClassNotFoundException {
-        ArrayList<Post> actual = (ArrayList<Post>) Commons.dataBaseManager.search(new SearchPostRequest("утка", 440));
+        ArrayList<Post> actual = (ArrayList<Post>) PostsDataBaseManager.search(new SearchPostRequest("утка", 440));
         assertEquals(1, actual.size());
     }
     @Test
     void search_WhenOwnerNotReal_ShouldReturnEmpty() throws SQLException, ClassNotFoundException {
-        ArrayList<Post> actual = (ArrayList<Post>) Commons.dataBaseManager.search(new SearchPostRequest("Иван", 444));
+        ArrayList<Post> actual = (ArrayList<Post>) PostsDataBaseManager.search(new SearchPostRequest("Иван", 444));
         assertEquals(0, actual.size());
     }
 
     @Test
     void search_ContentExist_ShouldReturnPosts() throws SQLException, ClassNotFoundException {
-        ArrayList<Post> actual = (ArrayList<Post>) Commons.dataBaseManager.search(new SearchPostRequest("идет", null));
+        ArrayList<Post> actual = (ArrayList<Post>) PostsDataBaseManager.search(new SearchPostRequest("идет", null));
         assertEquals(4, actual.size());
     }
     @Test
     void search_ContentExistAndOwnerTrue_ShouldReturnPosts() throws SQLException, ClassNotFoundException {
-        ArrayList<Post> actual = (ArrayList<Post>) Commons.dataBaseManager.search(new SearchPostRequest("идет", 441));
+        ArrayList<Post> actual = (ArrayList<Post>) PostsDataBaseManager.search(new SearchPostRequest("идет", 441));
         assertEquals(2, actual.size());
     }
 
     @Test
     void search_ContentNotExist_ShouldReturnEmpty() throws SQLException, ClassNotFoundException {
-        ArrayList<Post> actual = (ArrayList<Post>) Commons.dataBaseManager.search(new SearchPostRequest("Петр", null));
+        ArrayList<Post> actual = (ArrayList<Post>) PostsDataBaseManager.search(new SearchPostRequest("Петр", null));
         assertEquals(0, actual.size());
     }
 
