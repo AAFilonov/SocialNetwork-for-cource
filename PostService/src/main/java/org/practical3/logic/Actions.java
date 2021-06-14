@@ -28,10 +28,10 @@ public class Actions {
     }
 
 
-    public static void getWall(HttpServletRequest req, HttpServletResponse resp) throws SQLException, IOException {
+    public static void getWall(HttpServletRequest req, HttpServletResponse resp) throws SQLException, IOException, ClassNotFoundException {
         WallRequest wallRequest = Commons.getRequestBodyAsObject(req, WallRequest.class);
         Collection<Post> posts = Commons.dataBaseManager.getWall(wallRequest);
-
+        if (posts.isEmpty()) throw  new ClassNotFoundException();
         sendOk(resp, posts);
 
     }
@@ -39,6 +39,7 @@ public class Actions {
     public static void getPosts(HttpServletRequest req, HttpServletResponse resp) throws ClassNotFoundException, SQLException, IOException {
         PostsRequest request = Commons.getRequestBodyAsObject(req, PostsRequest.class);
         Collection<Post> posts = Commons.dataBaseManager.getPosts(request.ids, request.Count, request.Offset);
+        if (posts.isEmpty()) throw  new ClassNotFoundException();
         sendOk(resp, posts);
     }
 

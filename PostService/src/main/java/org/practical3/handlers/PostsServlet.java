@@ -35,16 +35,16 @@ public class PostsServlet extends HttpServlet {
             doAction(action, req, resp);
         } catch (IllegalArgumentException e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().println(Commons.toJson(new Answer("Data already exists",e)));
+            resp.getWriter().println(Commons.toJson(new Answer("Data already exists",null)));
         } catch (SQLException e) {
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().println(Commons.toJson(new Answer("Failed to connect to DataBase",e)));
+            resp.getWriter().println(Commons.toJson(new Answer("Failed to connect to DataBase",null)));
         } catch (ClassNotFoundException e) {
             resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            resp.getWriter().println(Commons.toJson(new Answer("No data found ",e)));
+            resp.getWriter().println(Commons.toJson(new Answer("No data found ",null)));
         } catch (Exception e) {
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().println(Commons.toJson(new Answer("Internal server error - " + e.getMessage(),e)));
+            resp.getWriter().println(Commons.toJson(new Answer("Internal server error - " + e.getMessage(),null)));
 
         }
 

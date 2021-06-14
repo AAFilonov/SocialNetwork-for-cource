@@ -50,22 +50,14 @@ public class PostServiceAPI {
         String url = String.format("%s/posts?action=getPosts", getBaseURL());
 
         HttpResponse response = HttpClientManager.sendPost(url, postsRequest);
-        if (isSuccessful(response)) {
-            ArrayList<Post> posts = (ArrayList<Post>)ResponseReader.getPostsCollection(response);
-            return posts;
-        }
-        return new ArrayList<Post>();
+        return (ArrayList<Post>)checkResponse(response, ResponseReader::getPostsCollection);
     }
 
     public static Collection<Post> getWall(WallRequest wallRequest) throws Exception {
 
         String url = String.format("%s/posts?action=getWall", getBaseURL());
         HttpResponse response = HttpClientManager.sendPost(url, wallRequest);
-        if (isSuccessful(response)) {
-            Collection<Post> posts = ResponseReader.getPostsCollection(response);
-            return posts;
-        }
-        return new ArrayList<Post>();
+        return checkResponse(response, ResponseReader::getPostsCollection);
     }
 
     public static int insertPosts(Collection<Post> posts) throws Exception {
