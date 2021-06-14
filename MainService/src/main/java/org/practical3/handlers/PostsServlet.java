@@ -75,15 +75,21 @@ public class PostsServlet extends HttpServlet {
 
     }
     private void getPosts(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-        Map<String,String[]> args =  req.getParameterMap();
-        PostsRequest request= new PostsRequest(
-                args.get("post_ids")[0],
-                new Integer(args.get("count")[0]),
-                new Integer(args.get("offset")[0])
-        );
-        Collection<Post> posts  = PostServiceAPI.getPosts(request);
+        try {
+            Map<String, String[]> args = req.getParameterMap();
+            PostsRequest request = new PostsRequest(
+                    RequestReader.getArgAsString(args,"post_ids"),
+                    RequestReader.getArgAsInt(args, "count"),
+                    RequestReader.getArgAsInt(args, "offset")
+            );
 
-        HttpClientManager.sendOk(posts, resp);
+
+            Collection<Post> posts = PostServiceAPI.getPosts(request);
+
+            HttpClientManager.sendOk(posts, resp);
+        }catch (NullPointerException e){
+            throw new IllegalArgumentException();
+        }
     }
 
     private void updatePosts(HttpServletRequest httpServletRequest, HttpServletResponse response) throws Exception {
