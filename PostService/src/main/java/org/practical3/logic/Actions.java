@@ -41,6 +41,7 @@ public class Actions {
 
     public static void getPosts(HttpServletRequest req, HttpServletResponse resp) throws ClassNotFoundException, SQLException, IOException {
         PostsRequest request = RequestReader.getRequestBodyAsObject(req, PostsRequest.class);
+
         Collection<Post> posts = PostsDataBaseManager.getPosts(request.ids, request.Count, request.Offset);
         if (posts.isEmpty()) throw  new ClassNotFoundException();
         sendOk(resp, posts);
@@ -61,7 +62,7 @@ public class Actions {
         Integer rowsAffected = PostsDataBaseManager.deletePosts(ids);
         sendOk(resp, new Answer("OK", null, rowsAffected));
     }
-    
+
     public static void updatePosts(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException {
         Type userListType = new TypeToken<ArrayList<Post>>() {
         }.getType();

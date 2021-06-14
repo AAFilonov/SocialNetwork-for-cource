@@ -26,7 +26,7 @@ public class ExceptionHandler {
 
         } catch (IllegalArgumentException e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().println(toJson(new Answer("Data already exists",null)));
+            resp.getWriter().println(toJson(new Answer("Wrong arguments",null)));
         } catch (SQLException e) {
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             resp.getWriter().println(toJson(new Answer("Failed to connect to DataBase",null)));

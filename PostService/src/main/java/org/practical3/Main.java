@@ -5,6 +5,7 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
 
+import org.practical3.handlers.LikeServlet;
 import org.practical3.logic.DataBaseManager;
 import org.practical3.logic.PostsDataBaseManager;
 import org.practical3.handlers.PostsServlet;
@@ -89,7 +90,11 @@ public class Main {
     }
 
     private static void setServlets() {
-        setServlet(new PostsServlet(), "/posts/*");
+        setServlet(new PostsServlet(), "/posts");
+        setServlet(new LikeServlet(), "/posts/like");
+        setServlet(new PostsServlet(), "/posts/repost");
+        setServlet(new PostsServlet(), "/posts/search");
+        setServlet(new PostsServlet(), "/posts/wall");
 
     }
 
