@@ -10,31 +10,42 @@ public class Answer {
         this.Data = data;
     }
 
-    public String getStatus() {
-        return this.Status;
-    }
-
-    public Object getData() {
-        return this.Data;
+    public Answer(String status, Object data, Integer affectedRows) {
+        this.Status = status;
+        this.Data = data;
+        this.AffectedRows = affectedRows;
     }
 }
 
 /*
+// todo: согласовать с Александром и Андреем класс Answer.
 public class Answer {
     private final String status;
     private final Object data;
+    private final Integer AffectedRows;
 
     public Answer(String status, Object data) {
         this.status = status;
         this.data = data;
     }
 
+    public Answer(String status, Object data, Integer affectedRows) {
+        this.status = status;
+        this.data = data;
+        this.affectedRows = affectedRows;
+    }
+
     public String getStatus() {
-        return this.status;
+        return status;
     }
 
     public Object getData() {
-        return this.data;
+        return data;
+    }
+
+    public Integer getAffectedRows()
+    {
+        return affectedRows;
     }
 }
- */
+*/

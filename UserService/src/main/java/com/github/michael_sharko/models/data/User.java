@@ -16,13 +16,15 @@ public class User {
     public String school = null;
     public String university = null;
 
-    public Integer[] subscriptions;
-    public Integer[] followers;
+    public boolean hasUserId() {
+        return userid != null;
+    }
 
-    public User() {}
+    public boolean hasUsername() {
+        return username != null;
+    }
 
-    public User(Integer userid)
-    {
-        this.userid = userid;
+    public boolean hasPassword() {
+        return password != null;
     }
 }

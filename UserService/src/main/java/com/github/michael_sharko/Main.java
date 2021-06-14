@@ -1,9 +1,7 @@
 package com.github.michael_sharko;
 
-import com.github.michael_sharko.handlers.GetFollowersUserServiceServlet;
-import com.github.michael_sharko.handlers.GetSubscriptionsUserServiceServlet;
-import com.github.michael_sharko.handlers.SubscriptionsUserServiceServlet;
-import com.github.michael_sharko.handlers.UserServiceServlet;
+import com.github.michael_sharko.handlers.servlets.SubscriptionsServlet;
+import com.github.michael_sharko.handlers.servlets.UserServiceServlet;
 import com.github.michael_sharko.utils.DatabaseManager;
 import com.github.michael_sharko.utils.PropertyManager;
 import org.eclipse.jetty.server.Handler;
@@ -32,9 +30,7 @@ public class Main {
         context.setContextPath(contextPath);
 
         context.addServlet(new ServletHolder(new UserServiceServlet()), "/users");
-        context.addServlet(new ServletHolder(new SubscriptionsUserServiceServlet()), "/subscriptions");
-        context.addServlet(new ServletHolder(new GetSubscriptionsUserServiceServlet()), "/getsubscriptions");
-        context.addServlet(new ServletHolder(new GetFollowersUserServiceServlet()), "/getfollowers");
+        context.addServlet(new ServletHolder(new SubscriptionsServlet()), "/subscriptions");
 
         HandlerList handlers = new HandlerList();
         handlers.setHandlers(new Handler[]{context});
