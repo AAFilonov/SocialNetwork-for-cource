@@ -13,33 +13,17 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static org.practical3.utils.StaticGson.fromJson;
+
 public class Commons {
     public static PostsDataBaseManager dataBaseManager;
-    public static Gson gson= new Gson();
-
-
-    public static String toJson(Object o){
-        return  gson.toJson(o);
-    }
-    public static <T> Collection<T>  fromJson(String s, Type dataType){
-
-        return gson.fromJson(s,dataType);
-    }
-    public static <T> T fromJson(String s,Class<T> dataType){
-        return gson.fromJson(s,dataType);
-    }
-
-    public  static <T> Collection<T> getRequestBodyAsCollection(HttpServletRequest req, Type userListType) throws IOException {
-        String requestString = IOUtils.toString(req.getInputStream());
-        return Commons.fromJson(requestString,userListType);
-    }
 
 
 
 
     public  static <T> T getRequestBodyAsObject (HttpServletRequest req, Class<T> type) throws IOException {
         String requestString = IOUtils.toString(req.getInputStream());
-        return Commons.fromJson(requestString, type );
+        return  fromJson(requestString, type );
     }
 
 }

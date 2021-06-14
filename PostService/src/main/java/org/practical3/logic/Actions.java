@@ -20,11 +20,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+import static org.practical3.utils.StaticGson.toJson;
+
 public class Actions {
 
     public static void sendOk(HttpServletResponse resp, Object data) throws IOException {
         resp.setStatus(HttpServletResponse.SC_OK);
-        resp.getWriter().println(Commons.gson.toJson(data));
+        resp.getWriter().println(toJson(data));
     }
 
 
@@ -46,7 +48,7 @@ public class Actions {
     public static void insertPosts(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException {
         Type userListType = new TypeToken<ArrayList<Post>>() {
         }.getType();
-        Collection<Post> posts = Commons.getRequestBodyAsCollection(req, userListType);
+        Collection<Post> posts = RequestReader.getRequestBodyAsCollection(req, userListType);
         Integer rowsAffected = Commons.dataBaseManager.insertPosts(posts);
         sendOk(resp, new Answer("OK", null, rowsAffected));
     }
@@ -54,7 +56,7 @@ public class Actions {
     public static void deletePosts(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException {
         Type userListType = new TypeToken<ArrayList<Integer>>() {
         }.getType();
-        Collection<Integer> ids = Commons.getRequestBodyAsCollection(req, userListType);
+        Collection<Integer> ids = RequestReader.getRequestBodyAsCollection(req, userListType);
         Integer rowsAffected = Commons.dataBaseManager.deletePosts(ids);
         sendOk(resp, new Answer("OK", null, rowsAffected));
     }
@@ -66,7 +68,7 @@ public class Actions {
     public static void updatePosts(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException {
         Type userListType = new TypeToken<ArrayList<Post>>() {
         }.getType();
-        Collection<Post> posts = Commons.getRequestBodyAsCollection(req, userListType);
+        Collection<Post> posts = RequestReader.getRequestBodyAsCollection(req, userListType);
         int affectedRows =  Commons.dataBaseManager.updatePosts(posts);
         sendOk(resp, new Answer("OK", null, affectedRows));
     }

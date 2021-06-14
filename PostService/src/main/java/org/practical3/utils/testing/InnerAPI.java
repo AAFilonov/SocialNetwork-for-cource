@@ -1,4 +1,4 @@
-package org.practical3.utils;
+package org.practical3.utils.testing;
 
 import com.google.common.reflect.TypeToken;
 import org.apache.http.HttpResponse;
@@ -8,6 +8,7 @@ import org.practical3.model.transfer.PostsRequest;
 import org.practical3.model.transfer.SearchPostRequest;
 import org.practical3.model.transfer.WallRequest;
 import org.practical3.utils.PropertyManager;
+import org.practical3.utils.ResponseReader;
 import org.practical3.utils.testing.HttpClientManager;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 

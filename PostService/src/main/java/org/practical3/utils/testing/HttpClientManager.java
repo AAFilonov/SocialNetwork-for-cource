@@ -17,13 +17,16 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static org.practical3.utils.StaticGson.fromJson;
+import static org.practical3.utils.StaticGson.toJson;
+
 public class HttpClientManager {
     public  static HttpClient httpClient = HttpClientBuilder.create().build();
 
 
     public static HttpResponse sendPost(String url, Object body) throws IOException {
         HttpPost request = new HttpPost(url);
-        String jsonBody = Commons.toJson(body);
+        String jsonBody = toJson(body);
         StringEntity entity = new StringEntity(jsonBody);
         request.setEntity(entity);
         return httpClient.execute(request);
@@ -32,13 +35,13 @@ public class HttpClientManager {
     public static Answer getResponseBody(HttpResponse response) throws IOException {
         HttpEntity resp = response.getEntity();
         String respStr = EntityUtils.toString(resp);
-        return Commons.fromJson(respStr, Answer.class);
+        return fromJson(respStr, Answer.class);
     }
 
     public static<T> Collection<T>  getResponseBodyAsCollection(HttpResponse response, Type userListType) throws IOException {
         HttpEntity resp = response.getEntity();
         String respStr = EntityUtils.toString(resp);
-        return  Commons.fromJson(respStr, userListType);
+        return  fromJson(respStr, userListType);
     }
 
 

@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import static org.practical3.utils.StaticGson.toJson;
+
 
 public class PostsServlet extends HttpServlet {
 
@@ -35,16 +37,16 @@ public class PostsServlet extends HttpServlet {
             doAction(action, req, resp);
         } catch (IllegalArgumentException e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().println(Commons.toJson(new Answer("Data already exists",null)));
+            resp.getWriter().println(toJson(new Answer("Data already exists",null)));
         } catch (SQLException e) {
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().println(Commons.toJson(new Answer("Failed to connect to DataBase",null)));
+            resp.getWriter().println(toJson(new Answer("Failed to connect to DataBase",null)));
         } catch (ClassNotFoundException e) {
             resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            resp.getWriter().println(Commons.toJson(new Answer("No data found ",null)));
+            resp.getWriter().println(toJson(new Answer("No data found ",null)));
         } catch (Exception e) {
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().println(Commons.toJson(new Answer("Internal server error - " + e.getMessage(),null)));
+            resp.getWriter().println(toJson(new Answer("Internal server error - " + e.getMessage(),null)));
 
         }
 
@@ -65,9 +67,6 @@ public class PostsServlet extends HttpServlet {
             case "updatePosts":
                 Actions.updatePosts(req, resp);
                 break;
-            case "removePosts":
-                Actions.removePosts(req, resp);
-                break;
             case "deletePosts":
                 Actions.deletePosts(req, resp);
                 break;
@@ -84,7 +83,7 @@ public class PostsServlet extends HttpServlet {
             default:
 
                 resp.setStatus(HttpServletResponse.SC_NOT_IMPLEMENTED);
-                resp.getWriter().println(Commons.gson.toJson(new Answer("Error: wrong action or no action "+ action, null)));
+                resp.getWriter().println(toJson(new Answer("Error: wrong action or no action "+ action, null)));
 
         }
     }

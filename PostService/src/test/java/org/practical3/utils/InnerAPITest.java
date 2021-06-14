@@ -9,6 +9,7 @@ import org.practical3.model.transfer.PostsRequest;
 import org.practical3.model.transfer.SearchPostRequest;
 import org.practical3.model.transfer.WallRequest;
 import org.practical3.utils.testing.DBTestsUtils;
+import org.practical3.utils.testing.InnerAPI;
 import org.practical3.utils.testing.TestUtils;
 
 import java.sql.SQLException;
