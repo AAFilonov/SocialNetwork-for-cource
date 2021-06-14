@@ -84,7 +84,7 @@ public class Main {
         setServlet(new WallServlet(),"/wall/");
 
 
-        setServlet(new UserServiceServlet(), "/users/*");
+        setServlet(new UserServiceServlet(), "/users");
         setServlet(new GetFollowersUserServiceServlet(), "/getfollowers/*");
         setServlet(new GetSubscriptionsUserServiceServlet(), "/getsubscriptions/*");
         setServlet(new SubscriptionsUserServiceServlet(), "/subscriptions/*");

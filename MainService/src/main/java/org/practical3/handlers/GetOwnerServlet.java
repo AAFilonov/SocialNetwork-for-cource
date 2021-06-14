@@ -21,7 +21,7 @@ public class GetOwnerServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Commons.executeAndCatchExceptions(req, resp, (req1,resp1)->{
+        Commons.executeAndCatchExceptions(req, resp, (req1, resp1)->{
             Integer post_id = new Integer( req1.getParameterMap().get("post_id")[0]);
             Post post = PostServiceAPI.getPosts(new PostsRequest(post_id.toString(),1,0)).get(0);
 
