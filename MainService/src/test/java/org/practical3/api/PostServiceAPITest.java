@@ -69,7 +69,7 @@ class PostServiceAPITest {
                         new Post(888, null, null, Instant.now()),
                         new Post(889, null, null, Instant.now()))
         );
-        int affectedRows =  PostServiceAPI.updatePost(posts);
+        int affectedRows =  PostServiceAPI.updatePosts(posts);
 
         assertEquals(2,affectedRows);
 
@@ -138,6 +138,18 @@ class PostServiceAPITest {
             assertEquals(1, actual.size());
         }
 
+    }
+
+
+    @Test
+    public void doLikeTest() throws Exception {
+
+        Collection<Integer> ids = new ArrayList<Integer>(Arrays.asList(868));
+        PostServiceAPI.removePosts(ids);
+
+        ArrayList<Post> actual = (ArrayList<Post>) PostServiceAPI.getWall(createRequestWall(500));
+
+        assertEquals(1, actual.size());
     }
 
 }

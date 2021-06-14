@@ -1,12 +1,16 @@
 package org.practical3.api;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Test;
 import org.practical3.model.data.User;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+
+
 
 public class UserServiceAPITest {
 
@@ -18,6 +22,7 @@ public class UserServiceAPITest {
         assertEquals("java_username",users.get(0).username);
 
     }
+
     @Test
     public void getUserReturnElements() throws IOException {
 

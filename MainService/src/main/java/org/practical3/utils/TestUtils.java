@@ -6,7 +6,9 @@ package org.practical3.utils;
 
 
 import org.practical3.api.PostServiceAPI;
+import org.practical3.api.UserServiceAPI;
 import org.practical3.model.data.Post;
+import org.practical3.model.data.User;
 import org.practical3.model.transfer.requests.WallRequest;
 
 import java.time.Instant;
@@ -16,22 +18,14 @@ import java.util.Arrays;
 import java.util.Collection;
 
 public class TestUtils {
-    public static final int TestOwnerId = 400;
-    public static final int FirstPostId = 888;
-    public static final int SecondPostId = 889;
-
-    public static final int TestOwnerId2 = 405;
-    public static final int PostId3 = 988;
-    public static final int PostId4 = 989;
 
 
-    public static  Instant currentPoint = Instant.now();
 
     public static WallRequest createRequestWall(int ownerId) {
         ArrayList<Integer> ownerIds = new ArrayList<Integer>(
                 Arrays.asList(ownerId));
-        Instant dateTimeBegin = currentPoint.minus(30, ChronoUnit.DAYS);
-        Instant dateTimeEnd =currentPoint.plus(30, ChronoUnit.DAYS);
+        Instant dateTimeBegin =Instant.now().minus(30, ChronoUnit.DAYS);
+        Instant dateTimeEnd =Instant.now().plus(30, ChronoUnit.DAYS);
 
         Integer Offset = 0;
         Integer Count = 10;
@@ -64,6 +58,34 @@ public class TestUtils {
         }
     }
 
+    public static void createPosts(Collection<Post> data){
+        try {
+            PostServiceAPI.insertPosts(data);
+        } catch (Exception e) {
+            //уже вставлен
+        }
+    }
 
+    public static void cleanPosts(Collection<Integer> data){
+        try {
+            PostServiceAPI.deletePosts(data);
+        } catch (Exception e) {
+            //уже удален
+        }
+    }public static void createUser(User data){
+        try {
+            UserServiceAPI.register(data);
+        } catch (Exception e) {
+            //уже вставлен
+        }
+    }
+
+    public static void cleanUser(Integer data){
+        try {
+            UserServiceAPI.delete(data);
+        } catch (Exception e) {
+            //уже удален
+        }
+    }
 
 }

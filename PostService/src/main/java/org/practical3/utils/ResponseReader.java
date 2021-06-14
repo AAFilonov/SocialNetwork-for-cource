@@ -5,8 +5,9 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
 import org.practical3.model.data.Post;
-import org.practical3.model.data.User;
+
 import org.practical3.model.transfer.Answer;
+import org.practical3.utils.StaticGson;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -21,10 +22,18 @@ public class ResponseReader {
         return StaticGson.fromJson(respStr, Answer.class);
     }
 
+    public static <T>T getResponseBodyAsObject(HttpResponse response, Class<T> tClass) throws IOException {
+        HttpEntity resp = response.getEntity();
+        String respStr = EntityUtils.toString(resp);
+        return StaticGson.fromJson(respStr, tClass);
+    }
+
+
+
     public static<T> Collection<T> getResponseBodyAsCollection(HttpResponse response, Type userListType) throws IOException {
         HttpEntity resp = response.getEntity();
         String respStr = EntityUtils.toString(resp);
-        return (Collection<T>) StaticGson.fromJson(respStr, userListType);
+        return  StaticGson.fromJson(respStr, userListType);
     }
 
 
@@ -33,17 +42,14 @@ public class ResponseReader {
         }.getType();
         return getResponseBodyAsCollection(response, userListType);
     }
-    public static Collection<User> getUsersCollection(HttpResponse response) throws IOException {
-        Type userListType = new TypeToken<ArrayList<User>>() {
-        }.getType();
-        return getResponseBodyAsCollection(response, userListType);
-    }
 
-    public static Collection<Post>  getIntegerCollection(HttpResponse response) throws IOException {
+
+    public static Collection<Integer>  getIntegerCollection(HttpResponse response) throws IOException {
         Type userListType = new TypeToken<ArrayList<Integer>>() {
         }.getType();
         return getResponseBodyAsCollection(response, userListType);
     }
+    //возвращает хэшмап
     public static <T> Collection<T> getCollection(HttpResponse response) throws IOException {
         Type userListType = new TypeToken<ArrayList<T>>() {}.getType();
         return getResponseBodyAsCollection(response, userListType);

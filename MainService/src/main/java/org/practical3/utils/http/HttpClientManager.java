@@ -1,4 +1,4 @@
-package org.practical3.utils;
+package org.practical3.utils.http;
 
 import com.google.common.reflect.TypeToken;
 import org.apache.http.HttpEntity;
@@ -11,6 +11,7 @@ import org.apache.http.util.EntityUtils;
 import org.practical3.model.data.Post;
 import org.practical3.model.data.User;
 import org.practical3.model.transfer.Answer;
+import org.practical3.utils.StaticGson;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;

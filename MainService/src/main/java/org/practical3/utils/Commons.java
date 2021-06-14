@@ -1,10 +1,10 @@
 package org.practical3.utils;
 
 
-import com.google.gson.Gson;
 import org.apache.commons.io.IOUtils;
 
 import org.practical3.model.transfer.Answer;
+import org.practical3.utils.http.HttpClientManager;
 
 ;
 import javax.servlet.http.HttpServletRequest;
@@ -15,22 +15,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public  class Commons {
-
-    static public HttpClientManager HttpClientManager = new HttpClientManager();
-
-
-
-
-
-    public  static <T> Collection<T> getRequestBodyAsCollection(HttpServletRequest req, Type userListType) throws IOException {
-        String requestString = IOUtils.toString(req.getInputStream());
-        return StaticGson.fromJson(requestString,userListType);
-    }
-    public  static <T> T getRequestBodyAsObject (HttpServletRequest req, Class<T> type) throws IOException {
-        String requestString = IOUtils.toString(req.getInputStream());
-        return StaticGson.fromJson(requestString, type );
-    }
-
 
     public static Collection<Integer> parseIds(String IdsString){
         String[] post_ids_s = IdsString.split(",");
@@ -48,9 +32,17 @@ public  class Commons {
             processor.process(req,resp);
 
         }
+        catch (PostServiceException e){
+            resp.setStatus(e.FailureStatusCode);
+            resp.getWriter().println(StaticGson.toJson(e.PostServiceAnswer));
+        }
         catch (IllegalArgumentException e){
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             resp.getWriter().println(StaticGson.toJson(new Answer("Error: wrong arguments",null)));
+        }
+        catch (ClassNotFoundException e){
+            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            resp.getWriter().println(StaticGson.toJson(new Answer("Error: data not found",null)));
         }
         catch (Exception e){
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

@@ -1,12 +1,14 @@
 package org.practical3.logic;
 
 
-import org.practical3.model.data.PostField;
+import org.postgresql.util.PSQLException;
 import org.practical3.model.data.Post;
+import org.practical3.model.transfer.SearchPostRequest;
 import org.practical3.model.transfer.WallRequest;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 public class PostsDataBaseManager extends DataBaseManager {
@@ -32,7 +34,7 @@ public class PostsDataBaseManager extends DataBaseManager {
     }
 
 
-    public Collection<Post> getPosts(Collection<Integer> ids, Integer count, Integer offset) throws SQLException {
+    public ArrayList<Post> getPosts(Collection<Integer> ids, Integer count, Integer offset) throws SQLException {
 
 
         String query = String.format("select * from db.posts WHERE post_id IN (%s) LIMIT %d OFFSET %d",
@@ -50,12 +52,22 @@ public class PostsDataBaseManager extends DataBaseManager {
     }
 
     public int insertPosts(Collection<Post> posts) throws SQLException {
+
         PreparedStatement statement = super.Connection.prepareStatement
                 (String.format("INSERT INTO db.posts VALUES %s",
-                        getPostsAsString(posts))
-                );
+                        getPostsAsString(posts)));
 
-        return statement.executeUpdate();
+        try {
+            return statement.executeUpdate();
+
+        } catch (PSQLException t) {
+            //объект с таким id уже вставлен
+            throw new IllegalArgumentException();
+
+        } finally {
+            statement.close();
+        }
+
     }
 
     public int updatePosts(Collection<Post> posts) throws SQLException {
@@ -130,51 +142,55 @@ public class PostsDataBaseManager extends DataBaseManager {
     }
 
 
-    ArrayList<Post> fetchPosts(ResultSet resultSet) throws SQLException {
-
-        ArrayList<Post> posts = new ArrayList<>();
-        while (resultSet.next()) {
-            posts.add(fetchPost(resultSet));
-        }
-        return posts;
-    }
 
 
-    String getIdsASString(Collection<Integer> ids) {
-        String output;
+    public void doLike(Integer post_id) throws SQLException, IllegalArgumentException {
 
-        ArrayList<String> idsVals = new ArrayList<>();
-        for (Integer id : ids) {
-            idsVals.add("'" + id.toString() + "'");
-        }
 
-        return String.join(",", idsVals);
+        PreparedStatement statement = super.Connection.prepareStatement
+                ("UPDATE db.posts SET \"CountLikes\" = \"CountLikes\" +1 where posts.post_id = ?");
+        statement.setInt(1, post_id);
+
+        int affectedRows = statement.executeUpdate();
+        statement.close();
+
+        if (affectedRows == 0)
+            throw new IllegalArgumentException();
 
     }
 
-    private String getPostsAsString(Collection<Post> posts) {
-        Collection<String> postsAsString = new ArrayList<>();
-        for (Post post : posts) {
-            postsAsString.add(post.toSqlValues());
-        }
-        return String.join(",", postsAsString);
-    }
-
-    Post fetchPost(ResultSet resultSet) throws SQLException {
-        Post post = new Post();
-        post.PostId = resultSet.getInt(PostField.POST_ID.getVal());
-        post.OwnerId = resultSet.getInt(PostField.OWNER_ID.getVal());
-        post.Content = resultSet.getString(PostField.CONTENT.getVal());
-        post.Timestamp = resultSet.getTimestamp(PostField.TIMESTAMP.getVal()).toInstant();
-        post.IsRedacted = resultSet.getBoolean(PostField.IS_REDACTED.getVal());
-        post.IsRemoved = resultSet.getBoolean(PostField.IS_REMOVED.getVal());
-        post.IsCommentable = resultSet.getBoolean(PostField.IS_COMMENTABLE.getVal());
-        post.CountLikes = resultSet.getInt(PostField.COUNT_LIKES.getVal());
-        post.CountReposts = resultSet.getInt(PostField.COUNT_REPOSTS.getVal());
+    public Post doRepost(Integer user_id, Integer post_id) throws SQLException, ClassNotFoundException {
+        String sql = super.Connection.nativeSQL(
+                String.format("INSERT INTO db.posts(owner_id,\"content\")\nSelect %s, posts.\"content\" FROM db.posts  WHERE posts.post_id = %s LIMIT 1", user_id.toString(), post_id.toString()));
+        int repostId =  executeAndReturnInt(sql);
 
 
-        return post;
+        PreparedStatement statement = super.Connection.prepareStatement
+                ("UPDATE db.posts SET \"CountReposts\" = \"CountReposts\" +1 where posts.post_id = ?");
+        statement.setInt(1, post_id);
+        int affectedRows = statement.executeUpdate();
+        statement.close();
+
+
+        return getPosts(Arrays.asList(repostId),1,0).get(0);
     }
 
 
+    public Collection<Post> search(SearchPostRequest req) throws SQLException {
+
+        String query = super.Connection.nativeSQL(String.format(
+                "SELECT * FROM db.posts WHERE " + "to_tsvector(\"content\") @@ plainto_tsquery('%s')%s LIMIT %s OFFSET %s",
+                req.Content,
+                        (req.UserId!=null)?"  and owner_id ="+ req.UserId.toString():"",
+                req.Count.toString(),
+                req.Offset.toString()
+                )
+        );
+
+        Statement statement = Connection.createStatement();
+        ResultSet result = statement.executeQuery(query);
+        ArrayList<Post> items = fetchPosts(result);
+        statement.close();
+        return items;
+    }
 }

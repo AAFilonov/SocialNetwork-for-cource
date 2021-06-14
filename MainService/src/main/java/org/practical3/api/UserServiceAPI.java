@@ -4,7 +4,8 @@ import org.apache.http.HttpResponse;
 import org.practical3.model.data.User;
 import org.practical3.model.transfer.requests.SubscriptionRequest;
 import org.practical3.model.transfer.requests.UserRequest;
-import org.practical3.utils.HttpManagerForUserService;
+import org.practical3.utils.http.HttpManagerForUserService;
+import org.practical3.utils.http.ResponseReader;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,9 +21,10 @@ public class UserServiceAPI {
         HttpManagerForUserService.sendPut("/users", user);
     }
 
-    public static Collection<User> getUsers(String users) throws IOException {
-        HttpResponse response = HttpManagerForUserService.sendGet("/users?user_ids=", users);
-        return (ArrayList<User>) (HttpManagerForUserService.readResponse(response).Data);
+    public static Collection<User> getUsers(String user_ids) throws IOException {
+        HttpResponse response = HttpManagerForUserService.sendGet("/users?user_ids=", user_ids);
+        Collection<User> users = ResponseReader.getUsersCollection(response);
+        return  users;
     }
 
     public static void delete(Integer userid) throws IOException {
@@ -58,12 +60,24 @@ public class UserServiceAPI {
         Collection<Double> doubleCollection = (ArrayList<Double>) HttpManagerForUserService.readResponse(response).Data;
         return Arrays.asList(doubleCollection.stream().map(Double::intValue).toArray(Integer[]::new));
     }
-
+//ничего не возвращает для проверки?
     public static void subscribe(SubscriptionRequest subscription) throws IOException {
         HttpResponse response = HttpManagerForUserService.sendPost("/subscriptions", subscription);
     }
 
     public static void unsubscribe(SubscriptionRequest subscription) throws IOException {
         HttpResponse response = HttpManagerForUserService.sendDelete("/subscriptions", subscription);
+    }
+    //саня: обертка вокруг getUsers для получения только id
+    public static ArrayList<Integer> getUsersIds(String username) throws IOException, ClassNotFoundException {
+        Collection<User> users = getUsers (username);
+        if(users.isEmpty()) throw new ClassNotFoundException();
+
+
+        ArrayList<Integer> user_ids = new ArrayList<>();
+        for (User user:users) {
+            user_ids.add(user.userid);
+        }
+        return user_ids;
     }
 }
