@@ -2,6 +2,7 @@ package org.practical3.api.main.postpart;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.practical3.api.MainServiceAPI;
 import org.practical3.api.PostServiceAPI;
@@ -19,7 +20,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+@Disabled
 public class doRepostTests {
     static ArrayList<Integer> postsToClean = new ArrayList<>(Arrays.asList(211,212,213));
 

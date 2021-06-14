@@ -3,7 +3,7 @@ package org.practical3;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.practical3.handlers.*;
+import org.practical3.handlers.PostService.*;
 import org.practical3.handlers.UserService.GetFollowersUserServiceServlet;
 import org.practical3.handlers.UserService.GetSubscriptionsUserServiceServlet;
 import org.practical3.handlers.UserService.SubscriptionsUserServiceServlet;
@@ -75,11 +75,13 @@ public class Main {
 
     private static void setServlets()
     {
-        setServlet(new PostsServlet(),"/posts");
-        setServlet(new DoLikeServlet(),"/posts_like");
-        setServlet(new DoRepostServlet(),"/posts_repost");
-        setServlet(new SearchPostsServlet(),"/posts_search");
-        setServlet(new GetOwnerServlet(),"/get_owner");
+        setServlet(new PostsServlet(),"/posts/");
+        setServlet(new DoLikeServlet(),"/posts/like");
+        setServlet(new RestoreServlet(),"/posts/restore");
+        setServlet(new RemoveServlet(),"/posts/remove");
+        setServlet(new DoRepostServlet(),"/posts/repost");
+        setServlet(new SearchPostsServlet(),"/posts/search");
+        setServlet(new GetOwnerServlet(),"/posts/get_owner");
         setServlet(new FeedServlet(),"/feed/");
         setServlet(new WallServlet(),"/wall/");
 

@@ -11,8 +11,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class deleteTests {
 
@@ -58,7 +57,7 @@ public class deleteTests {
         Collection<Integer> ids = Collections.singletonList(823);
         MainServiceAPI.deletePosts(ids);
         ArrayList<Post> shouldBeEmptyArray = ((ArrayList<Post>) MainServiceAPI.getPosts("823", 10, 0));
-        assertTrue(shouldBeEmptyArray.isEmpty());
+        assertNull(shouldBeEmptyArray);
 
     }
 }

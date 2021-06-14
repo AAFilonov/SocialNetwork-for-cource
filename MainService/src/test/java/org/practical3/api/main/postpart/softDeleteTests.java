@@ -1,4 +1,5 @@
 package org.practical3.api.main.postpart;
 
-public class getPostOwnerTests {
+public class softDeleteTests {
+
 }

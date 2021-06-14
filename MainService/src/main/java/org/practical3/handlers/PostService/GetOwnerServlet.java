@@ -1,4 +1,4 @@
-package org.practical3.handlers;
+package org.practical3.handlers.PostService;
 
 import org.practical3.api.PostServiceAPI;
 import org.practical3.api.UserServiceAPI;

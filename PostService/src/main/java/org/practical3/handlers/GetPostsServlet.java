@@ -10,10 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
-public class LikeServlet extends HttpServlet {
+public class GetPostsServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        ExceptionHandler.execute(req, resp, Actions::doLike);
+        ExceptionHandler.execute(req, resp, Actions::getPosts);
     }
 
 

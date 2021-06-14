@@ -1,4 +1,4 @@
-package org.practical3.handlers;
+package org.practical3.handlers.PostService;
 
 
 import com.google.common.reflect.TypeToken;
@@ -71,8 +71,8 @@ public class PostsServlet extends HttpServlet {
         Type userListType = new TypeToken<ArrayList<Post>>() {
         }.getType();
         Collection<Post> posts = RequestReader.getRequestBodyAsCollection(httpServletRequest, userListType);
-        Integer affectedRows = PostServiceAPI.insertPosts(posts);
-        HttpClientManager.sendOk(new Answer("OK",null,affectedRows), response);
+        Answer answer =  PostServiceAPI.insertPosts(posts);
+        HttpClientManager.sendOk(answer, response);
 
     }
     private void getPosts(HttpServletRequest req, HttpServletResponse resp) throws Exception {
@@ -97,16 +97,16 @@ public class PostsServlet extends HttpServlet {
         Type userListType = new TypeToken<ArrayList<Post>>() {
         }.getType();
         Collection<Post> posts = RequestReader.getRequestBodyAsCollection(httpServletRequest, userListType);
-        Integer affectedRows = PostServiceAPI.updatePosts(posts);
-        HttpClientManager.sendOk(new Answer("OK",null,affectedRows), response);
+        Answer answer = PostServiceAPI.updatePosts(posts);
+        HttpClientManager.sendOk(answer, response);
     }
 
     private void deletePosts(HttpServletRequest httpServletRequest, HttpServletResponse response) throws Exception {
         Type userListType = new TypeToken<ArrayList<Integer>>() {
         }.getType();
         Collection<Integer> ids = RequestReader.getRequestBodyAsCollection(httpServletRequest, userListType);
-        Integer affectedRows = PostServiceAPI.deletePosts(ids);
-        HttpClientManager.sendOk(new Answer("OK",null,affectedRows), response);
+        Answer answer = PostServiceAPI.deletePosts(ids);
+        HttpClientManager.sendOk(answer, response);
     }
 
 

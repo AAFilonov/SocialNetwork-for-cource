@@ -16,7 +16,7 @@ import java.util.Collection;
 
 public class ResponseReader {
 
-    public static Answer getAnswer(HttpResponse response) throws IOException {
+    public static Answer getAnswer(HttpResponse response)  {
         try {
             HttpEntity resp = response.getEntity();
             String respStr = EntityUtils.toString(resp);
@@ -27,7 +27,7 @@ public class ResponseReader {
             return null;
         }
     }
-    public static <T>T getBodyAsObject(HttpResponse response, Class<T> tClass) throws IOException {
+    public static <T>T getBodyAsObject(HttpResponse response, Class<T> tClass) {
         try {
             HttpEntity resp = response.getEntity();
             String respStr = EntityUtils.toString(resp);

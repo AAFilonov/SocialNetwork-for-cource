@@ -1,7 +1,7 @@
-package org.practical3.handlers;
+package org.practical3.handlers.PostService;
 
 import org.practical3.api.PostServiceAPI;
-import org.practical3.api.UserServiceAPI;
+import org.practical3.model.transfer.Answer;
 import org.practical3.utils.Commons;
 import org.practical3.utils.ExceptionHandler;
 import org.practical3.utils.http.HttpClientManager;
@@ -12,23 +12,20 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static org.practical3.utils.http.RequestReader.getArgAsInt;
-import static org.practical3.utils.http.RequestReader.getArgAsString;
 
 
-public class DoRepostServlet extends HttpServlet {
-
+public class DoLikeServlet extends HttpServlet {
 
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
          ExceptionHandler.execute(req, resp, (req1, resp1)->{
-            Integer post_id =   getArgAsInt(req.getParameterMap(),"post_id");
-            String username  =   getArgAsString(req.getParameterMap(),"username");
-            Integer user_id = UserServiceAPI.getUsersIds(username).get(0);
-            Object result = PostServiceAPI.doRepost(post_id,user_id);
-            HttpClientManager.sendOk(result, resp1);
+            Integer post_id = getArgAsInt(req.getParameterMap(),"post_id");
+            Answer answer =  PostServiceAPI.dolike(post_id);
+            HttpClientManager.sendOk(answer, resp1);
         });
     }
+
 
 
 

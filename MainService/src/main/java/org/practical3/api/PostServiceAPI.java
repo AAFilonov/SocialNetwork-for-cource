@@ -18,116 +18,97 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.function.Function;
 
+import static org.practical3.utils.http.HttpClientManager.*;
+
 public class PostServiceAPI {
 
     static String getBaseURL() {
         return PropertyManager.getPropertyAsString("service.posts.addr", "http://localhost:8027");
     }
 
-    private static Answer sendRequest(String url, Object request) throws Exception {
-        HttpResponse response = HttpClientManager.sendPost(url, request);
-        return isSuccessful(response) ? ResponseReader.getAnswer(response) : null;
-    }
 
-    static boolean isSuccessful(HttpResponse response) throws Exception {
-        switch (response.getStatusLine().getStatusCode()) {
-            case HttpServletResponse.SC_OK:
-                return true;
 
-            case HttpServletResponse.SC_NOT_FOUND:
-                return false;
-            case HttpServletResponse.SC_NOT_IMPLEMENTED:
-            case HttpServletResponse.SC_BAD_REQUEST:
-            default:
-                System.out.println("[POST SERVICE ERROR]: "
-                        + ResponseReader.getAnswer(response).Status);
-                throw new Exception();
-        }
-    }
 
 
     public static ArrayList<Post> getPosts(PostsRequest postsRequest) throws Exception {
-        String url = String.format("%s/posts?action=getPosts", getBaseURL());
-
-        HttpResponse response = HttpClientManager.sendPost(url, postsRequest);
+        String url = String.format("%s/posts/get", getBaseURL());
+        HttpResponse response = sendPost(url, postsRequest);
         return (ArrayList<Post>)checkResponse(response, ResponseReader::getPostsCollection);
     }
 
     public static Collection<Post> getWall(WallRequest wallRequest) throws Exception {
 
-        String url = String.format("%s/posts?action=getWall", getBaseURL());
-        HttpResponse response = HttpClientManager.sendPost(url, wallRequest);
+        String url = String.format("%s/posts/walll", getBaseURL());
+        HttpResponse response = sendPost(url, wallRequest);
         return checkResponse(response, ResponseReader::getPostsCollection);
     }
 
-    public static int insertPosts(Collection<Post> posts) throws Exception {
-        String url = String.format("%s/posts?action=insertPosts", getBaseURL());
-        Answer postServiceAnswer = sendRequest(url, posts);
-        return (postServiceAnswer != null) ? postServiceAnswer.AffectedRows : 0;
+    public static Answer insertPosts(Collection<Post> posts) throws Exception {
+        String url = String.format("%s/posts", getBaseURL());
+        HttpResponse response = sendPost(url, posts);
+        return checkResponse(response, ResponseReader::getAnswer);
     }
 
-    public static int deletePosts(Collection<Integer> post_ids) throws Exception {
-        String url = String.format("%s/posts?action=deletePosts", getBaseURL());
-        Answer postServiceAnswer = sendRequest(url, post_ids);
-        return (postServiceAnswer != null) ? postServiceAnswer.AffectedRows : 0;
+    public static Answer deletePosts(Collection<Integer> post_ids) throws Exception {
+        String url = String.format("%s/posts", getBaseURL());
+        HttpResponse response = sendDelete(url, post_ids);
+        return checkResponse(response, ResponseReader::getAnswer );
     }
 
-    public static int updatePosts(Collection<Post> posts) throws Exception {
-        String url = String.format("%s/posts?action=updatePosts", getBaseURL());
-        Answer postServiceAnswer = sendRequest(url, posts);
-        return (postServiceAnswer != null) ? postServiceAnswer.AffectedRows : 0;
+    public static Answer updatePosts(Collection<Post> posts) throws Exception {
+        String url = String.format("%s/posts", getBaseURL());
+        HttpResponse response = sendPut(url, posts);
+        return checkResponse(response, ResponseReader::getAnswer);
     }
 
-    public static int removePosts(Collection<Integer> post_ids) throws Exception {
-        ArrayList<Post> postsToUpdateRemovedField = new ArrayList<Post>();
+    public static Answer removePosts(Collection<Integer> post_ids) throws Exception {
+        ArrayList<Post> posts = new ArrayList<Post>();
 
         for (int id : post_ids) {
             Post post = new Post();
             post.PostId = id;
             post.IsRemoved = true;
-            postsToUpdateRemovedField.add(post);
+            posts.add(post);
         }
 
-        String url = String.format("%s/posts?action=updatePosts", getBaseURL());
-        Answer postServiceAnswer = sendRequest(url, postsToUpdateRemovedField);
-        return (postServiceAnswer != null) ? postServiceAnswer.AffectedRows : 0;
+        String url = String.format("%s/posts", getBaseURL());
+        HttpResponse response = sendPut(url, posts);
+        return checkResponse(response, ResponseReader::getAnswer );
     }
 
-    public static int restorePosts(Collection<Integer> post_ids) throws Exception {
-        ArrayList<Post> postsToUpdateRemovedField = new ArrayList<Post>();
+    public static Answer restorePosts(Collection<Integer> post_ids) throws Exception {
+        ArrayList<Post> posts = new ArrayList<Post>();
 
         for (int id : post_ids) {
             Post post = new Post();
             post.PostId = id;
             post.IsRemoved = false;
-            postsToUpdateRemovedField.add(post);
+            posts.add(post);
         }
 
-        String url = String.format("%s/posts?action=updatePosts", getBaseURL());
-        Answer postServiceAnswer = sendRequest(url, postsToUpdateRemovedField);
-        return (postServiceAnswer != null) ? postServiceAnswer.AffectedRows : 0;
+        String url = String.format("%s/posts", getBaseURL());
+        HttpResponse response = sendPut(url, posts);
+        return checkResponse(response, ResponseReader::getAnswer);
     }
 
     public static Object doRepost(Integer post_id, Integer user_id) throws Exception {
-        String url = String.format("%s/posts?action=doRepost&post_id=%s&user_id=%s",
+        String url = String.format("%s/posts/repost&post_id=%s&user_id=%s",
                 getBaseURL(), post_id.toString(), user_id.toString());
-        HttpResponse response = HttpClientManager.sendPost(url, null);
-        return  checkResponse(response, (response1)-> {
-            return ResponseReader.getPostsCollection(response1);
-        });
+        HttpResponse response = sendPost(url, null);
+        return  checkResponse(response, ResponseReader::getPostsCollection);
     }
 
     public static Answer dolike(Integer post_id) throws Exception {
-        String url = String.format("%s/posts?action=doLike&post_id=%s",
+        String url = String.format("%s/posts/like?post_id=%s",
                 getBaseURL(), post_id.toString());
-        HttpResponse response = HttpClientManager.sendPost(url, null);
+        HttpResponse response = sendPost(url, null);
         return checkResponse(response, (response1)-> {return new Answer("OK", null);});
     }
 
     public static Collection<Post> searchPosts(SearchPostRequest request) throws Exception {
-        String url = String.format("%s/posts?action=searchPosts",
+        String url = String.format("%s/posts/search",
                 getBaseURL());
-        HttpResponse response = HttpClientManager.sendPost(url, request);
+        HttpResponse response = sendPost(url, request);
         return checkResponse(response, ResponseReader::getPostsCollection);
 
 

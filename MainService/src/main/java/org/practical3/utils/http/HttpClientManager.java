@@ -28,27 +28,35 @@ public class HttpClientManager {
 
     public static HttpResponse sendGet(String url, String parameters) throws IOException {
         HttpGet request = new HttpGet(url + parameters);
-        return httpClient.execute(request);
+        HttpResponse response =  httpClient.execute(request);
+        request.releaseConnection();
+        return response;
     }
 
     public static HttpResponse sendPost(String url, Object data) throws IOException {
         HttpPost request = new HttpPost(url);
         setBody(request, data);
-        return httpClient.execute(request);
+        HttpResponse response =  httpClient.execute(request);
+        request.releaseConnection();
+        return response;
     }
 
 
     public static HttpResponse sendPut(String url, Object data) throws IOException {
         HttpPut request = new HttpPut(url);
         setBody(request, data);
-        return httpClient.execute(request);
+        HttpResponse response =  httpClient.execute(request);
+        request.releaseConnection();
+        return response;
     }
 
 
     public static HttpResponse sendDelete(String url, Object data) throws IOException {
         HttpDeleteWithBody request = new HttpDeleteWithBody(url);
         setBody(request, data);
-        return httpClient.execute(request);
+        HttpResponse response =  httpClient.execute(request);
+        request.releaseConnection();
+        return response;
     }
 
     private static void setBody(HttpEntityEnclosingRequestBase request, Object data) throws UnsupportedEncodingException {

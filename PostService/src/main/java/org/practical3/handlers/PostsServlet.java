@@ -36,11 +36,7 @@ public class PostsServlet extends HttpServlet {
 
     }
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        ExceptionHandler.execute(req, resp, Actions::getPosts);
 
-    }
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ExceptionHandler.execute(req, resp, Actions::updatePosts);

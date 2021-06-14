@@ -3,6 +3,7 @@ package org.practical3.api;
 
 import org.junit.jupiter.api.*;
 import org.practical3.model.data.Post;
+import org.practical3.model.transfer.Answer;
 import org.practical3.model.transfer.requests.PostsRequest;
 import org.practical3.model.transfer.requests.WallRequest;
 import org.practical3.utils.PropertyManager;
@@ -13,7 +14,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.practical3.utils.TestUtils.createRequestWall;
 
 @Disabled
@@ -22,15 +25,7 @@ class PostServiceAPITest {
     public  static  void init(){
         PropertyManager.load("./main.props");
     }
-    @BeforeEach
-    void beforeEach() {
-        TestUtils.insertTestData();
-    }
 
-    @AfterEach
-    void afterEach() {
-        TestUtils.clearTestData();
-    }
 
     @Test
     public void testGetPosts() throws Exception {
@@ -55,9 +50,9 @@ class PostServiceAPITest {
         TestUtils.clearTestData();
         Collection<Post> posts = TestUtils.getTestPosts(888,889, 400);
 
-        int affectedRows =  PostServiceAPI.insertPosts(posts);
+        Answer answer = (Answer) PostServiceAPI.insertPosts(posts);
 
-        assertEquals(2,affectedRows);
+        assertNotNull(answer);
 
 
     }
@@ -69,9 +64,10 @@ class PostServiceAPITest {
                         new Post(888, null, null, Instant.now()),
                         new Post(889, null, null, Instant.now()))
         );
-        int affectedRows =  PostServiceAPI.updatePosts(posts);
 
-        assertEquals(2,affectedRows);
+        Answer answer = (Answer) PostServiceAPI.updatePosts(posts);
+
+        assertNotNull(answer);
 
     }
 
@@ -81,75 +77,14 @@ class PostServiceAPITest {
         Collection<Integer> ids = new ArrayList<Integer>(
                 Arrays.asList(888,889));
 
-         int affectedRows =  PostServiceAPI.deletePosts(ids);
+        Answer answer = (Answer) PostServiceAPI.deletePosts(ids);
 
-        assertEquals(2,affectedRows);
-
-    }
-
-
-    @Nested
-    class softDeleteTests {
-
-        @BeforeEach
-        void beforeEach() throws Exception {
-            Collection<Post> posts = TestUtils.getTestPosts(868,869, 500);
-            PostServiceAPI.insertPosts(posts);
-        }
-
-        @AfterEach
-        void afterEach() throws Exception {
-            PostServiceAPI.deletePosts(Arrays.asList(868,869 ));
-        }
-
-        @Test
-        public void doRemovePost_whenPostExist_ThenPostIsRemovedTrue() throws Exception {
-
-            Collection<Integer> ids = new ArrayList<Integer>(
-                    Arrays.asList(868));
-            PostServiceAPI.removePosts(ids);
-            ArrayList<Post> actual = (ArrayList<Post>) PostServiceAPI.getPosts(new PostsRequest("868", 1, 0));
-
-            assertEquals(true, actual.get(0).IsRemoved);
-            PostServiceAPI.restorePosts(ids);
-        }
-
-        @Test
-        public void doRestorePost_whenPostIsRemoveTrue_ThenPostIsRemovedBecameFalse() throws Exception {
-
-            Collection<Integer> ids = new ArrayList<Integer>(
-                    Arrays.asList(868));
-            PostServiceAPI.removePosts(ids);
-
-            PostServiceAPI.restorePosts(ids);
-            ArrayList<Post> actual = (ArrayList<Post>) PostServiceAPI.getPosts(new PostsRequest("868", 1, 0));
-
-            assertEquals(false, actual.get(0).IsRemoved);
-        }
-
-        @Test
-        public void doRemovePost_whenPostExist_ThenGetWallDontReturnThisPost() throws Exception {
-
-            Collection<Integer> ids = new ArrayList<Integer>(Arrays.asList(868));
-            PostServiceAPI.removePosts(ids);
-
-            ArrayList<Post> actual = (ArrayList<Post>) PostServiceAPI.getWall(createRequestWall(500));
-
-            assertEquals(1, actual.size());
-        }
+        assertNotNull(answer);
 
     }
 
 
-    @Test
-    public void doLikeTest() throws Exception {
 
-        Collection<Integer> ids = new ArrayList<Integer>(Arrays.asList(868));
-        PostServiceAPI.removePosts(ids);
 
-        ArrayList<Post> actual = (ArrayList<Post>) PostServiceAPI.getWall(createRequestWall(500));
-
-        assertEquals(1, actual.size());
-    }
 
 }
