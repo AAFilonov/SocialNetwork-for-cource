@@ -2,6 +2,7 @@ package org.practical3.handlers;
 
 import org.practical3.logic.Actions;
 
+import org.practical3.logic.ExceptionHandler;
 import org.practical3.model.transfer.Answer;
 
 
@@ -31,61 +32,24 @@ public class PostsServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.setContentType("application/json");
-        try {
-            String action = req.getParameter("action");
-            doAction(action, req, resp);
-        } catch (IllegalArgumentException e) {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().println(toJson(new Answer("Data already exists",null)));
-        } catch (SQLException e) {
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().println(toJson(new Answer("Failed to connect to DataBase",null)));
-        } catch (ClassNotFoundException e) {
-            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            resp.getWriter().println(toJson(new Answer("No data found ",null)));
-        } catch (Exception e) {
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().println(toJson(new Answer("Internal server error - " + e.getMessage(),null)));
-
-        }
+        ExceptionHandler.execute(req, resp, Actions::insertPosts);
 
     }
 
-    private void doAction(String action, HttpServletRequest req, HttpServletResponse resp)
-            throws IOException, ClassNotFoundException, SQLException, NumberFormatException   {
-        switch (action) {
-            case "getPosts":
-                Actions.getPosts(req, resp);
-                break;
-            case "getWall":
-                Actions.getWall(req, resp);
-                break;
-            case "insertPosts":
-                Actions.insertPosts(req, resp);
-                break;
-            case "updatePosts":
-                Actions.updatePosts(req, resp);
-                break;
-            case "deletePosts":
-                Actions.deletePosts(req, resp);
-                break;
-            case "doLike":
-                Actions.doLike(req, resp);
-                break;
-            case "doRepost":
-                Actions.doRepost(req, resp);
-                break;
-            case "searchPosts":
-               Actions.searchPosts(req, resp);
-                break;
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        ExceptionHandler.execute(req, resp, Actions::getPosts);
 
-            default:
+    }
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        ExceptionHandler.execute(req, resp, Actions::updatePosts);
 
-                resp.setStatus(HttpServletResponse.SC_NOT_IMPLEMENTED);
-                resp.getWriter().println(toJson(new Answer("Error: wrong action or no action "+ action, null)));
+    }
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        ExceptionHandler.execute(req, resp, Actions::deletePosts);
 
-        }
     }
 
 

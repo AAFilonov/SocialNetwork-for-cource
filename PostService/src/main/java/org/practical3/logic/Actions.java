@@ -61,11 +61,7 @@ public class Actions {
         Integer rowsAffected = PostsDataBaseManager.deletePosts(ids);
         sendOk(resp, new Answer("OK", null, rowsAffected));
     }
-
-    public static void removePosts(HttpServletRequest req, HttpServletResponse resp) {
-        throw new NotImplementedException();
-    }
-
+    
     public static void updatePosts(HttpServletRequest req, HttpServletResponse resp) throws IOException, SQLException {
         Type userListType = new TypeToken<ArrayList<Post>>() {
         }.getType();

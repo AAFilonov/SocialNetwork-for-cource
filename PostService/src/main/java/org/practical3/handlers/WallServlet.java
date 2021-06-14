@@ -2,6 +2,9 @@ package org.practical3.handlers;
 
 
 
+import org.practical3.logic.Actions;
+import org.practical3.logic.ExceptionHandler;
+
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -16,6 +19,9 @@ import java.util.Map;
 
 
 public class WallServlet extends HttpServlet {
-
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        ExceptionHandler.execute(req, resp, Actions::getWall);
+    }
 
 }
