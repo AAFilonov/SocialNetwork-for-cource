@@ -1,8 +1,9 @@
-package com.github.michael_sharko.handlers;
+package org.practical3.logic;
 
-import com.github.michael_sharko.models.Answer;
-import com.github.michael_sharko.utils.StaticGson;
+
 import org.apache.http.HttpStatus;
+import org.practical3.model.transfer.Answer;
+import org.practical3.utils.StaticGson;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,7 +21,7 @@ public class ExceptionHandler {
         PrintWriter writer = response.getWriter();
         try {
             Object result = executor.execute(request, response);
-            writer.write(StaticGson.toJson(new Answer("Success", result)));
+            writer.write(StaticGson.toJson(new Answer("OK", result)));
         } catch (InvalidParameterException e) {
             response.setStatus(HttpStatus.SC_BAD_REQUEST);
             writer.write(e.getMessage());

@@ -3,9 +3,10 @@ package org.practical3.common.databaseManagerTests;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.practical3.logic.PostsDataBaseManager;
 import org.practical3.utils.testing.DBTestsUtils;
 import org.practical3.model.data.Post;
-import org.practical3.utils.Commons;
+
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class doRepostTests {
 
     @Test
     void doRepost_ShouldCreatePost() throws SQLException, ClassNotFoundException {
-        Post post  = Commons.dataBaseManager.doRepost(431, 730);
+        Post post  = PostsDataBaseManager.doRepost(431, 730);
         postsToClean.add(post.PostId);
         assertNotNull(post);
 
@@ -38,7 +39,7 @@ public class doRepostTests {
 
     @Test
     void doRepost_CreatedPostShouldMatch() throws SQLException, ClassNotFoundException {
-        Post post  = Commons.dataBaseManager.doRepost(432, 730);
+        Post post  = PostsDataBaseManager.doRepost(432, 730);
         postsToClean.add(post.PostId);
 
 
@@ -47,7 +48,7 @@ public class doRepostTests {
 
     @Test
     void doRepost_WhenPostNotFound_ShouldThrowException() {
-        assertThrows(ClassNotFoundException.class, () -> Commons.dataBaseManager.doRepost(431, 732));
+        assertThrows(ClassNotFoundException.class, () -> PostsDataBaseManager.doRepost(431, 732));
     }
 
 }

@@ -12,36 +12,29 @@ import java.util.Arrays;
 import java.util.Collection;
 
 public class PostsDataBaseManager extends DataBaseManager {
-    public PostsDataBaseManager(String DB_URL, String DB_Name, String user, String password) throws SQLException {
-        super(DB_URL, DB_Name, user, password);
-    }
 
-    public java.sql.Connection getConnection() {
-        return super.Connection;
-    }
-
-    public String getData() throws SQLException {
-
-        String str = super.Connection.nativeSQL("select * from db.posts");
-
-        Statement statement = super.Connection.createStatement();
-        ResultSet result = statement.executeQuery(str);
-        String output = "";
-        while (result.next()) {
-            output += result.getString("content") + "\n";
+    public static boolean init(String DB_URL, String DB_Name, String user, String password){
+        try {
+            connectTo(DB_URL,DB_Name,user,password);
+            return true;
+        } catch (SQLException e) {
+           System.out.println("Failed connect to DB:"+e.getMessage());
+            return false;
         }
-        return output;
     }
 
 
-    public ArrayList<Post> getPosts(Collection<Integer> ids, Integer count, Integer offset) throws SQLException {
+
+
+
+    public static ArrayList<Post> getPosts(Collection<Integer> ids, Integer count, Integer offset) throws SQLException {
 
 
         String query = String.format("select * from db.posts WHERE post_id IN (%s) LIMIT %d OFFSET %d",
 
                 getIdsASString(ids),
                 count, offset);
-        Statement statement = Connection.createStatement();
+        Statement statement = connection.createStatement();
 
         ResultSet result = statement.executeQuery(query);
         ArrayList<Post> items = fetchPosts(result);
@@ -51,9 +44,9 @@ public class PostsDataBaseManager extends DataBaseManager {
 
     }
 
-    public int insertPosts(Collection<Post> posts) throws SQLException {
+    public static int insertPosts(Collection<Post> posts) throws SQLException {
 
-        PreparedStatement statement = super.Connection.prepareStatement
+        PreparedStatement statement = connection.prepareStatement
                 (String.format("INSERT INTO db.posts VALUES %s",
                         getPostsAsString(posts)));
 
@@ -70,7 +63,7 @@ public class PostsDataBaseManager extends DataBaseManager {
 
     }
 
-    public int updatePosts(Collection<Post> posts) throws SQLException {
+    public static int updatePosts(Collection<Post> posts) throws SQLException {
         String sql = "update db.posts set " +
                 "owner_id = COALESCE(? , owner_id ) ," +
                 "content = COALESCE(?,content )," +
@@ -83,7 +76,7 @@ public class PostsDataBaseManager extends DataBaseManager {
                 "where post_id = ?;";
         int affectedRows = 0;
         for (Post post : posts) {
-            PreparedStatement statement = super.Connection.prepareStatement(sql);
+            PreparedStatement statement = connection.prepareStatement(sql);
 
             if ((post.OwnerId != null)) statement.setInt(1, post.OwnerId);
             else statement.setNull(1, Types.INTEGER);
@@ -110,8 +103,8 @@ public class PostsDataBaseManager extends DataBaseManager {
     }
 
 
-    public int deletePosts(Collection<Integer> ids) throws SQLException {
-        PreparedStatement statement = super.Connection.prepareStatement
+    public static int deletePosts(Collection<Integer> ids) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement
                 (String.format("DELETE from db.posts WHERE post_id IN (%s)",
                         getIdsASString(ids))
                 );
@@ -120,8 +113,8 @@ public class PostsDataBaseManager extends DataBaseManager {
 
     }
 
-    public Collection<Post> getWall(WallRequest wallRequest) throws SQLException {
-        PreparedStatement statement = super.Connection.prepareStatement(String.format("SELECT * FROM db.posts " +
+    public static Collection<Post> getWall(WallRequest wallRequest) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(String.format("SELECT * FROM db.posts " +
                 "WHERE owner_id IN (%s) " +
                 "AND post_timestamp BETWEEN ? AND ? " +
                 "and \"isRemoved\" = 'false' " +
@@ -144,10 +137,10 @@ public class PostsDataBaseManager extends DataBaseManager {
 
 
 
-    public void doLike(Integer post_id) throws SQLException, IllegalArgumentException {
+    public static void doLike(Integer post_id) throws SQLException, IllegalArgumentException {
 
 
-        PreparedStatement statement = super.Connection.prepareStatement
+        PreparedStatement statement = connection.prepareStatement
                 ("UPDATE db.posts SET \"CountLikes\" = \"CountLikes\" +1 where posts.post_id = ?");
         statement.setInt(1, post_id);
 
@@ -159,13 +152,13 @@ public class PostsDataBaseManager extends DataBaseManager {
 
     }
 
-    public Post doRepost(Integer user_id, Integer post_id) throws SQLException, ClassNotFoundException {
-        String sql = super.Connection.nativeSQL(
+    public static Post doRepost(Integer user_id, Integer post_id) throws SQLException, ClassNotFoundException {
+        String sql = connection.nativeSQL(
                 String.format("INSERT INTO db.posts(owner_id,\"content\")\nSelect %s, posts.\"content\" FROM db.posts  WHERE posts.post_id = %s LIMIT 1", user_id.toString(), post_id.toString()));
         int repostId =  executeAndReturnInt(sql);
 
 
-        PreparedStatement statement = super.Connection.prepareStatement
+        PreparedStatement statement = connection.prepareStatement
                 ("UPDATE db.posts SET \"CountReposts\" = \"CountReposts\" +1 where posts.post_id = ?");
         statement.setInt(1, post_id);
         int affectedRows = statement.executeUpdate();
@@ -176,9 +169,9 @@ public class PostsDataBaseManager extends DataBaseManager {
     }
 
 
-    public Collection<Post> search(SearchPostRequest req) throws SQLException {
+    public static Collection<Post> search(SearchPostRequest req) throws SQLException {
 
-        String query = super.Connection.nativeSQL(String.format(
+        String query = connection.nativeSQL(String.format(
                 "SELECT * FROM db.posts WHERE " + "to_tsvector(\"content\") @@ plainto_tsquery('%s')%s LIMIT %s OFFSET %s",
                 req.Content,
                         (req.UserId!=null)?"  and owner_id ="+ req.UserId.toString():"",
@@ -187,7 +180,7 @@ public class PostsDataBaseManager extends DataBaseManager {
                 )
         );
 
-        Statement statement = Connection.createStatement();
+        Statement statement = connection.createStatement();
         ResultSet result = statement.executeQuery(query);
         ArrayList<Post> items = fetchPosts(result);
         statement.close();

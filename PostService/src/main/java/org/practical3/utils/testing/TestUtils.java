@@ -1,8 +1,9 @@
 package org.practical3.utils.testing;
 
+import org.practical3.logic.PostsDataBaseManager;
 import org.practical3.model.data.Post;
 import org.practical3.model.transfer.WallRequest;
-import org.practical3.utils.Commons;
+
 
 import java.sql.SQLException;
 import java.time.Instant;
@@ -48,7 +49,7 @@ public class TestUtils {
         try {
 
             Collection<Post> inserted = TestUtils.getTestPosts(888, 889);
-            Commons.dataBaseManager.insertPosts(inserted);
+            PostsDataBaseManager.insertPosts(inserted);
         } catch (Exception e) {
             //уже вставлены
         }
@@ -56,7 +57,7 @@ public class TestUtils {
 
     public static void clearTestData() throws SQLException {
 
-        Commons.dataBaseManager.deletePosts(Arrays.asList(888, 889));
+       PostsDataBaseManager.deletePosts(Arrays.asList(888, 889));
     }
 
 

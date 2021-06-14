@@ -7,6 +7,7 @@ import org.practical3.model.data.Post;
 import org.practical3.model.transfer.Answer;
 import org.practical3.model.transfer.requests.PostsRequest;
 import org.practical3.utils.Commons;
+import org.practical3.utils.ExceptionHandler;
 import org.practical3.utils.http.HttpClientManager;
 import org.practical3.utils.http.RequestReader;
 
@@ -40,28 +41,28 @@ public class PostsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-        Commons.executeAndCatchExceptions(req, resp, this::getPosts);
+         ExceptionHandler.execute(req, resp, this::getPosts);
 
 
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Commons.executeAndCatchExceptions(req, resp, this::insertPosts);
+         ExceptionHandler.execute(req, resp, this::insertPosts);
     }
 
 
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Commons.executeAndCatchExceptions(req, resp, this::updatePosts);
+         ExceptionHandler.execute(req, resp, this::updatePosts);
     }
 
 
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Commons.executeAndCatchExceptions(req, resp, this::deletePosts);
+         ExceptionHandler.execute(req, resp, this::deletePosts);
     }
 
 

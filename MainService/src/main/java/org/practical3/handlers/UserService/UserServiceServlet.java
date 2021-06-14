@@ -5,6 +5,7 @@ import org.practical3.api.UserServiceAPI;
 import org.practical3.model.data.User;
 import org.practical3.model.transfer.requests.UserRequest;
 import org.practical3.utils.Commons;
+import org.practical3.utils.ExceptionHandler;
 import org.practical3.utils.StaticGson;
 import org.practical3.utils.http.HttpClientManager;
 
@@ -31,7 +32,7 @@ public class UserServiceServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        Commons.executeAndCatchExceptions(req,resp,((req1, resp1) -> {
+         ExceptionHandler.execute(req,resp,((req1, resp1) -> {
             resp1.setContentType("application/json");
 
             String reqStr = IOUtils.toString(req1.getInputStream());
@@ -46,7 +47,7 @@ public class UserServiceServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Commons.executeAndCatchExceptions(req,resp,((req1, resp1) -> {
+         ExceptionHandler.execute(req,resp,((req1, resp1) -> {
             resp.setContentType("application/json");
             Collection<User> users = UserServiceAPI.getUsers(req1.getParameter("user_ids"));
 

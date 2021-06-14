@@ -5,6 +5,7 @@ import org.practical3.api.PostServiceAPI;
 import org.practical3.model.data.Post;
 import org.practical3.model.transfer.requests.WallRequest;
 import org.practical3.utils.Commons;
+import org.practical3.utils.ExceptionHandler;
 import org.practical3.utils.http.HttpClientManager;
 import org.practical3.utils.http.RequestReader;
 
@@ -26,7 +27,7 @@ public class WallServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Commons.executeAndCatchExceptions(req, resp, this::getWall);
+         ExceptionHandler.execute(req, resp, this::getWall);
     }
 
 

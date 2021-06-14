@@ -5,6 +5,7 @@ import org.practical3.api.UserServiceAPI;
 import org.practical3.model.data.Post;
 import org.practical3.model.transfer.requests.WallRequest;
 import org.practical3.utils.Commons;
+import org.practical3.utils.ExceptionHandler;
 import org.practical3.utils.http.HttpClientManager;
 
 import javax.servlet.http.HttpServlet;
@@ -26,7 +27,7 @@ public class FeedServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Commons.executeAndCatchExceptions(req, resp, this::getFeed);
+         ExceptionHandler.execute(req, resp, this::getFeed);
     }
 
 

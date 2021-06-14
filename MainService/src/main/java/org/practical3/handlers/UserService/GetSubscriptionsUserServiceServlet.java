@@ -4,6 +4,7 @@ import org.apache.commons.io.IOUtils;
 import org.practical3.api.UserServiceAPI;
 import org.practical3.model.transfer.requests.UserRequest;
 import org.practical3.utils.Commons;
+import org.practical3.utils.ExceptionHandler;
 import org.practical3.utils.StaticGson;
 
 import javax.servlet.ServletException;
@@ -41,7 +42,7 @@ public class GetSubscriptionsUserServiceServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-        Commons.executeAndCatchExceptions(req,resp,((req1, resp1) -> {
+         ExceptionHandler.execute(req,resp,((req1, resp1) -> {
             String user =req.getParameterMap().get("user")[0];
             Collection<Integer> userids = new ArrayList<>();
             try {

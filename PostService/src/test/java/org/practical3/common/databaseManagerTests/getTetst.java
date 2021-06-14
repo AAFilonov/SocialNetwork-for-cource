@@ -1,8 +1,9 @@
 package org.practical3.common.databaseManagerTests;
 
 import org.junit.jupiter.api.Test;
+import org.practical3.logic.PostsDataBaseManager;
 import org.practical3.model.data.Post;
-import org.practical3.utils.Commons;
+
 
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -15,7 +16,7 @@ public class getTetst {
     @Test
     void getPostsTest() throws SQLException {
 
-        Collection<Post> actual = Commons.dataBaseManager.getPosts(Arrays.asList(988, 989), 10, 0);
+        Collection<Post> actual = PostsDataBaseManager.getPosts(Arrays.asList(988, 989), 10, 0);
 
         assertEquals(2, actual.size());
 

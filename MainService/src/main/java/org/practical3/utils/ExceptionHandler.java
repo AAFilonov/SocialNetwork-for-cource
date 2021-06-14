@@ -1,10 +1,7 @@
-package org.practical3.logic;
+package org.practical3.utils;
 
-import com.github.michael_sharko.models.Answer;
-import com.github.michael_sharko.utils.StaticGson;
 import org.apache.http.HttpStatus;
 import org.practical3.model.transfer.Answer;
-import org.practical3.utils.StaticGson;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,23 +10,32 @@ import java.io.PrintWriter;
 import java.security.InvalidParameterException;
 
 public class ExceptionHandler {
-    public interface Executor<T> {
-        T execute(HttpServletRequest request, HttpServletResponse response) throws Exception;
+    public interface Executor {
+        void execute(HttpServletRequest request, HttpServletResponse response) throws Exception;
     }
 
-    public static <T> void execute(HttpServletRequest request, HttpServletResponse response, Executor<T> executor) throws IOException {
-        response.setContentType("application/json");
-        PrintWriter writer = response.getWriter();
+    public static  void execute(HttpServletRequest req, HttpServletResponse resp, Executor executor) throws IOException {
+        resp.setContentType("application/json");
+        PrintWriter writer = resp.getWriter();
         try {
-            Object result = executor.execute(request, response);
-            writer.write(StaticGson.toJson(new Answer("OK", result)));
-        } catch (InvalidParameterException e) {
-            response.setStatus(HttpStatus.SC_BAD_REQUEST);
-            writer.write(e.getMessage());
+            executor.execute(req, resp);
+
+
+        } catch (ServiceException e) {
+            resp.setStatus(e.FailureStatusCode);
+            writer.println(StaticGson.toJson(e.ServiceAnswer));
+        } catch (IllegalArgumentException e) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            writer.println(StaticGson.toJson(new Answer("Error: wrong arguments", null)));
+        } catch (ClassNotFoundException e) {
+            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            writer.println(StaticGson.toJson(new Answer("Error: data not found", null)));
         } catch (Exception e) {
-            response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-            writer.write(e.getMessage());
-        } finally {
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            writer.println(StaticGson.toJson(new Answer("Error: internal server error:" + e.getMessage(), null)));
+
+        }
+        finally {
             writer.close();
         }
     }

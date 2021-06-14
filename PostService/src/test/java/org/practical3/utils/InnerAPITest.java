@@ -1,6 +1,7 @@
 package org.practical3.utils;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.practical3.Main;
 import org.practical3.logic.PostsDataBaseManager;
@@ -19,7 +20,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+@Disabled
 class InnerAPITest {
 
     @BeforeAll
@@ -31,7 +32,7 @@ class InnerAPITest {
         String Password = PropertyManager.getPropertyAsString("database.password", "1");
 
 
-        Commons.dataBaseManager = new PostsDataBaseManager(DB_URL, DB_Name, User, Password);
+        PostsDataBaseManager.init(DB_URL, DB_Name, User, Password);
 
         Thread newThread = new Thread(() -> {
             try {

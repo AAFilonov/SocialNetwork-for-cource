@@ -3,9 +3,10 @@ package org.practical3.common.databaseManagerTests;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.practical3.logic.PostsDataBaseManager;
 import org.practical3.model.data.Post;
 import org.practical3.model.transfer.WallRequest;
-import org.practical3.utils.Commons;
+
 import org.practical3.utils.testing.DBTestsUtils;
 import org.practical3.utils.testing.TestUtils;
 
@@ -33,7 +34,7 @@ public class getWallTests {
     @Test
     void getWallTest() throws SQLException {
         WallRequest wallRequest = TestUtils.createRequestWall(422);
-        ArrayList<Post> actual = (ArrayList<Post>) Commons.dataBaseManager.getWall(wallRequest);
+        ArrayList<Post> actual = (ArrayList<Post>) PostsDataBaseManager.getWall(wallRequest);
         assertEquals(2, actual.size());
     }
 

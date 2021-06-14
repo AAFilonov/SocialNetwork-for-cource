@@ -3,8 +3,9 @@ package org.practical3.common.databaseManagerTests;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.practical3.logic.PostsDataBaseManager;
 import org.practical3.model.data.Post;
-import org.practical3.utils.Commons;
+
 import org.practical3.utils.testing.DBTestsUtils;
 import org.practical3.utils.testing.TestUtils;
 
@@ -32,7 +33,7 @@ public class deleteTests {
     @Test
     void deletePostsTest() throws SQLException {
 
-        int rowsDeleted = Commons.dataBaseManager.deletePosts(Arrays.asList(741,742));
+        int rowsDeleted = PostsDataBaseManager.deletePosts(Arrays.asList(741,742));
         assertEquals(2, rowsDeleted);
     }
 }

@@ -10,7 +10,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.practical3.model.data.Post;
 import org.practical3.model.transfer.Answer;
-import org.practical3.utils.Commons;
+
 
 import java.io.IOException;
 import java.lang.reflect.Type;

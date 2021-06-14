@@ -5,6 +5,7 @@ import org.practical3.api.UserServiceAPI;
 import org.practical3.model.data.Post;
 import org.practical3.model.transfer.requests.SearchPostRequest;
 import org.practical3.utils.Commons;
+import org.practical3.utils.ExceptionHandler;
 import org.practical3.utils.StaticGson;
 import org.practical3.utils.http.RequestReader;
 
@@ -22,7 +23,7 @@ public class SearchPostsServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Commons.executeAndCatchExceptions(req, resp, (req1, resp1)->{
+         ExceptionHandler.execute(req, resp, (req1, resp1)->{
             SearchPostRequest searchRequest =  RequestReader.getRequestBodyAsObject(req, SearchPostRequest.class);
             if(searchRequest.Username!=null)
                 searchRequest.UserId = UserServiceAPI.getUsersIds(searchRequest.Username).get(0);

@@ -2,16 +2,14 @@ package org.practical3.utils.testing;
 
 import org.practical3.logic.PostsDataBaseManager;
 import org.practical3.model.data.Post;
-import org.practical3.utils.Commons;
+
 import org.practical3.utils.PropertyManager;
 
 import java.sql.SQLException;
 import java.util.Collection;
 
 
-
 public class DBTestsUtils {
-
 
 
     public static void init() {
@@ -20,25 +18,21 @@ public class DBTestsUtils {
         String DB_Name = "javaPracticeTest";
         String User = PropertyManager.getPropertyAsString("database.user", "postgres");
         String Password = PropertyManager.getPropertyAsString("database.password", "1");
+        PostsDataBaseManager.init(DB_URL, DB_Name, User, Password);
 
-
-        try {
-            Commons.dataBaseManager = new PostsDataBaseManager(DB_URL, DB_Name, User, Password);
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
     }
-    public static void insertData(Collection<Post> data){
+
+    public static void insertData(Collection<Post> data) {
         try {
-            Commons.dataBaseManager.insertPosts(data);
+            PostsDataBaseManager.insertPosts(data);
         } catch (Exception e) {
             //уже вставлен
         }
     }
 
-    public static void cleanData(Collection<Integer> data){
+    public static void cleanData(Collection<Integer> data) {
         try {
-            Commons.dataBaseManager.deletePosts(data);
+            PostsDataBaseManager.deletePosts(data);
         } catch (Exception e) {
             //уже удален
         }

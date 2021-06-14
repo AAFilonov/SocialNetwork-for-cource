@@ -3,9 +3,10 @@ package org.practical3.common.databaseManagerTests;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.practical3.logic.PostsDataBaseManager;
 import org.practical3.utils.testing.DBTestsUtils;
 import org.practical3.model.data.Post;
-import org.practical3.utils.Commons;
+
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -32,16 +33,16 @@ public class doLikeTests {
     @Test
     void doLikeTest_ShouldIncreaseLikeCount() throws SQLException, ClassNotFoundException {
 
-        Commons.dataBaseManager.doLike(720);
+        PostsDataBaseManager.doLike(720);
         ArrayList<Post> actual = (ArrayList<Post>)
-                Commons.dataBaseManager.getPosts(Arrays.asList(720), 10, 0);
+                PostsDataBaseManager.getPosts(Arrays.asList(720), 10, 0);
 
         assertEquals(1, actual.get(0).CountLikes);
 
     }
     @Test
     void doLikeTest_WhenNoSuchPost_ShouldThrowIllegalArgumentException()  {
-        assertThrows(IllegalArgumentException.class, () ->  Commons.dataBaseManager.doLike(722));
+        assertThrows(IllegalArgumentException.class, () ->  PostsDataBaseManager.doLike(722));
 
     }
 }

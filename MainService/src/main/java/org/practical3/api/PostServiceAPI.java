@@ -7,7 +7,7 @@ import org.practical3.model.transfer.Answer;
 import org.practical3.model.transfer.requests.PostsRequest;
 import org.practical3.model.transfer.requests.SearchPostRequest;
 import org.practical3.model.transfer.requests.WallRequest;
-import org.practical3.utils.PostServiceException;
+import org.practical3.utils.ServiceException;
 import org.practical3.utils.http.HttpClientManager;
 import org.practical3.utils.PropertyManager;
 import org.practical3.utils.http.ResponseReader;
@@ -121,7 +121,7 @@ public class PostServiceAPI {
         String url = String.format("%s/posts?action=doLike&post_id=%s",
                 getBaseURL(), post_id.toString());
         HttpResponse response = HttpClientManager.sendPost(url, null);
-        return (Answer) checkResponse(response, (response1)-> {return new Answer("OK", null);});
+        return checkResponse(response, (response1)-> {return new Answer("OK", null);});
     }
 
     public static Collection<Post> searchPosts(SearchPostRequest request) throws Exception {
@@ -133,7 +133,7 @@ public class PostServiceAPI {
 
     }
 
-    public static   <T> T checkResponse(HttpResponse response, Function<HttpResponse,T> returnIfOk) throws IOException, PostServiceException {
+    public static   <T> T checkResponse(HttpResponse response, Function<HttpResponse,T> returnIfOk) throws IOException, ServiceException {
 
         if( response.getStatusLine().getStatusCode() == HttpServletResponse.SC_OK)
             return returnIfOk.apply(response);
@@ -143,11 +143,11 @@ public class PostServiceAPI {
         }
     }
 
-    private static void pullExceptionByResponseCode(HttpResponse response) throws IOException, PostServiceException {
+    private static void pullExceptionByResponseCode(HttpResponse response) throws IOException, ServiceException {
         Answer postServiceAnswer = ResponseReader.getAnswer(response);
         System.out.println("[POST SERVICE ERROR]: "+ postServiceAnswer.Status);
 
-        throw  new PostServiceException(postServiceAnswer,
+        throw  new ServiceException(postServiceAnswer,
                 response.getStatusLine().getStatusCode());
     }
 }
