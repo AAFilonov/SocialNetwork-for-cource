@@ -41,6 +41,17 @@ public class getTests {
     }
 
     @Test
+    public void getUser__ShouldReturn200() throws IOException {
+        String url = String.format("http://localhost:8026/users/");
+        String params = String.format("?user_ids=%s", "471,472");
+
+        HttpResponse response = HttpClientManager.sendGet(url, params);
+
+        assertEquals(200, response.getStatusLine().getStatusCode());
+
+    }
+
+    @Test
     public void getUser_WhenGetMultiple_ShouldMultiple() throws IOException {
         String url = String.format("http://localhost:8026/users/");
         String params = String.format("?user_ids=%s", "471,472");
@@ -69,7 +80,7 @@ public class getTests {
     @Test
     public void getUser_WhenUserNotExist_ShouldReturn404() throws IOException {
         String url = String.format("http://localhost:8026/users/");
-        String params = String.format("?user_ids=%s", "473");
+        String params = String.format("?user_ids=%s", "478");
         HttpResponse response = HttpClientManager.sendGet(url, params);
 
         assertEquals(404, response.getStatusLine().getStatusCode());

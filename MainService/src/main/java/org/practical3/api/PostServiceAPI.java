@@ -91,7 +91,7 @@ public class PostServiceAPI {
     }
 
     public static Object doRepost(Integer post_id, Integer user_id) throws Exception {
-        String url = String.format("%s/posts/repost&post_id=%s&user_id=%s",
+        String url = String.format("%s/posts/repost?post_id=%s&user_id=%s",
                 getBaseURL(), post_id.toString(), user_id.toString());
         HttpResponse response = sendPost(url, null);
         return  checkResponse(response, ResponseReader::getPostsCollection);

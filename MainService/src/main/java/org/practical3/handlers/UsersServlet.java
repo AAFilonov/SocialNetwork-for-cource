@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.Collection;
 
 
-public class UserServiceServlet extends HttpServlet {
+public class UsersServlet extends HttpServlet {
 
     @Override
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
@@ -46,7 +46,8 @@ public class UserServiceServlet extends HttpServlet {
         ExceptionHandler.execute(req, resp, ((req1, resp1) -> {
             String user_ids = RequestReader.getArgAsString(req1.getParameterMap(), "user_ids");
             Collection<User> users = UserServiceAPI.getUsers(user_ids);
-
+            if(users.isEmpty())
+                throw  new ClassNotFoundException();
             resp1.setStatus(HttpServletResponse.SC_OK);
             resp1.getWriter().write(StaticGson.toJson(users));
         }));

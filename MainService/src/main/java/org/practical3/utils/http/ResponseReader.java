@@ -28,7 +28,7 @@ public class ResponseReader {
             return null;
         }
     }
-    public static <T>T getBodyAsObject(HttpResponse response, Class<T> tClass) {
+    public static <T>T  getBodyAsObject(HttpResponse response, Class<T> tClass) {
         try {
             HttpEntity resp = response.getEntity();
             String respStr = EntityUtils.toString(resp);

@@ -27,7 +27,8 @@ public class SubscriptionServlet extends HttpServlet {
             Collection<Integer> userids = new ArrayList<>();
 
             userids = UserServiceAPI.getSubscriptions(user);
-
+            if(userids.isEmpty())
+                throw  new ClassNotFoundException();
             HttpClientManager.sendOk(new Answer("OK", userids), resp);
         }));
     }
@@ -40,7 +41,6 @@ public class SubscriptionServlet extends HttpServlet {
 
             String reqStr = IOUtils.toString(req.getInputStream());
             SubscriptionRequest[] subscriptionRequest = StaticGson.gson.fromJson(reqStr, SubscriptionRequest[].class);
-
             int affectedRows = UserServiceAPI.subscribe(subscriptionRequest);
             HttpClientManager.sendOk(new Answer("OK", null, affectedRows), resp);
         }));

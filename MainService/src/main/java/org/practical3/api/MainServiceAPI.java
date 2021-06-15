@@ -122,14 +122,11 @@ public class MainServiceAPI {
         return response.getStatusLine().getStatusCode() == HttpServletResponse.SC_OK;
     }
 
-    public static Object doRepost(String username, Integer post_id) throws IOException {
+    public static HttpResponse doRepost(String username, Integer post_id) throws IOException {
         String url = String.format("%s/posts/repost", getBaseURL());
         String params = String.format("?post_id=%s&username=%s", post_id.toString(), username);
-        HttpResponse response = HttpClientManager.sendPost(url + params, null);
-        if (response.getStatusLine().getStatusCode() == HttpServletResponse.SC_OK)
-            return ResponseReader.getPostsCollection(response);
-        else
-            return ResponseReader.getAnswer(response);
+
+        return HttpClientManager.sendPost(url + params, null);
     }
 
     public static Object searchPost(SearchPostRequest request) throws IOException {

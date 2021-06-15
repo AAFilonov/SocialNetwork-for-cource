@@ -22,7 +22,8 @@ public class FollowersServlet extends HttpServlet {
             Collection<Integer> userids = new ArrayList<>();
 
             userids = UserServiceAPI.getFollowers(user);
-
+            if(userids.isEmpty())
+                throw  new ClassNotFoundException();
 
             resp.setContentType("application/json");
             resp.setStatus(HttpServletResponse.SC_OK);

@@ -40,7 +40,6 @@ public class UserServiceAPI {
 
     public static Collection<User> getUsers(String user_ids) throws IOException, ServiceException {
         HttpResponse response = HttpManagerForUserService.sendGet(url + "/users", "user_ids=" + user_ids);
-        answer = HttpManagerForUserService.readResponse(response);
         answer =  ExceptionHandler.checkResponse(response, ResponseReader::getAnswer);
         return Arrays.asList(StaticGson.fromJson((String) answer.Data, User[].class));
     }

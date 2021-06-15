@@ -26,7 +26,7 @@ public class RequestReader {
     public static <T> T getBodyAsObject(HttpServletRequest req, Class<T> type) throws IOException {
         try {
             String requestString = IOUtils.toString(req.getInputStream());
-            return StaticGson.fromJson(requestString, type);
+            return  StaticGson.fromJson(requestString, type);
         } catch (Exception e) {
             throw new IllegalArgumentException();
         }
