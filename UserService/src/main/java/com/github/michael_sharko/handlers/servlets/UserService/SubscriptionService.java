@@ -9,13 +9,14 @@ import com.github.michael_sharko.utils.StaticGson;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.InvalidParameterException;
 
 public class SubscriptionService {
     private static String generateInsertQuery(SubscriptionRequest[] subscriptions, boolean isReverse) {
         String generateValue = "";
         for (SubscriptionRequest s : subscriptions) {
-            String user = s.user;
-            String follower = s.follower;
+            String user = s.UserId;
+            String follower = s.FollowerId;
 
             if (!SeparatorForUserIdsAndUsernames.isNumeric(user))
                 user = "(SELECT userid FROM users WHERE username = '" + user + "')";
@@ -29,8 +30,8 @@ public class SubscriptionService {
     }
 
     private static String generateDeleteQuery(SubscriptionRequest subscription, boolean isReverse) {
-        String user = subscription.user;
-        String follower = subscription.follower;
+        String user = subscription.UserId;
+        String follower = subscription.FollowerId;
 
         if (!SeparatorForUserIdsAndUsernames.isNumeric(user))
             user = "(SELECT userid FROM users WHERE username = '" + user + "')";
@@ -45,7 +46,8 @@ public class SubscriptionService {
         int result = DatabaseManager.executeSimpleUpdate(generateInsertQuery(subscriptions, calledFollowers));
         if (result > 0)
             return new Answer("Success: subscriptions were successfully made!", null, result);
-        throw new Exception("SubscriptionService.subscribe send that exception, result: " + result);
+        //костыль  на 400 при попытке подписать   подписанного пользователя
+        throw new InvalidParameterException("User already subscribed");
     }
 
     public static Answer unsubscribe(SubscriptionRequest[] subscriptions, boolean calledFollowers) throws Exception {
@@ -55,21 +57,15 @@ public class SubscriptionService {
 
         if (result > 0)
             return new Answer("Success: subscriptions were successfully made!", null, result);
-        throw new Exception("SubscriptionService.unsubscribe send that exception, result: " + result);
+        //костыль  на 400 при попытке отписать   неподписанного пользователя
+        throw new InvalidParameterException("User not subscribed");
     }
 
     public static Answer getSubscriptions(String user_ids, boolean calledFollowers) {
         SeparatorForUserIdsAndUsernames separator = new SeparatorForUserIdsAndUsernames(user_ids);
-        String query = "SELECT DISTINCT " + (calledFollowers ? "followerid" : "userid") + " FROM subscriptions WHERE " + (calledFollowers ? "userid" : "followerid") + " IN (";
-
-        if (separator.hasIdentifiers())
-            query += separator.getIdentifiersString(",");
-        if (separator.hasIdentifiersAndNames())
-            query += ",";
-        if (separator.hasNames())
-            query += "(SELECT userid FROM users WHERE username IN ('" + separator.getNamesString("','") + "'))";
-
-        Integer[] result = DatabaseManager.executeQueryToArray(query + ")", Integer.class, (calledFollowers ? "followerid" : "userid"));
+        String query = String.format( "SELECT DISTINCT " + (calledFollowers ? "userid" : "followerid")
+                + " FROM subscriptions WHERE " + (calledFollowers ? "followerid" : "userid") + " IN (%s)",user_ids);
+        Integer[] result = DatabaseManager.executeQueryToArray(query, Integer.class, (calledFollowers ? "userid" : "followerid"));
         return new Answer("Success: subscriptions were successfully made!", StaticGson.toJson(result));
     }
 

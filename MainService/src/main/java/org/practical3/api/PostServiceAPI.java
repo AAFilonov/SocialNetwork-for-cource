@@ -8,7 +8,6 @@ import org.practical3.model.transfer.requests.PostsRequest;
 import org.practical3.model.transfer.requests.SearchPostRequest;
 import org.practical3.model.transfer.requests.WallRequest;
 import org.practical3.utils.ServiceException;
-import org.practical3.utils.http.HttpClientManager;
 import org.practical3.utils.PropertyManager;
 import org.practical3.utils.http.ResponseReader;
 
@@ -38,7 +37,7 @@ public class PostServiceAPI {
 
     public static Collection<Post> getWall(WallRequest wallRequest) throws Exception {
 
-        String url = String.format("%s/posts/walll", getBaseURL());
+        String url = String.format("%s/posts/wall", getBaseURL());
         HttpResponse response = sendPost(url, wallRequest);
         return checkResponse(response, ResponseReader::getPostsCollection);
     }
@@ -92,7 +91,7 @@ public class PostServiceAPI {
     }
 
     public static Object doRepost(Integer post_id, Integer user_id) throws Exception {
-        String url = String.format("%s/posts/repost&post_id=%s&user_id=%s",
+        String url = String.format("%s/posts/repost?post_id=%s&user_id=%s",
                 getBaseURL(), post_id.toString(), user_id.toString());
         HttpResponse response = sendPost(url, null);
         return  checkResponse(response, ResponseReader::getPostsCollection);

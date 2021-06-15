@@ -15,11 +15,14 @@ public class StaticGson {
         return StaticGson.gson.toJson(o);
     }
     public static <T> Collection<T> fromJson(String s, Type dataType){
-
-        return StaticGson.gson.fromJson(s,dataType);
+        Collection<T> obj = StaticGson.gson.fromJson(s, dataType);
+        if (obj == null) throw new IllegalArgumentException();
+        return obj;
     }
-    public static <T> T fromJson(String s,Class<T> dataType){
-        return StaticGson.gson.fromJson(s,dataType);
+    public static <T> T fromJson(String s,Class<T> dataType) {
+        T obj = StaticGson.gson.fromJson(s, dataType);
+        if (obj == null) throw new IllegalArgumentException();
+        return obj;
     }
 
 

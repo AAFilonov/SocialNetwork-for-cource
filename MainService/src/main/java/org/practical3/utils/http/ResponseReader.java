@@ -7,6 +7,7 @@ import org.apache.http.util.EntityUtils;
 import org.practical3.model.data.Post;
 import org.practical3.model.data.User;
 import org.practical3.model.transfer.Answer;
+import org.practical3.utils.ServiceException;
 import org.practical3.utils.StaticGson;
 
 import java.io.IOException;
@@ -27,7 +28,7 @@ public class ResponseReader {
             return null;
         }
     }
-    public static <T>T getBodyAsObject(HttpResponse response, Class<T> tClass) {
+    public static <T>T  getBodyAsObject(HttpResponse response, Class<T> tClass) {
         try {
             HttpEntity resp = response.getEntity();
             String respStr = EntityUtils.toString(resp);

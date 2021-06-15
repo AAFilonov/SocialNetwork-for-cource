@@ -1,4 +1,4 @@
-package org.practical3.handlers.PostService;
+package org.practical3.handlers;
 
 
 import com.google.common.reflect.TypeToken;
@@ -6,7 +6,6 @@ import org.practical3.api.PostServiceAPI;
 import org.practical3.model.data.Post;
 import org.practical3.model.transfer.Answer;
 import org.practical3.model.transfer.requests.PostsRequest;
-import org.practical3.utils.Commons;
 import org.practical3.utils.ExceptionHandler;
 import org.practical3.utils.http.HttpClientManager;
 import org.practical3.utils.http.RequestReader;
@@ -43,7 +42,6 @@ public class PostsServlet extends HttpServlet {
 
          ExceptionHandler.execute(req, resp, this::getPosts);
 
-
     }
 
     @Override
@@ -70,7 +68,7 @@ public class PostsServlet extends HttpServlet {
 
         Type userListType = new TypeToken<ArrayList<Post>>() {
         }.getType();
-        Collection<Post> posts = RequestReader.getRequestBodyAsCollection(httpServletRequest, userListType);
+        Collection<Post> posts = RequestReader.getBodyAsCollection(httpServletRequest, userListType);
         Answer answer =  PostServiceAPI.insertPosts(posts);
         HttpClientManager.sendOk(answer, response);
 
@@ -96,7 +94,7 @@ public class PostsServlet extends HttpServlet {
     private void updatePosts(HttpServletRequest httpServletRequest, HttpServletResponse response) throws Exception {
         Type userListType = new TypeToken<ArrayList<Post>>() {
         }.getType();
-        Collection<Post> posts = RequestReader.getRequestBodyAsCollection(httpServletRequest, userListType);
+        Collection<Post> posts = RequestReader.getBodyAsCollection(httpServletRequest, userListType);
         Answer answer = PostServiceAPI.updatePosts(posts);
         HttpClientManager.sendOk(answer, response);
     }
@@ -104,7 +102,7 @@ public class PostsServlet extends HttpServlet {
     private void deletePosts(HttpServletRequest httpServletRequest, HttpServletResponse response) throws Exception {
         Type userListType = new TypeToken<ArrayList<Integer>>() {
         }.getType();
-        Collection<Integer> ids = RequestReader.getRequestBodyAsCollection(httpServletRequest, userListType);
+        Collection<Integer> ids = RequestReader.getBodyAsCollection(httpServletRequest, userListType);
         Answer answer = PostServiceAPI.deletePosts(ids);
         HttpClientManager.sendOk(answer, response);
     }

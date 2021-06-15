@@ -1,13 +1,16 @@
 package org.practical3.utils;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.practical3.model.transfer.Answer;
+import org.practical3.utils.http.ResponseReader;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.InvalidParameterException;
+import java.util.function.Function;
 
 public class ExceptionHandler {
     public interface Executor {
@@ -19,7 +22,6 @@ public class ExceptionHandler {
         PrintWriter writer = resp.getWriter();
         try {
             executor.execute(req, resp);
-
 
         } catch (ServiceException e) {
             resp.setStatus(e.FailureStatusCode);
@@ -39,4 +41,23 @@ public class ExceptionHandler {
             writer.close();
         }
     }
+
+
+    public static   <T> T checkResponse(HttpResponse response, Function<HttpResponse,T> returnIfOk) throws IOException, ServiceException {
+
+        if( response.getStatusLine().getStatusCode() == HttpServletResponse.SC_OK)
+            return returnIfOk.apply(response);
+        else {
+            pullExceptionByResponseCode(response);
+            return null;
+        }
+    }
+    private static void pullExceptionByResponseCode(HttpResponse response) throws IOException, ServiceException {
+        Answer postServiceAnswer = ResponseReader.getAnswer(response);
+        System.out.println("[SERVICE ERROR]: "+ postServiceAnswer.Status);
+
+        throw  new ServiceException(postServiceAnswer,
+                response.getStatusLine().getStatusCode());
+    }
+
 }

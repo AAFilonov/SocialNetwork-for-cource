@@ -17,7 +17,7 @@ import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@Disabled
+
 public class doLikeTests {
 
 
@@ -35,10 +35,10 @@ public class doLikeTests {
         TestUtils.cleanPosts(Arrays.asList(201,202, 204));
     }
 
-    @Disabled
+
     @Test
     @RepeatedTest(10)
-    public void doLike_WhenPostExist_ShouldReturnTrue() throws IOException
+    public void doLike10_WhenPostExist_ShouldReturnTrue() throws IOException
     {
         String url = String.format("http://localhost:8026/posts/like");
         String params = String.format("?post_id=%s", "201");

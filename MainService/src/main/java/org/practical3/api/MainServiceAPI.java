@@ -4,16 +4,14 @@ import org.apache.http.HttpResponse;
 import org.practical3.model.data.Post;
 import org.practical3.model.data.User;
 import org.practical3.model.transfer.Answer;
-import org.practical3.model.transfer.requests.PostsRequest;
 import org.practical3.model.transfer.requests.SearchPostRequest;
 import org.practical3.model.transfer.requests.SubscriptionRequest;
-import org.practical3.utils.http.HttpClientManager;
 import org.practical3.utils.PropertyManager;
+import org.practical3.utils.http.HttpClientManager;
 import org.practical3.utils.http.ResponseReader;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.Instant;
 import java.util.Collection;
 
 public class MainServiceAPI {
@@ -24,7 +22,7 @@ public class MainServiceAPI {
 
 
     public static Collection<User> getUsers(String user_ids) throws IOException {
-        String url = String.format("%s/users", getBaseURL());
+        String url = String.format("%s/users/", getBaseURL());
         String params = "?user_ids=" + user_ids;
         HttpResponse response = HttpClientManager.sendGet(url, params);
         Collection<User> users = ResponseReader.getUsersCollection(response);
@@ -33,7 +31,7 @@ public class MainServiceAPI {
 
 
     public static int registerUser(User user) throws IOException {
-        String url = String.format("%s/users", getBaseURL());
+        String url = String.format("%s/users/", getBaseURL());
 
         HttpResponse response = HttpClientManager.sendPost(url, user);
         //нужно чтоб вернул что нибудь для проверки
@@ -41,23 +39,14 @@ public class MainServiceAPI {
     }
 
 
-    public static int deleteUser(String username) throws IOException {
-        String url = String.format("%s/users", getBaseURL());
+    public static HttpResponse deleteUser(String username) throws IOException {
+        String url = String.format("%s/users/", getBaseURL());
 
-        HttpResponse response = HttpClientManager.sendDelete(url, username);
-        //нужно чтоб вернул что нибудь для проверки
-        return 0;
-    }
-
-    public static Collection<Integer> getSubscriptions(String user) throws IOException {
-        String url = String.format("%s/getsubscriptions", getBaseURL());
-        String params = String.format("?user=%s", user);
-
-        HttpResponse response = HttpClientManager.sendGet(url, params);
-        Collection<Integer> ids = ResponseReader.getIntegerCollection(response);
-        return ids;
+        return  HttpClientManager.sendDelete(url, username);
 
     }
+
+
 
 
     public static Collection<Post> getPosts(String post_ids, Integer count, Integer offset) throws IOException {
@@ -91,28 +80,35 @@ public class MainServiceAPI {
     }
 
 
+    public static HttpResponse subscribeUser(SubscriptionRequest request) throws IOException {
+        String url = String.format("%s/users/subscriptions", getBaseURL());
+        SubscriptionRequest[] arrayArg = new SubscriptionRequest[]{request};
+        return HttpClientManager.sendPost(url, arrayArg);
 
-    public static boolean subscribeUser(SubscriptionRequest request) throws IOException {
-        String url = String.format("%s/subscriptions", getBaseURL());
-        HttpResponse response = HttpClientManager.sendPost(url, request);
-        return response.getStatusLine().getStatusCode() == HttpServletResponse.SC_OK;
 
     }
 
-    public static boolean unsubscribeUser(SubscriptionRequest request) throws IOException {
-        String url = String.format("%s/subscriptions", getBaseURL());
-        HttpResponse response = HttpClientManager.sendDelete(url, request);
-        return response.getStatusLine().getStatusCode() == HttpServletResponse.SC_OK;
+    public static HttpResponse unsubscribeUser(SubscriptionRequest request) throws IOException {
+        String url = String.format("%s/users/subscriptions", getBaseURL());
+        SubscriptionRequest[] arrayArg = new SubscriptionRequest[]{request};
+        return HttpClientManager.sendDelete(url, arrayArg);
+
     }
 
+    public static HttpResponse getSubscriptions(String user) throws IOException {
+        String url = String.format("%s/users/subscriptions", getBaseURL());
+        String params = String.format("?user=%s", user);
 
-    public static User getOwner(Integer post_id) throws IOException {
+        return HttpClientManager.sendGet(url, params);
+
+
+    }
+
+    public static HttpResponse getOwner(Integer post_id) throws IOException {
         String url = String.format("%s/posts/get_owner", getBaseURL());
         String params = String.format("?post_id=%s", post_id.toString());
-        HttpResponse response = HttpClientManager.sendGet(url, params);
-        if (response.getStatusLine().getStatusCode() == HttpServletResponse.SC_OK)
-            return  ResponseReader.getBodyAsObject(response, User.class);
-        else return null;
+        return HttpClientManager.sendGet(url, params);
+
     }
 
     public static boolean doLike(Integer post_id) throws IOException {
@@ -122,14 +118,11 @@ public class MainServiceAPI {
         return response.getStatusLine().getStatusCode() == HttpServletResponse.SC_OK;
     }
 
-    public static Object doRepost(String username, Integer post_id) throws IOException {
+    public static HttpResponse doRepost(String username, Integer post_id) throws IOException {
         String url = String.format("%s/posts/repost", getBaseURL());
         String params = String.format("?post_id=%s&username=%s", post_id.toString(), username);
-        HttpResponse response = HttpClientManager.sendPost(url + params, null);
-        if (response.getStatusLine().getStatusCode() == HttpServletResponse.SC_OK)
-            return ResponseReader.getPostsCollection(response);
-        else
-            return ResponseReader.getAnswer(response);
+
+        return HttpClientManager.sendPost(url + params, null);
     }
 
     public static Object searchPost(SearchPostRequest request) throws IOException {

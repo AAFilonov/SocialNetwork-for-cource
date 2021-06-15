@@ -1,5 +1,7 @@
 package com.github.michael_sharko.utils;
 
+import org.postgresql.util.PSQLException;
+
 import java.lang.reflect.Field;
 import java.sql.*;
 import java.util.ArrayList;
@@ -128,7 +130,7 @@ public class DatabaseManager {
         return result;
     }
 
-    public static <T> int executeUpdate(String sql, T object) {
+    public static <T> int executeUpdate(String sql, T object) throws Exception {
         int result = -1;
         try {
             Class<?> classOfT = object.getClass();
@@ -164,13 +166,17 @@ public class DatabaseManager {
 
             result = statement.executeUpdate();
             statement.close();
-        } catch (SQLException | IllegalAccessException throwables) {
-            throwables.printStackTrace();
+
         }
+         catch (SQLException|IllegalAccessException throwables) {
+             throwables.getMessage();
+             throw new Exception("SQL exption on Userservice");
+         }
+
         return result;
     }
 
-    public static <T> int executeInsertObject(String table, T object) {
+    public static <T> int executeInsertObject(String table, T object) throws Exception {
         int result = 0;
         try {
             String query = "INSERT INTO %s(%s) VALUES(%s)";
@@ -189,13 +195,15 @@ public class DatabaseManager {
             result = executeUpdate(query, object);
 
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            e.getMessage();
+
+            throw e;
         }
 
         return result;
     }
 
-    public static <T> int executeUpdateObject(String table, T object, String where) {
+    public static <T> int executeUpdateObject(String table, T object, String where) throws Exception {
         int result = 0;
         try {
             String query = "UPDATE %s SET %s %s";
