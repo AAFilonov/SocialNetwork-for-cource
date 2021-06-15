@@ -15,3 +15,4 @@ CREATE TABLE users
     school		    TEXT,
     university	    TEXT
 );
+

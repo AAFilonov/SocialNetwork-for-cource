@@ -94,7 +94,7 @@ public class Main {
         setServlet(new RepostServlet(), "/posts/repost");
         setServlet(new SearchServlet(), "/posts/search");
         setServlet(new WallServlet(), "/posts/wall");
-        setServlet(new GetPostsServlet(), "/posts/get");
+        setServlet(new GetPostsServlet(), "/posts/wall");
 
     }
 

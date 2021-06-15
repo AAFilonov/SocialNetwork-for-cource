@@ -12,13 +12,3 @@ CREATE TABLE db.posts(
 	"CountReposts" integer DEFAULT 0
 );
 
-
-CREATE OR REPLACE FUNCTION make_tsvector( "content" TEXT)
-   RETURNS tsvector AS $$
-BEGIN
-RETURN ( setweight(to_tsvector('english', content), 'B'));
-END
-$$ LANGUAGE 'plpgsql' IMMUTABLE;
-
-
-

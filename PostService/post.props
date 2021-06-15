@@ -4,4 +4,4 @@ server.contextPath = /
 database.server = jdbc:postgresql://127.0.0.1:5432/
 database.user = postgres
 database.password = 1
-database.database = javaPracticeTest
+database.database = JavaPractice
