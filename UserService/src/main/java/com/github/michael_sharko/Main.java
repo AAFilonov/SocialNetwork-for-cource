@@ -1,5 +1,6 @@
 package com.github.michael_sharko;
 
+import com.github.michael_sharko.handlers.servlets.FollowersServlet;
 import com.github.michael_sharko.handlers.servlets.SubscriptionsServlet;
 import com.github.michael_sharko.handlers.servlets.UserServiceServlet;
 import com.github.michael_sharko.utils.DatabaseManager;
@@ -31,6 +32,7 @@ public class Main {
 
         context.addServlet(new ServletHolder(new UserServiceServlet()), "/users");
         context.addServlet(new ServletHolder(new SubscriptionsServlet()), "/subscriptions");
+        context.addServlet(new ServletHolder(new FollowersServlet()), "/followers");
 
         HandlerList handlers = new HandlerList();
         handlers.setHandlers(new Handler[]{context});
