@@ -59,13 +59,13 @@ public class UserServiceAPI {
         return answer.AffectedRows;
     }
 
-    public static int becomeFollower(SubscriptionRequest[] subscriptions) throws IOException {
+    public static int follow(SubscriptionRequest[] subscriptions) throws IOException {
         HttpResponse response = HttpManagerForUserService.sendPost("/followers", subscriptions);
         answer = HttpManagerForUserService.readResponse(response);
         return answer.AffectedRows;
     }
 
-    public static int stopBeingFollower(SubscriptionRequest[] subscriptions) throws IOException {
+    public static int unfollow(SubscriptionRequest[] subscriptions) throws IOException {
         HttpResponse response = HttpManagerForUserService.sendDelete(url + "/followers", subscriptions);
         answer = HttpManagerForUserService.readResponse(response);
         return answer.AffectedRows;

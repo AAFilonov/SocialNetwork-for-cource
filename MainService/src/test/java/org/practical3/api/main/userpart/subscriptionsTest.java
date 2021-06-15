@@ -7,6 +7,7 @@ import org.practical3.api.MainServiceAPI;
 import org.practical3.api.UserServiceAPI;
 import org.practical3.model.data.User;
 import org.practical3.model.transfer.requests.SubscriptionRequest;
+import org.practical3.utils.TestUtils;
 import org.practical3.utils.http.StaticServerForTests;
 
 import java.io.IOException;
@@ -19,18 +20,26 @@ import static org.junit.jupiter.api.Assertions.*;
 
 //очень медленные тесты
 public class subscriptionsTest {
-
     @BeforeAll
     public static void init() {
         StaticServerForTests.start();
-//        cleanData();
-        prepareData();
-    }
-    @AfterAll
-    public static void do_final(){
-        cleanData();
+        Collection<User> users = Arrays.asList(
+                new User(461, "User461", "Pass481"),
+                new User(462, "User462", "Pass482"),
+                new User(463, "User463", "Pass483"),
+                new User(464, "User464", "Pass483"),
+                new User(465, "User465", "Pass483"),
+                new User(466, "User466", "Pass483")
+
+        );
+        TestUtils.createUsers(users);
+
     }
 
+    @AfterAll
+    public static void cleanup() {
+        TestUtils.cleanUsers("461,462,463,464,465,466");
+    }
 
     @Test
     public void subscribeUnsubscribedUserShouldReturnTrue() throws IOException {
@@ -81,33 +90,5 @@ public class subscriptionsTest {
         assertEquals(462, ids.get(1));
     }
 
-
-    public static void prepareData() {
-
-        Collection<User> users = Arrays.asList(
-                new User(461, "User461", "Pass481"),
-                new User(462, "User462", "Pass482"),
-                new User(463, "User463", "Pass483"),
-                new User(464, "User464", "Pass483"),
-                new User(465, "User465", "Pass483"),
-                new User(466, "User466", "Pass483")
-
-        );
-        try {
-            for (User user : users)
-                UserServiceAPI.register(user);
-        } catch (Exception ioException) {
-            //уже вставлен
-        }
-    };
-    public static void cleanData() {
-        Collection<Integer> ids = Arrays.asList(461, 462, 463,464,465,466);
-        try {
-            for (Integer id : ids)
-                UserServiceAPI.delete(id);
-        } catch (Exception ioException) {
-            //уже вставлен
-        }
-    }
 
 }

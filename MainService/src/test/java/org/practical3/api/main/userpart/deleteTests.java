@@ -22,7 +22,7 @@ public class deleteTests {
     @BeforeAll
     public static void init() {
         StaticServerForTests.start();
-       // cleanData();
+
         prepareData();
     }
 
@@ -76,18 +76,17 @@ public class deleteTests {
 
         );
         try {
-            for (User user : users)
-                UserServiceAPI.register(user);
+            UserServiceAPI.register((User[]) users.toArray());
+
         } catch (Exception ioException) {
             //уже вставлен
         }
     };
     public static void cleanData() {
         Collection<Integer> ids = Arrays.asList(451, 452, 453);
-       // Collection<Integer> ids = Arrays.asList(453);
-        try {
-            for (Integer id : ids)
-                UserServiceAPI.delete(id);
+       try {
+
+                UserServiceAPI.delete("451,452,453");
         } catch (Exception ioException) {
             //уже вставлен
         }

@@ -1,12 +1,16 @@
 package org.practical3.handlers.UserService;
 
+import com.google.common.reflect.TypeToken;
 import org.apache.commons.io.IOUtils;
 import org.practical3.api.UserServiceAPI;
+import org.practical3.model.data.Post;
 import org.practical3.model.data.User;
 
 import org.practical3.utils.ExceptionHandler;
 import org.practical3.utils.StaticGson;
 import org.practical3.utils.http.HttpClientManager;
+import org.practical3.utils.http.RequestReader;
+import org.practical3.utils.http.ResponseReader;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -15,7 +19,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 import java.util.Collection;
 
 
@@ -58,12 +64,11 @@ public class UserServiceServlet extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("application/json");
 
-        String reqStr = IOUtils.toString(req.getInputStream());
-        User[] user = StaticGson.fromJson(reqStr, User[].class);
 
-        UserServiceAPI.update(user);
+        User[] users = RequestReader.getRequestBodyAsObject(req,User[].class);
+
+        UserServiceAPI.update(users);
     }
 
     @Override
