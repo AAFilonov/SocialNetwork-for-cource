@@ -2,11 +2,13 @@ package com.github.michael_sharko.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.security.InvalidParameterException;
 
 public class StaticGson {
@@ -17,8 +19,12 @@ public class StaticGson {
         return gson.toJson(object);
     }
 
-    public static <T> T fromJson(String json, Class<T> classOfT) {
+    public static <T> T fromJson(String json, Type classOfT) {
         return gson.fromJson(json, classOfT);
+    }
+
+    public static <T> T fromJson(String json, TypeToken<T> typeToken) {
+        return gson.fromJson(json, typeToken.getType());
     }
 
     public static <T> T readObjectFrom(HttpServletRequest request, Class<T> classOfObject) throws IOException {

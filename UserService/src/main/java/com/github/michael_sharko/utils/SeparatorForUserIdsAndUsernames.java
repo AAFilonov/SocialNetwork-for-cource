@@ -7,13 +7,29 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SeparatorForUserIdsAndUsernames {
-    private static final String PATTERN = "([a-zA-Z0-9_]{4,16}|[0-9]+)";
+    private static final String PATTERN = "([a-zA-Z0-9_]{3,16}|[0-9]+)";
 
     List<Integer> identifiers = new ArrayList<>();
     List<String> names = new ArrayList<>();
 
+    public SeparatorForUserIdsAndUsernames(String user_ids) {
+        insert(user_ids);
+    }
+
+    public SeparatorForUserIdsAndUsernames() {
+    }
+
     private static Matcher createMatcher(String source) {
         return Pattern.compile(PATTERN).matcher(source);
+    }
+
+    public static boolean isNumeric(String source) {
+        try {
+            Integer.parseInt(source);
+            return true;
+        } catch (NumberFormatException numberFormatException) {
+            return false;
+        }
     }
 
     private void fillIdentifiersAndNamesLists(Matcher matcher) {
@@ -27,25 +43,9 @@ public class SeparatorForUserIdsAndUsernames {
         }
     }
 
-    public static boolean isNumeric(String source) {
-        try {
-            Integer.parseInt(source);
-            return true;
-        } catch (NumberFormatException numberFormatException) {
-            return false;
-        }
-    }
-
     public void insert(String user_ids) {
         Matcher matcher = createMatcher(user_ids);
         fillIdentifiersAndNamesLists(matcher);
-    }
-
-    public SeparatorForUserIdsAndUsernames(String user_ids) {
-        insert(user_ids);
-    }
-
-    public SeparatorForUserIdsAndUsernames() {
     }
 
     public List<Integer> getIdentifiers() {

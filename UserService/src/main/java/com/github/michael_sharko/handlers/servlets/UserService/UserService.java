@@ -1,5 +1,6 @@
 package com.github.michael_sharko.handlers.servlets.UserService;
 
+import com.github.michael_sharko.models.Answer;
 import com.github.michael_sharko.models.data.User;
 import com.github.michael_sharko.utils.DatabaseManager;
 import com.github.michael_sharko.utils.SeparatorForUserIdsAndUsernames;
@@ -20,9 +21,9 @@ public class UserService {
         if (separator.hasIdentifiers())
             query += "userid IN (" + separator.getIdentifiersString(",") + ") ";
         if (separator.hasIdentifiersAndNames())
-            query += "OR";
+            query += "OR ";
         if (separator.hasNames())
-            query += "username IN (" + separator.getNamesString(",") + ") ";
+            query += "username IN ('" + separator.getNamesString("','") + "') ";
 
         return query;
     }
@@ -39,12 +40,12 @@ public class UserService {
         if (separator.hasIdentifiersAndNames())
             query += "OR";
         if (separator.hasNames())
-            query += "username IN (" + separator.getNamesString(",") + ") ";
+            query += " username IN ('" + separator.getNamesString("','") + "') ";
 
         return query + "ORDER BY userid";
     }
 
-    public static int register(User[] newUsers) {
+    public static Answer register(User[] newUsers) throws Exception {
         int result = 0;
         for (User u : newUsers) {
             if (!u.hasUsername())
@@ -54,10 +55,12 @@ public class UserService {
 
             result += DatabaseManager.executeInsertObject("users", u);
         }
-        return result;
+        if (result > 0)
+            return new Answer("Success: users have been registered successfully!", null, result);
+        throw new Exception("UserService.register send that exception, result: " + result);
     }
 
-    public static int update(User[] updatedUsers) {
+    public static Answer update(User[] updatedUsers) throws Exception {
         int result = 0;
         for (User u : updatedUsers) {
             if (!u.hasUserId())
@@ -65,34 +68,39 @@ public class UserService {
 
             result += DatabaseManager.executeUpdateObject("users", u, "WHERE userid = " + u.userid);
         }
-        return result;
+        if (result > 0)
+            return new Answer("Success: users have been successfully updated!", null, result);
+        throw new Exception("UserService.update send that exception, result: " + result);
     }
 
-    public static User[] getUsers(String user_ids) throws Exception {
-        return (User[]) DatabaseManager.executeQueryToArrayList(generateSelectQuery(user_ids), User.class).toArray();
+    public static Answer getUsers(String user_ids) throws Exception {
+        User[] result = DatabaseManager.executeQueryToArray(generateSelectQuery(user_ids), User.class);
+        return new Answer("Success: users were found successfully!", StaticGson.toJson(result));
     }
 
-    public static int remove(String user_ids) throws Exception {
-        return DatabaseManager.executeSimpleUpdate(generateDeleteQuery(user_ids));
+    public static Answer remove(String user_ids) throws Exception {
+        int result = DatabaseManager.executeSimpleUpdate(generateDeleteQuery(user_ids));
+        if (result > 0)
+            return new Answer("Success: users were deleted successfully!", null, result);
+        throw new Exception("UserService.remove send that exception, result: " + result);
     }
 
-    public static int register(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public static Answer register(HttpServletRequest request, HttpServletResponse response) throws Exception {
         User[] newUsers = StaticGson.readObjectFrom(request, User[].class);
         return register(newUsers);
     }
 
-    public static int update(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public static Answer update(HttpServletRequest request, HttpServletResponse response) throws Exception {
         User[] updatedUsers = StaticGson.readObjectFrom(request, User[].class);
         return update(updatedUsers);
     }
 
-    public static User[] getUsers(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        // String user_ids = StaticGson.readObjectFrom(request, String.class);
+    public static Answer getUsers(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String user_ids = request.getParameter("user_ids");
         return getUsers(user_ids);
     }
 
-    public static int remove(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public static Answer remove(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String user_ids = StaticGson.readObjectFrom(request, String.class);
         return remove(user_ids);
     }

@@ -5,6 +5,9 @@ public class Answer {
     public Object Data;
     public Integer AffectedRows;
 
+    public Answer() {
+    }
+
     public Answer(String status, Object data) {
         this.Status = status;
         this.Data = data;

@@ -7,7 +7,6 @@ package com.github.michael_sharko.utils;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;

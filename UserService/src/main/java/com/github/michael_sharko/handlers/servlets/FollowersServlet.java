@@ -2,7 +2,6 @@ package com.github.michael_sharko.handlers.servlets;
 
 import com.github.michael_sharko.handlers.ExceptionHandler;
 import com.github.michael_sharko.handlers.servlets.UserService.SubscriptionService;
-import com.github.michael_sharko.utils.StaticGson;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

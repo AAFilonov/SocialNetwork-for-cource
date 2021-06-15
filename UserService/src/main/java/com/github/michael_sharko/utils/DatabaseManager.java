@@ -1,7 +1,6 @@
 package com.github.michael_sharko.utils;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Type;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -33,6 +32,18 @@ public class DatabaseManager {
 
     private static <T> boolean isFieldOfType(Field field, Class<T> clazz) {
         return clazz.getName().equals(field.getType().getName());
+    }
+
+    public static <T> T[] executeQueryToArray(String sql, Class<T> classOfT) {
+        ArrayList<T> list = executeQueryToArrayList(sql, classOfT);
+        T[] arr = (T[]) java.lang.reflect.Array.newInstance(classOfT, list.size());
+        return list.toArray(arr);
+    }
+
+    public static <T> T[] executeQueryToArray(String sql, Class<T> classOfT, String column) {
+        ArrayList<T> list = executeQueryToArrayList(sql, classOfT, column);
+        T[] arr = (T[]) java.lang.reflect.Array.newInstance(classOfT, list.size());
+        return list.toArray(arr);
     }
 
     public static <T> ArrayList<T> executeQueryToArrayList(String sql, Class<T> classOfT) {
@@ -79,21 +90,23 @@ public class DatabaseManager {
             statement.close();
         } catch (SQLException | IllegalAccessException | InstantiationException throwables) {
             throwables.printStackTrace();
+            System.out.println(throwables.getMessage());
+            return null;
         }
         return result;
     }
 
-    public static <T> ArrayList<T> executeQueryToArrayList(String sql, T type, String column) {
+    public static <T> ArrayList<T> executeQueryToArrayList(String sql, Class<T> classOfT, String column) {
         ArrayList<Object> result = new ArrayList<>();
         try {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
 
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 if (resultSet.findColumn(column) > 0) {
-                    if (type.getClass().getTypeName().equals(String.class.getTypeName()))
+                    if (classOfT.getTypeName().equals(String.class.getTypeName()))
                         result.add(resultSet.getString(column));
-                    else if (type.getClass().getTypeName().equals(Integer.class.getTypeName()))
+                    else if (classOfT.getTypeName().equals(Integer.class.getTypeName()))
                         result.add(resultSet.getInt(column));
                 }
             }
