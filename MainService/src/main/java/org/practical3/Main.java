@@ -87,8 +87,8 @@ public class Main {
 
 
         setServlet(new UsersServlet(), "/users/");
-        setServlet(new FollowersServlet(), "/getfollowers/*");
-        setServlet(new SubscriptionServlet(), "/getsubscriptions/*");
+        setServlet(new FollowersServlet(), "/users/followers");
+        setServlet(new SubscriptionServlet(), "/users/subscriptions");
 
     }
 

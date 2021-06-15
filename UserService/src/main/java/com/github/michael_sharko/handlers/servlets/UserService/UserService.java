@@ -89,7 +89,8 @@ public class UserService {
         int result = DatabaseManager.executeSimpleUpdate(generateDeleteQuery(user_ids));
         if (result > 0)
             return new Answer("Success: users were deleted successfully!", null, result);
-        throw new Exception("UserService.remove send that exception, result: " + result);
+        //быстрокостыль
+        throw new InvalidParameterException("UserService.remove send that exception, result: " + result);
     }
 
     public static Answer register(HttpServletRequest request, HttpServletResponse response) throws Exception {
