@@ -7,6 +7,7 @@ import org.apache.http.util.EntityUtils;
 import org.practical3.model.data.Post;
 import org.practical3.model.data.User;
 import org.practical3.model.transfer.Answer;
+import org.practical3.utils.ServiceException;
 import org.practical3.utils.StaticGson;
 
 import java.io.IOException;

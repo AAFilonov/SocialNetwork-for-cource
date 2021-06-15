@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.practical3.api.MainServiceAPI;
 import org.practical3.api.UserServiceAPI;
 import org.practical3.model.data.User;
+import org.practical3.utils.ServiceException;
 import org.practical3.utils.http.StaticServerForTests;
 
 import java.io.IOException;
@@ -59,7 +60,7 @@ public class deleteTests {
     }
 
     @Test
-    public void deleteUserActuallyDelete() throws IOException {
+    public void deleteUserActuallyDelete() throws IOException, ServiceException {
 
         MainServiceAPI.deleteUser("453");
         Collection<User> shouldBeEmptyArray = UserServiceAPI.getUsers("453");

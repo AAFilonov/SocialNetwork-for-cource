@@ -4,9 +4,10 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.practical3.handlers.PostService.*;
+import org.practical3.handlers.PostsServlet;
 import org.practical3.handlers.UserService.FollowersServlet;
 import org.practical3.handlers.UserService.SubscriptionServlet;
-import org.practical3.handlers.UserService.UserServiceServlet;
+import org.practical3.handlers.UserServiceServlet;
 
 import org.practical3.utils.PropertyManager;
 
@@ -85,7 +86,7 @@ public class Main {
         setServlet(new WallServlet(),"/wall/");
 
 
-        setServlet(new UserServiceServlet(), "/users");
+        setServlet(new UserServiceServlet(), "/users/");
         setServlet(new FollowersServlet(), "/getfollowers/*");
         setServlet(new SubscriptionServlet(), "/getsubscriptions/*");
 

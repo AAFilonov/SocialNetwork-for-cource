@@ -29,7 +29,6 @@ public class registerTests {
     }
 
 
-
     @AfterAll
     public static void cleanup() {
         TestUtils.cleanUsers("451,452,453");
@@ -65,11 +64,19 @@ public class registerTests {
         User user = new User(453, "User453", "User from register tests");
         String url = String.format("http://localhost:8026/users/");
 
-        HttpClientManager.sendPost(url, user);
+        HttpResponse response1= HttpClientManager.sendPost(url, user);
         HttpResponse response =  HttpClientManager.sendPost(url, user);
 
         assertEquals(400, response.getStatusLine().getStatusCode());
 
+    }
+    @Test
+    public void register_WhenNullArgument_ShouldReturn400() throws IOException {
+        String url = String.format("http://localhost:8026/users/");
+
+        HttpResponse response =  HttpClientManager.sendPost(url, null);
+
+        assertEquals(400, response.getStatusLine().getStatusCode());
     }
 
 

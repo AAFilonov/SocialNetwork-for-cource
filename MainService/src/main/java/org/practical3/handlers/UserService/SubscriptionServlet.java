@@ -2,16 +2,16 @@ package org.practical3.handlers.UserService;
 
 import org.apache.commons.io.IOUtils;
 import org.practical3.api.UserServiceAPI;
+import org.practical3.model.transfer.Answer;
 import org.practical3.model.transfer.requests.SubscriptionRequest;
 import org.practical3.utils.ExceptionHandler;
 import org.practical3.utils.StaticGson;
+import org.practical3.utils.http.HttpClientManager;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -28,31 +28,35 @@ public class SubscriptionServlet extends HttpServlet {
 
             userids = UserServiceAPI.getSubscriptions(user);
 
-
-            resp.setContentType("application/json");
-            resp.setStatus(HttpServletResponse.SC_OK);
-            resp.getWriter().write(StaticGson.toJson(userids));
+            HttpClientManager.sendOk(new Answer("OK", userids), resp);
         }));
     }
 
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("application/json");
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        ExceptionHandler.execute(req, resp, ((req1, resp1) -> {
+            resp.setContentType("application/json");
 
-        String reqStr = IOUtils.toString(req.getInputStream());
-        SubscriptionRequest[] subscriptionRequest = StaticGson.gson.fromJson(reqStr, SubscriptionRequest[].class);
+            String reqStr = IOUtils.toString(req.getInputStream());
+            SubscriptionRequest[] subscriptionRequest = StaticGson.gson.fromJson(reqStr, SubscriptionRequest[].class);
 
-        UserServiceAPI.subscribe( subscriptionRequest);
+            int affectedRows = UserServiceAPI.subscribe(subscriptionRequest);
+            HttpClientManager.sendOk(new Answer("OK", null, affectedRows), resp);
+        }));
     }
 
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("application/json");
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        ExceptionHandler.execute(req, resp, ((req1, resp1) -> {
+            resp.setContentType("application/json");
 
-        String reqStr = IOUtils.toString(req.getInputStream());
-        SubscriptionRequest[] subscriptionRequest = StaticGson.gson.fromJson(reqStr, SubscriptionRequest[].class);
+            String reqStr = IOUtils.toString(req.getInputStream());
+            SubscriptionRequest[] subscriptionRequest = StaticGson.gson.fromJson(reqStr, SubscriptionRequest[].class);
 
-        UserServiceAPI.unsubscribe(subscriptionRequest);
+
+            int affectedRows = UserServiceAPI.unsubscribe(subscriptionRequest);
+            HttpClientManager.sendOk(new Answer("OK", null, affectedRows), resp);
+        }));
     }
 }

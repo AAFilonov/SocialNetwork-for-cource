@@ -4,9 +4,12 @@ import org.apache.http.HttpResponse;
 import org.practical3.model.data.User;
 import org.practical3.model.transfer.Answer;
 import org.practical3.model.transfer.requests.SubscriptionRequest;
+import org.practical3.utils.ExceptionHandler;
 import org.practical3.utils.PropertyManager;
+import org.practical3.utils.ServiceException;
 import org.practical3.utils.StaticGson;
 import org.practical3.utils.http.HttpManagerForUserService;
+import org.practical3.utils.http.ResponseReader;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,77 +25,83 @@ public class UserServiceAPI {
     }
 
     /* UserService */
-    public static int register(User[] users) throws IOException {
+    public static int register(User[] users) throws IOException, ServiceException {
         HttpResponse response = HttpManagerForUserService.sendPost(url + "/users", users);
-        answer = HttpManagerForUserService.readResponse(response);
+
+        answer =  ExceptionHandler.checkResponse(response, ResponseReader::getAnswer);
         return answer.AffectedRows;
     }
 
-    public static int update(User[] users) throws IOException {
+    public static int update(User[] users) throws IOException, ServiceException {
         HttpResponse response = HttpManagerForUserService.sendPut(url + "/users", users);
-        answer = HttpManagerForUserService.readResponse(response);
+        answer =  ExceptionHandler.checkResponse(response, ResponseReader::getAnswer);
         return answer.AffectedRows;
     }
 
-    public static Collection<User> getUsers(String user_ids) throws IOException {
+    public static Collection<User> getUsers(String user_ids) throws IOException, ServiceException {
         HttpResponse response = HttpManagerForUserService.sendGet(url + "/users", "user_ids=" + user_ids);
         answer = HttpManagerForUserService.readResponse(response);
+        answer =  ExceptionHandler.checkResponse(response, ResponseReader::getAnswer);
         return Arrays.asList(StaticGson.fromJson((String) answer.Data, User[].class));
     }
 
-    public static int delete(String user_ids) throws IOException {
+    public static int delete(String user_ids) throws IOException, ServiceException {
         HttpResponse response = HttpManagerForUserService.sendDelete(url + "/users", user_ids);
-        answer = HttpManagerForUserService.readResponse(response);
+        answer =  ExceptionHandler.checkResponse(response, ResponseReader::getAnswer);
         return answer.AffectedRows;
     }
 
     /* SubscriptionService */
-    public static int subscribe(SubscriptionRequest[] subscriptions) throws IOException {
+    public static int subscribe(SubscriptionRequest[] subscriptions) throws IOException, ServiceException {
         HttpResponse response = HttpManagerForUserService.sendPost(url + "/subscriptions", subscriptions);
-        answer = HttpManagerForUserService.readResponse(response);
+        answer =  ExceptionHandler.checkResponse(response, ResponseReader::getAnswer);
         return answer.AffectedRows;
     }
 
-    public static int unsubscribe(SubscriptionRequest[] subscriptions) throws IOException {
+    public static int unsubscribe(SubscriptionRequest[] subscriptions) throws IOException, ServiceException {
         HttpResponse response = HttpManagerForUserService.sendDelete(url + "/subscriptions", subscriptions);
-        answer = HttpManagerForUserService.readResponse(response);
+        answer =  ExceptionHandler.checkResponse(response, ResponseReader::getAnswer);
         return answer.AffectedRows;
     }
 
-    public static int follow(SubscriptionRequest[] subscriptions) throws IOException {
+    public static int follow(SubscriptionRequest[] subscriptions) throws IOException, ServiceException {
         HttpResponse response = HttpManagerForUserService.sendPost("/followers", subscriptions);
-        answer = HttpManagerForUserService.readResponse(response);
+        answer =  ExceptionHandler.checkResponse(response, ResponseReader::getAnswer);
         return answer.AffectedRows;
     }
 
-    public static int unfollow(SubscriptionRequest[] subscriptions) throws IOException {
+    public static int unfollow(SubscriptionRequest[] subscriptions) throws IOException, ServiceException {
         HttpResponse response = HttpManagerForUserService.sendDelete(url + "/followers", subscriptions);
-        answer = HttpManagerForUserService.readResponse(response);
+        answer =  ExceptionHandler.checkResponse(response, ResponseReader::getAnswer);
         return answer.AffectedRows;
     }
 
-    public static Collection<Integer> getSubscriptions(String user_ids) throws IOException {
+    public static Collection<Integer> getSubscriptions(String user_ids) throws IOException, ServiceException {
         HttpResponse response = HttpManagerForUserService.sendGet(url + "/subscriptions", "user_ids=" + user_ids);
-        answer = HttpManagerForUserService.readResponse(response);
+        answer =  ExceptionHandler.checkResponse(response, ResponseReader::getAnswer);
         return Arrays.asList(StaticGson.fromJson((String) answer.Data, Integer[].class));
     }
 
-    public static Collection<Integer> getFollowers(String user_ids) throws IOException {
+    public static Collection<Integer> getFollowers(String user_ids) throws IOException, ServiceException {
         HttpResponse response = HttpManagerForUserService.sendGet(url + "/followers", "user_ids=" + user_ids);
-        answer = HttpManagerForUserService.readResponse(response);
+
+        answer =  ExceptionHandler.checkResponse(response, ResponseReader::getAnswer);
         return Arrays.asList(StaticGson.fromJson((String) answer.Data, Integer[].class));
+
+
     }
 
     //саня: обертка вокруг getUsers для получения только id
-    public static ArrayList<Integer> getUsersIds(String username) throws IOException, ClassNotFoundException {
+    public static ArrayList<Integer> getUsersIds(String username) throws IOException, ClassNotFoundException, ServiceException {
         Collection<User> users = getUsers (username);
         if(users.isEmpty()) throw new ClassNotFoundException();
-
-
         ArrayList<Integer> user_ids = new ArrayList<>();
         for (User user:users) {
             user_ids.add(user.userid);
         }
         return user_ids;
     }
+
+
+
 }

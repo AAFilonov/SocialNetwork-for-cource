@@ -3,7 +3,6 @@ package org.practical3.handlers.UserService;
 import org.apache.commons.io.IOUtils;
 import org.practical3.api.UserServiceAPI;
 import org.practical3.model.transfer.requests.SubscriptionRequest;
-
 import org.practical3.utils.ExceptionHandler;
 import org.practical3.utils.StaticGson;
 
@@ -18,7 +17,6 @@ import java.util.Collection;
 public class FollowersServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-
         ExceptionHandler.execute(req, resp, ((req1, resp1) -> {
             String user = req.getParameterMap().get("user")[0];
             Collection<Integer> userids = new ArrayList<>();
@@ -35,21 +33,25 @@ public class FollowersServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("application/json");
+        ExceptionHandler.execute(req, resp, ((req1, resp1) -> {
+            resp.setContentType("application/json");
 
-        String reqStr = IOUtils.toString(req.getInputStream());
-        SubscriptionRequest[] subscriptionRequest = StaticGson.gson.fromJson(reqStr, SubscriptionRequest[].class);
+            String reqStr = IOUtils.toString(req.getInputStream());
+            SubscriptionRequest[] subscriptionRequest = StaticGson.gson.fromJson(reqStr, SubscriptionRequest[].class);
 
-        UserServiceAPI.follow( subscriptionRequest);
+            UserServiceAPI.follow(subscriptionRequest);
+        }));
     }
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("application/json");
+        ExceptionHandler.execute(req, resp, ((req1, resp1) -> {
+            resp.setContentType("application/json");
 
-        String reqStr = IOUtils.toString(req.getInputStream());
-        SubscriptionRequest[] subscriptionRequest = StaticGson.gson.fromJson(reqStr, SubscriptionRequest[].class);
+            String reqStr = IOUtils.toString(req.getInputStream());
+            SubscriptionRequest[] subscriptionRequest = StaticGson.gson.fromJson(reqStr, SubscriptionRequest[].class);
 
-        UserServiceAPI.unfollow(subscriptionRequest);
+            UserServiceAPI.unfollow(subscriptionRequest);
+        }));
     }
 }
