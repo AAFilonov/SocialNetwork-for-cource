@@ -3,8 +3,6 @@ package org.practical3.handlers.UserService;
 import org.apache.commons.io.IOUtils;
 import org.practical3.api.UserServiceAPI;
 import org.practical3.model.transfer.requests.SubscriptionRequest;
-import org.practical3.model.transfer.requests.UserRequest;
-import org.practical3.utils.Commons;
 import org.practical3.utils.ExceptionHandler;
 import org.practical3.utils.StaticGson;
 

@@ -8,12 +8,10 @@ import org.practical3.model.data.Post;
 import org.practical3.model.data.User;
 import org.practical3.model.transfer.Answer;
 import org.practical3.model.transfer.requests.SearchPostRequest;
-import org.practical3.utils.Commons;
 import org.practical3.utils.TestUtils;
 import org.practical3.utils.http.StaticServerForTests;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -31,14 +29,14 @@ public class searchPostsTests {
                 new Post(1601, 1401, "Sanya inserted a text here"),
                 new Post(1602, 1401, "Goat goes here"),
                 new Post(1603, 1400, "goat  inserted a text")));
-        TestUtils.createUser(new User(1401,"User1401","Pass1401"));
+        TestUtils.createUsers(Arrays.asList(new User(1401,"User1401","Pass1401")));
     }
 
     @AfterAll
     public static void cleanup() {
 
         TestUtils.cleanPosts(postsToClean);
-        TestUtils.cleanUser(1401);
+        TestUtils.cleanUsers("1401");
     }
 
     @Test

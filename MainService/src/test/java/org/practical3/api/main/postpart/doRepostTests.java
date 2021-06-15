@@ -2,7 +2,6 @@ package org.practical3.api.main.postpart;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.practical3.api.MainServiceAPI;
 import org.practical3.api.PostServiceAPI;
@@ -10,14 +9,12 @@ import org.practical3.model.data.Post;
 import org.practical3.model.data.User;
 import org.practical3.model.transfer.Answer;
 import org.practical3.model.transfer.requests.PostsRequest;
-import org.practical3.model.transfer.requests.WallRequest;
 import org.practical3.utils.TestUtils;
 import org.practical3.utils.http.StaticServerForTests;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -32,13 +29,13 @@ public class doRepostTests {
                 new Post(212,701,"Post to check repost from MainAPI"),
                 new Post(213,701,"Post to check repost from MainAPI")
         ));
-        TestUtils.createUser(new User(702,"User702","Pass702"));
+        TestUtils.createUsers(Arrays.asList(new User(702,"User702","Pass702")));
     }
     @AfterAll
     public static void cleanup() {
 
         TestUtils.cleanPosts(postsToClean);
-        TestUtils.cleanUser(702);
+        TestUtils.cleanUsers("702");
     }
 
     @Test

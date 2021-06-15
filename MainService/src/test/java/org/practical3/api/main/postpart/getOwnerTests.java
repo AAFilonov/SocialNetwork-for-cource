@@ -2,18 +2,14 @@ package org.practical3.api.main.postpart;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.practical3.api.MainServiceAPI;
 import org.practical3.model.data.Post;
 import org.practical3.model.data.User;
-import org.practical3.model.transfer.Answer;
-import org.practical3.model.transfer.requests.SearchPostRequest;
 import org.practical3.utils.TestUtils;
 import org.practical3.utils.http.StaticServerForTests;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -28,14 +24,15 @@ public class getOwnerTests {
         TestUtils.createPosts(Arrays.asList(
                 new Post(1500, 101, "Post to test getowner")));
 
-        TestUtils.createUser(new User(101,"User101","Pass101"));
+        TestUtils.createUsers(Arrays.asList(
+                new User(101,"User101","Pass101")));
     }
 
     @AfterAll
     public static void cleanup() {
 
         TestUtils.cleanPosts(Collections.singleton(1500));
-        TestUtils.cleanUser(101);
+        TestUtils.cleanUsers("101");
     }
 
     @Test

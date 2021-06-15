@@ -16,6 +16,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 public class TestUtils {
 
@@ -72,15 +73,15 @@ public class TestUtils {
         } catch (Exception e) {
             //уже удален
         }
-    }public static void createUser(User data){
+    }public static void createUsers(Collection<User> data){
         try {
-            UserServiceAPI.register(data);
+            UserServiceAPI.register((User[]) data.toArray());
         } catch (Exception e) {
             //уже вставлен
         }
     }
 
-    public static void cleanUser(Integer data){
+    public static void cleanUsers(String data){
         try {
             UserServiceAPI.delete(data);
         } catch (Exception e) {

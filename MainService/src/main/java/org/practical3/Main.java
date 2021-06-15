@@ -6,7 +6,6 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.practical3.handlers.PostService.*;
 import org.practical3.handlers.UserService.FollowersServlet;
 import org.practical3.handlers.UserService.SubscriptionServlet;
-import org.practical3.handlers.UserService.SubscriptionsUserServiceServlet;
 import org.practical3.handlers.UserService.UserServiceServlet;
 
 import org.practical3.utils.PropertyManager;

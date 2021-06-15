@@ -4,11 +4,9 @@ import org.apache.http.HttpResponse;
 import org.practical3.model.data.User;
 import org.practical3.model.transfer.Answer;
 import org.practical3.model.transfer.requests.SubscriptionRequest;
-import org.practical3.model.transfer.requests.UserRequest;
 import org.practical3.utils.PropertyManager;
 import org.practical3.utils.StaticGson;
 import org.practical3.utils.http.HttpManagerForUserService;
-import org.practical3.utils.http.ResponseReader;
 
 import java.io.IOException;
 import java.util.ArrayList;
