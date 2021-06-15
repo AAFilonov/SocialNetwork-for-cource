@@ -76,7 +76,7 @@ public class doRepostTests {
         ArrayList<Post> actual = (ArrayList<Post>) PostServiceAPI.getPosts(
                 new PostsRequest("212"));
 
-        assertEquals(1, actual.get(0).CountReposts);
+        assertNotEquals(0, actual.get(0).CountReposts);
 
 
     }

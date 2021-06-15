@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
@@ -38,7 +39,8 @@ public class FeedServlet extends HttpServlet {
         Map<String, String[]> args = req.getParameterMap();
 
         String username = getArgAsString(args, "user_login");
-        Collection<Integer> subscriptions  = UserServiceAPI.getSubscriptions(username);
+        ArrayList<Integer> userid = UserServiceAPI.getUsersIds(username);
+        Collection<Integer> subscriptions  = UserServiceAPI.getSubscriptions(userid.get(0).toString());
 
         WallRequest request = new WallRequest(
                subscriptions

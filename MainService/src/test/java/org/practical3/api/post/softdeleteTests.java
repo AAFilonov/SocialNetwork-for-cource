@@ -53,15 +53,5 @@ class softdeleteTests {
         assertEquals(false, actual.get(0).IsRemoved);
     }
 
-    @Test
-    public void doRemovePost_whenPostExist_ThenGetWallDontReturnThisPost() throws Exception {
-
-        Collection<Integer> ids = new ArrayList<Integer>(Arrays.asList(693));
-        PostServiceAPI.removePosts(ids);
-
-        ArrayList<Post> actual = (ArrayList<Post>) PostServiceAPI.getWall(createRequestWall(792));
-
-        assertEquals(0, actual.size());
-    }
 
 }
