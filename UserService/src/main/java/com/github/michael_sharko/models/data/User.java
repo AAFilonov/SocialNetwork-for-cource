@@ -11,10 +11,18 @@ public class User {
     public String fullname;
     public Integer sex = 0;
 
-    public String country ;
+    public String country;
     public String city = null;
     public String school = null;
     public String university = null;
+
+    public User() {
+    }
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 
     public boolean hasUserId() {
         return userid != null;
