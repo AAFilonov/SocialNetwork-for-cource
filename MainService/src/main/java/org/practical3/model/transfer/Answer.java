@@ -5,6 +5,10 @@ public class Answer {
     public Object Data;
     public String Status;
     public Integer AffectedRows;
+
+    public Answer() {
+
+    }
     public Answer( String status, Object data) {
         Data = data;
         Status = status;

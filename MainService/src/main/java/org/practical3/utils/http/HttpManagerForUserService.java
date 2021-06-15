@@ -19,6 +19,40 @@ import java.io.IOException;
 import java.net.URI;
 
 public class HttpManagerForUserService {
+    private static final HttpClient client = HttpClientBuilder.create().build();
+
+    public static HttpResponse sendPost(String url, Object data) throws IOException {
+        HttpPost request = new HttpPost(url);
+        StringEntity entity = new StringEntity(StaticGson.toJson(data));
+        request.setEntity(entity);
+        return client.execute(request);
+    }
+
+    public static HttpResponse sendPut(String url, Object data) throws IOException {
+        HttpPut request = new HttpPut(url);
+        StringEntity entity = new StringEntity(StaticGson.toJson(data));
+        request.setEntity(entity);
+        return client.execute(request);
+    }
+
+    public static HttpResponse sendGet(String url, String parameters) throws IOException {
+        HttpGet request = new HttpGet(url + "?" + parameters);
+        return client.execute(request);
+    }
+
+    public static HttpResponse sendDelete(String url, Object data) throws IOException {
+        HttpDeleteWithBody request = new HttpDeleteWithBody(url);
+        HttpEntity entity = new StringEntity(StaticGson.toJson(data));
+        request.setEntity(entity);
+        return client.execute(request);
+    }
+
+    public static Answer readResponse(HttpResponse response) throws IOException {
+        HttpEntity resp = response.getEntity();
+        String respStr = EntityUtils.toString(resp);
+        return StaticGson.fromJson(respStr, Answer.class);
+    }
+
     static class HttpDeleteWithBody extends HttpEntityEnclosingRequestBase {
         public static final String METHOD_NAME = "DELETE";
 
@@ -39,40 +73,5 @@ public class HttpManagerForUserService {
         public String getMethod() {
             return METHOD_NAME;
         }
-    }
-
-    private static final HttpClient client = HttpClientBuilder.create().build();
-    private static final String url = PropertyManager.getPropertyAsString("service.users.addr", "http://localhost:8080");
-
-    public static HttpResponse sendPost(String path, Object data) throws IOException {
-        HttpPost request = new HttpPost(url + path);
-        StringEntity entity = new StringEntity(StaticGson.gson.toJson(data));
-        request.setEntity(entity);
-        return client.execute(request);
-    }
-
-    public static HttpResponse sendPut(String path, Object data) throws IOException {
-        HttpPut request = new HttpPut(url + path);
-        StringEntity entity = new StringEntity(StaticGson.gson.toJson(data));
-        request.setEntity(entity);
-        return client.execute(request);
-    }
-
-    public static HttpResponse sendGet(String path, String parameters) throws IOException {
-        HttpGet request = new HttpGet(url + path + parameters);
-        return client.execute(request);
-    }
-
-    public static HttpResponse sendDelete(String path, Object data) throws IOException {
-        HttpDeleteWithBody request = new HttpDeleteWithBody(url + path);
-        HttpEntity entity = new StringEntity(StaticGson.gson.toJson(data));
-        request.setEntity(entity);
-        return client.execute(request);
-    }
-
-    public static Answer readResponse(HttpResponse response) throws IOException {
-        HttpEntity resp  = response.getEntity();
-        String respStr = EntityUtils.toString(resp);
-        return StaticGson.gson.fromJson(respStr, Answer.class);
     }
 }

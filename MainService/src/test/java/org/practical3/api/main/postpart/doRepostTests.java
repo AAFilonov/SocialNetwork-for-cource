@@ -20,7 +20,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.*;
-@Disabled
+
 public class doRepostTests {
     static ArrayList<Integer> postsToClean = new ArrayList<>(Arrays.asList(211,212,213));
 

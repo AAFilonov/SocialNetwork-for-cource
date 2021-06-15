@@ -4,8 +4,8 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.practical3.handlers.PostService.*;
-import org.practical3.handlers.UserService.GetFollowersUserServiceServlet;
-import org.practical3.handlers.UserService.GetSubscriptionsUserServiceServlet;
+import org.practical3.handlers.UserService.FollowersServlet;
+import org.practical3.handlers.UserService.SubscriptionServlet;
 import org.practical3.handlers.UserService.SubscriptionsUserServiceServlet;
 import org.practical3.handlers.UserService.UserServiceServlet;
 
@@ -87,9 +87,9 @@ public class Main {
 
 
         setServlet(new UserServiceServlet(), "/users");
-        setServlet(new GetFollowersUserServiceServlet(), "/getfollowers/*");
-        setServlet(new GetSubscriptionsUserServiceServlet(), "/getsubscriptions/*");
-        setServlet(new SubscriptionsUserServiceServlet(), "/subscriptions/*");
+        setServlet(new FollowersServlet(), "/getfollowers/*");
+        setServlet(new SubscriptionServlet(), "/getsubscriptions/*");
+
     }
 
 

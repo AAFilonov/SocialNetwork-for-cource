@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.Collection;
 
-public class GetFollowersUserServiceServlet extends HttpServlet {
+public class FollowersServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("application/json");
@@ -24,7 +24,7 @@ public class GetFollowersUserServiceServlet extends HttpServlet {
         Collection<Integer> userids = null;
 
         if (userRequest.userid != null)
-            userids = UserServiceAPI.getFollowers(userRequest.userid);
+            userids = UserServiceAPI.getFollowers(userRequest.userid.toString());
         else if (userRequest.username != null)
             userids = UserServiceAPI.getFollowers(userRequest.username);
         else

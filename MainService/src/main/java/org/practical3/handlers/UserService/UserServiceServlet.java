@@ -3,8 +3,7 @@ package org.practical3.handlers.UserService;
 import org.apache.commons.io.IOUtils;
 import org.practical3.api.UserServiceAPI;
 import org.practical3.model.data.User;
-import org.practical3.model.transfer.requests.UserRequest;
-import org.practical3.utils.Commons;
+
 import org.practical3.utils.ExceptionHandler;
 import org.practical3.utils.StaticGson;
 import org.practical3.utils.http.HttpClientManager;
@@ -36,7 +35,7 @@ public class UserServiceServlet extends HttpServlet {
             resp1.setContentType("application/json");
 
             String reqStr = IOUtils.toString(req1.getInputStream());
-            User user = StaticGson.fromJson(reqStr, User.class);
+            User[] user = StaticGson.fromJson(reqStr, User[].class);
 
             UserServiceAPI.register(user);
             HttpClientManager.sendOk(null, resp1);
@@ -62,7 +61,7 @@ public class UserServiceServlet extends HttpServlet {
         resp.setContentType("application/json");
 
         String reqStr = IOUtils.toString(req.getInputStream());
-        User user = StaticGson.fromJson(reqStr, User.class);
+        User[] user = StaticGson.fromJson(reqStr, User[].class);
 
         UserServiceAPI.update(user);
     }
@@ -72,13 +71,6 @@ public class UserServiceServlet extends HttpServlet {
         resp.setContentType("application/json");
 
         String reqStr = IOUtils.toString(req.getInputStream());
-        UserRequest userRequest = StaticGson.gson.fromJson(reqStr, UserRequest.class);
-
-        if (userRequest.userid != null)
-            UserServiceAPI.delete(userRequest.userid);
-        else if (userRequest.username != null)
-            UserServiceAPI.delete(userRequest.username);
-        else
-            throw new InvalidParameterException("Set userid or username");
+        UserServiceAPI.delete(reqStr);
     }
 }
